@@ -40,15 +40,38 @@ import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
+
 public class CaptureActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private static final String[] PERMISSIONS = {
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-
+    WebAPIService api;
 
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
 
@@ -74,6 +97,8 @@ public class CaptureActivity extends AppCompatActivity
 
         setUp();
 
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        api = new Retrofit.Builder().baseUrl("http://149.97.166.38:8085/").client(client).build().create(WebAPIService.class);
 
     }
 
@@ -261,6 +286,13 @@ public class CaptureActivity extends AppCompatActivity
             return null;
         }
 
+        try{
+            sendImage(  bitmap,   filePath);
+        }catch(Exception e){
+            Log.i("sendImage", "Exception:: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         return new Image(bitmap);
     }
 
@@ -300,5 +332,57 @@ public class CaptureActivity extends AppCompatActivity
     }
 
 
+//------- TODO move this to another class
 
+
+    public interface WebAPIService {
+        @Multipart
+        @POST("FrontTerminal/v1/terminal/upload")
+        Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
+    }
+
+
+
+    public void sendImage(Bitmap bitmap, String filePath){
+        File file = new File(filePath);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+
+
+        Call<ResponseBody> call = api.upload(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                Log.i("-------- onResponse", "success XXX");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("-------- onFailure", t.getMessage());
+            }
+        });
+    }
 }
