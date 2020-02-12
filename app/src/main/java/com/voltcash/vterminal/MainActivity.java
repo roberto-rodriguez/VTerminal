@@ -2,6 +2,7 @@ package com.voltcash.vterminal;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.voltcash.vterminal.auth.AuthTerminal;
+import com.voltcash.vterminal.tx.CaptureActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,7 +29,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
+//import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +42,7 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected void onCaptureClick(View view){
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Please wait");
+        mProgressDialog.setMessage("Initializing...");
+        mProgressDialog.show();
+
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivity(intent);
+    }
+
     protected void onTerminalAuth(View view){
         Toast.makeText(getApplicationContext(), "Some text", Toast.LENGTH_SHORT).show();
 
@@ -70,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 //        startActivityForResult(photoPickerIntent, PICK_IMAGE);
 
     }
+
+
 //
 //    private static final int REQUEST_EXTERNAL_STORAGE = 1;
 //    private static String[] PERMISSIONS_STORAGE = {

@@ -27,11 +27,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".auth.AuthTerminal" />
         <activity android:name=".home.HomeActivity"></activity>
+        <activity
+            android:name=".tx.CaptureActivity"
+            android:label="@string/title_activity_capture"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
