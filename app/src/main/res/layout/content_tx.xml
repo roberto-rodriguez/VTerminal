@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.voltcash.vterminal.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+            android:id="@+id/view_check_front_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="140dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerInside"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+            android:id="@+id/view_check_back_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="140dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerInside"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

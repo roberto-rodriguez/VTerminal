@@ -71,6 +71,8 @@ public class CaptureActivity extends AppCompatActivity
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    private TxField field;
+
     WebAPIService api;
 
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
@@ -84,9 +86,13 @@ public class CaptureActivity extends AppCompatActivity
 
     public ProgressDialog mProgressDialog;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
 
         AppContextProvider.setContext(getApplicationContext());
         Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
@@ -233,9 +239,9 @@ public class CaptureActivity extends AppCompatActivity
             case Constants.GALLERY_IMPORT_REQUEST_ID:
                 Log.i("onActivityResult", requestCode + " - GALLERY_IMPORT_REQUEST_ID");
                 if (resultCode == RESULT_OK && data != null) {
-                    Constants.RESULT_IMAGE = decodeImageFromIntent(data);
+                    TxData.put(field, decodeImageFromIntent(data));
 
-                    if (Constants.RESULT_IMAGE == null)
+                    if ( TxData.getImage(field) == null)
                     {
                         new AlertDialog.Builder(this)
                                 .setTitle("Error")
@@ -248,9 +254,10 @@ public class CaptureActivity extends AppCompatActivity
                     else {
 
 
-                        Toast.makeText(CaptureActivity.this, "Show PreviewActivity  ", Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(getApplicationContext(), com.kofax.samples.mobilecapturedemo.PreviewActivity.class);
-//                        startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
+                        Toast.makeText(CaptureActivity.this, "onActivityResult -> Show PreviewActivity  ", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.PreviewActivity.class);
+                        intent.putExtra(TxField.TX_FIELD.getName(), field);
+                        startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
                     }
                 }
                 break;
@@ -258,9 +265,14 @@ public class CaptureActivity extends AppCompatActivity
             case Constants.PROCESSED_IMAGE_REQUEST_ID:
                 Log.i("onActivityResult", requestCode + " - PROCESSED_IMAGE_REQUEST_ID");
                 if (resultCode == RESULT_OK || resultCode == Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID) {
+
+                    CaptureActivity.super.onBackPressed();
                     finish();
-                    Toast.makeText(CaptureActivity.this, "Show ProcessImageActivity", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(getApplicationContext(), com.kofax.samples.mobilecapturedemo.ProcessImageActivity.class);
+
+      //              finish();
+//                    Toast.makeText(CaptureActivity.this, "Show ProcessImageActivity", Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.ProcessImageActivity.class);
+//                    intent.putExtra(TxField.TX_FIELD.getName(), field);
 //                    startActivity(intent);
                 }
                 break;
@@ -302,7 +314,7 @@ public class CaptureActivity extends AppCompatActivity
         mImageCaptureView.setUseVideoFrame(true);
         mImageCaptureView.setFlash(Flash.OFF);
 
-        if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
+        if (mProgressDialog != null && mProgressDialog.isShowing()) mProgressDialog.dismiss();
     }
 
     @Override
@@ -310,11 +322,13 @@ public class CaptureActivity extends AppCompatActivity
         Log.i("onImageCaptured",   " ----------");
         if (imageCapturedEvent != null) {
             if (imageCapturedEvent.getImage() != null) {
-                Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
+              //  Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
+                TxData.put(field, imageCapturedEvent.getImage());
 
-                Toast.makeText(CaptureActivity.this, "Show PreviewActivity", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(getApplicationContext(), com.kofax.samples.mobilecapturedemo.PreviewActivity.class);
-//                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
+                Toast.makeText(CaptureActivity.this, "onImageCaptured -> Show PreviewActivity", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.PreviewActivity.class);
+                intent.putExtra(TxField.TX_FIELD.getName(), field);
+                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
             } else {
                 onBackPressed();
             }

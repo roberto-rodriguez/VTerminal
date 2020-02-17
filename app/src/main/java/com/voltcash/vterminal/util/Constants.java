@@ -3,7 +3,7 @@ package com.voltcash.vterminal.util;
 import com.kofax.kmc.ken.engines.data.Image;
 
 public class Constants {
-    public static Image RESULT_IMAGE = null;
+    public static Image RESULT_IMAGEX = null;
     public final static String PHOTO_ALBUM_NAME = "KofaxMobileCapture";
 
     public static boolean IS_TORCH_SUPPORTED = false;

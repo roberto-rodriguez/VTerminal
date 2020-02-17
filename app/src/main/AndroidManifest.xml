@@ -28,12 +28,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".auth.AuthTerminal" />
-        <activity android:name=".home.HomeActivity"></activity>
+        <activity android:name=".home.HomeActivity" />
         <activity
             android:name=".tx.CaptureActivity"
             android:label="@string/title_activity_capture"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".tx.PreviewActivity"
+            android:label="@string/title_activity_preview"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:parentActivityName=".tx.CaptureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".tx.ProcessImageActivity"
+            android:label="@string/title_activity_process_image"
+            android:parentActivityName=".tx.PreviewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".tx.TxActivity"></activity>
     </application>
 
 </manifest>
