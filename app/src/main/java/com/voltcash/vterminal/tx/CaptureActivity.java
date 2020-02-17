@@ -337,7 +337,7 @@ public class CaptureActivity extends AppCompatActivity
 
     public interface WebAPIService {
         @Multipart
-        @POST("FrontTerminal/v1/terminal/upload")
+        @POST("FrontTerminal/v1/tx/checkAuth")
         Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
     }
 
