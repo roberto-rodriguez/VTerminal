@@ -292,6 +292,8 @@ public class CaptureActivity extends AppCompatActivity
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String filePath = cursor.getString(columnIndex);
+
+        Log.i("sendImage", "filePath:: " +filePath);
         cursor.close();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         if(bitmap == null) {
