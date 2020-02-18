@@ -1,29 +1,24 @@
 package com.voltcash.vterminal.tx;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
 import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.RequestBuilder;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.TxField;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-
-import okhttp3.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -32,11 +27,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-
 import static com.voltcash.vterminal.util.Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID;
+import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
 
 public class TxActivity extends AppCompatActivity {
 
@@ -74,8 +70,12 @@ public class TxActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View view){
-        Image checkFront =  TxData.getImage(TxField.CHECK_FRONT);
-        sendImage(checkFront.getImageBitmap());
+        try{
+            submit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void onClickCheckFront(View view){
@@ -169,74 +169,63 @@ public class TxActivity extends AppCompatActivity {
     public interface APIService {
         @Multipart
         @POST("FrontTerminal/v1/tx/checkAuth")
-        Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
+        Call<ResponseBody> upload(@Part MultipartBody.Part checkFront, @Part MultipartBody.Part checkBack, @Part("username") RequestBody params);  //, @Body RequestBody params
     }
 
 
 
-    public void sendImage(Bitmap bitmap) {
+    public void submit() throws IOException {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Sending Transaction");
+        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.show();
 
         try{
-            String path = android.os.Environment
-                    .getExternalStorageDirectory()
-                    + File.separator;
+            final List<File> filesToDelete = new ArrayList<>();
 
-            Log.i("sendImage", "path:: " +path);
+            MultipartBody.Part checkFront = RequestBuilder.buildMultipartBody( TxField.CHECK_FRONT, filesToDelete);
+            MultipartBody.Part checkBack = RequestBuilder.buildMultipartBody( TxField.CHECK_BACK, filesToDelete);
+            RequestBody username = buildStringBody("Tito Robe");
 
-            String fileName = "checkFront_" + System.currentTimeMillis() + ".jpg";
+            Call<ResponseBody> call = api.upload(
+                    checkFront,
+                    checkBack,
+                    username
+            );
 
-            final File file = new File(path, fileName);
+           final TxActivity _this = this;
 
-            if(!file.exists()){
-                Log.i("file >> ", "file.createNewFile() -> " + path + fileName );
-                file.createNewFile();
-            }
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-            byte[] bitmapdata = bos.toByteArray();
-
-//write the bytes in file
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(file);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            try {
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-
-            RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
-
-
-        Call<ResponseBody> call = api.upload(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call,
                                    Response<ResponseBody> response) {
-                Log.i("-------- onResponse", "success XXX.. deleting:: " + file.getName());
 
-                file.delete();
+                for (File file: filesToDelete){
+                    file.delete();
+                }
+
+                if (mProgressDialog != null && mProgressDialog.isShowing()) mProgressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("-------- onFailure", t.getMessage());
+                if (mProgressDialog != null && mProgressDialog.isShowing()) mProgressDialog.dismiss();
+
+                new AlertDialog.Builder(_this)
+                        .setTitle("Error")
+                        .setMessage( t.getMessage() )
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setCancelable(true)
+                        .setIcon(R.drawable.error)
+                        .show();
             }
         });
 
         }catch(Exception e){
             e.printStackTrace();
-
         }
       }
+
+
 
 }

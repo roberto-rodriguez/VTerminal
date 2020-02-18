@@ -73,7 +73,7 @@ public class CaptureActivity extends AppCompatActivity
 
     private TxField field;
 
-    WebAPIService api;
+//    WebAPIService api;
 
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
 
@@ -103,8 +103,8 @@ public class CaptureActivity extends AppCompatActivity
 
         setUp();
 
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        api = new Retrofit.Builder().baseUrl("http://149.97.166.38:8085/").client(client).build().create(WebAPIService.class);
+//        OkHttpClient client = new OkHttpClient.Builder().build();
+//        api = new Retrofit.Builder().baseUrl("http://149.97.166.38:8085/").client(client).build().create(WebAPIService.class);
 
     }
 
@@ -300,12 +300,12 @@ public class CaptureActivity extends AppCompatActivity
             return null;
         }
 
-        try{
-            sendImage(  bitmap,   filePath);
-        }catch(Exception e){
-            Log.i("sendImage", "Exception:: " + e.getMessage());
-            e.printStackTrace();
-        }
+//        try{
+//            sendImage(  bitmap,   filePath);
+//        }catch(Exception e){
+//            Log.i("sendImage", "Exception:: " + e.getMessage());
+//            e.printStackTrace();
+//        }
 
         return new Image(bitmap);
     }
@@ -351,54 +351,54 @@ public class CaptureActivity extends AppCompatActivity
 //------- TODO move this to another class
 
 
-    public interface WebAPIService {
-        @Multipart
-        @POST("FrontTerminal/v1/tx/checkAuth")
-        Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
-    }
-
-
-
-    public void sendImage(Bitmap bitmap, String filePath){
-        File file = new File(filePath);
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-        byte[] bitmapdata = bos.toByteArray();
-
-//write the bytes in file
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
-
-
-        Call<ResponseBody> call = api.upload(body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call,
-                                   Response<ResponseBody> response) {
-                Log.i("-------- onResponse", "success XXX");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("-------- onFailure", t.getMessage());
-            }
-        });
-    }
+//    public interface WebAPIService {
+//        @Multipart
+//        @POST("FrontTerminal/v1/tx/checkAuth")
+//        Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
+//    }
+//
+//
+//
+//    public void sendImage(Bitmap bitmap, String filePath){
+//        File file = new File(filePath);
+//
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+//        byte[] bitmapdata = bos.toByteArray();
+//
+////write the bytes in file
+//        FileOutputStream fos = null;
+//        try {
+//            fos = new FileOutputStream(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            fos.write(bitmapdata);
+//            fos.flush();
+//            fos.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//        RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+//
+//
+//        Call<ResponseBody> call = api.upload(body);
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call,
+//                                   Response<ResponseBody> response) {
+//                Log.i("-------- onResponse", "success XXX");
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.e("-------- onFailure", t.getMessage());
+//            }
+//        });
+//    }
 }
