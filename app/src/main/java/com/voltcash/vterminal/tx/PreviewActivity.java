@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.kofax.kmc.ken.engines.ImageProcessor;
@@ -43,8 +44,7 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
 
         processImage(TxData.getImage( field));
-       // processImage(Constants.RESULT_IMAGE);
-
+       
         mImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.view_review1);
 
         mfabRetake = (FloatingActionButton) findViewById(R.id.fab_retake);
@@ -52,9 +52,9 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         mfabRetake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("PreviewActivity",   "PreviewActivity.super.onBackPressed();" );
                 setResult(Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID);
                 PreviewActivity.super.onBackPressed();
-                finish();
             }
         });
 
@@ -65,6 +65,8 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
             public void onClick(View view) {
          //   Constants.RESULT_IMAGE = mImgReviewEditCntrl.getImage();
                 TxData.put( field, mImgReviewEditCntrl.getImage());
+
+                Log.i("PreviewActivity",   "setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);" );
 
             setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);
             finish();
@@ -97,7 +99,7 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
     @Override
     public void onBackPressed() {
         setResult(Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID);
-        super.onBackPressed();
+      //  super.onBackPressed();
         finish();
     }
 

@@ -62,20 +62,11 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public class CaptureActivity extends AppCompatActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
+        implements  CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
-    private static final String[] PERMISSIONS = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     private TxField field;
-
-//    WebAPIService api;
-
-    private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
 
     private boolean mTorchFlag = false;
     private FloatingActionButton mFabTorch;
@@ -94,39 +85,10 @@ public class CaptureActivity extends AppCompatActivity
 
         this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
 
-        AppContextProvider.setContext(getApplicationContext());
-        Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
-
-        if (!mPermissionsManager.isGranted(PERMISSIONS)) {
-            mPermissionsManager.request(PERMISSIONS);
-        }
-
         setUp();
-
-//        OkHttpClient client = new OkHttpClient.Builder().build();
-//        api = new Retrofit.Builder().baseUrl("http://149.97.166.38:8085/").client(client).build().create(WebAPIService.class);
-
     }
 
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
-        if (mPermissionsManager.isGranted(PERMISSIONS)) {
-            setUp();
-        } else {
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.permissions_rationale)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-        }
-    }
 
     private void setUp() {
         setContentView(R.layout.activity_capture);
@@ -185,17 +147,10 @@ public class CaptureActivity extends AppCompatActivity
             fabGallery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    String[] GALLERY_PERMISSIONS_REQUIRED = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-
-                    if (mPermissionsManager.isGranted(GALLERY_PERMISSIONS_REQUIRED)) {
-                        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                        photoPickerIntent.setType("image/*");
-                        startActivityForResult(photoPickerIntent, Constants.GALLERY_IMPORT_REQUEST_ID);
-                    } else {
-                        mPermissionsManager.request(GALLERY_PERMISSIONS_REQUIRED);
-                    }
-                }
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, Constants.GALLERY_IMPORT_REQUEST_ID);
+            }
             });
         } else {
             fabGallery.setVisibility(View.GONE);
@@ -234,49 +189,15 @@ public class CaptureActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.i("CaptureActivity", requestCode + "onActivityResult:: requestCode = " + requestCode + " , resultCode = " + resultCode);
 
-        switch (requestCode) {
-            case Constants.GALLERY_IMPORT_REQUEST_ID:
-                Log.i("onActivityResult", requestCode + " - GALLERY_IMPORT_REQUEST_ID");
-                if (resultCode == RESULT_OK && data != null) {
-                    TxData.put(field, decodeImageFromIntent(data));
-
-                    if ( TxData.getImage(field) == null)
-                    {
-                        new AlertDialog.Builder(this)
-                                .setTitle("Error")
-                                .setMessage( "Gallery image is not selected" )
-                                .setPositiveButton(android.R.string.ok, null)
-                                .setCancelable(true)
-                                .setIcon(R.drawable.error)
-                                .show();
-                    }
-                    else {
-
-
-                        Toast.makeText(CaptureActivity.this, "onActivityResult -> Show PreviewActivity  ", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.PreviewActivity.class);
-                        intent.putExtra(TxField.TX_FIELD.getName(), field);
-                        startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
-                    }
-                }
-                break;
-
-            case Constants.PROCESSED_IMAGE_REQUEST_ID:
-                Log.i("onActivityResult", requestCode + " - PROCESSED_IMAGE_REQUEST_ID");
-                if (resultCode == RESULT_OK || resultCode == Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID) {
-
-                    CaptureActivity.super.onBackPressed();
-                    finish();
-
-      //              finish();
-//                    Toast.makeText(CaptureActivity.this, "Show ProcessImageActivity", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.ProcessImageActivity.class);
-//                    intent.putExtra(TxField.TX_FIELD.getName(), field);
-//                    startActivity(intent);
-                }
+        switch(resultCode){
+             case Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID:
+                setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);
+                finish();
                 break;
         }
+
     }
 
     private Image decodeImageFromIntent(Intent data) {
@@ -300,12 +221,6 @@ public class CaptureActivity extends AppCompatActivity
             return null;
         }
 
-//        try{
-//            sendImage(  bitmap,   filePath);
-//        }catch(Exception e){
-//            Log.i("sendImage", "Exception:: " + e.getMessage());
-//            e.printStackTrace();
-//        }
 
         return new Image(bitmap);
     }
@@ -348,57 +263,4 @@ public class CaptureActivity extends AppCompatActivity
     }
 
 
-//------- TODO move this to another class
-
-
-//    public interface WebAPIService {
-//        @Multipart
-//        @POST("FrontTerminal/v1/tx/checkAuth")
-//        Call<ResponseBody> upload(@Part MultipartBody.Part file);  //, @Part("image") RequestBody image
-//    }
-//
-//
-//
-//    public void sendImage(Bitmap bitmap, String filePath){
-//        File file = new File(filePath);
-//
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-//        byte[] bitmapdata = bos.toByteArray();
-//
-////write the bytes in file
-//        FileOutputStream fos = null;
-//        try {
-//            fos = new FileOutputStream(file);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            fos.write(bitmapdata);
-//            fos.flush();
-//            fos.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//        RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
-//
-//
-//        Call<ResponseBody> call = api.upload(body);
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call,
-//                                   Response<ResponseBody> response) {
-//                Log.i("-------- onResponse", "success XXX");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.e("-------- onFailure", t.getMessage());
-//            }
-//        });
-//    }
 }

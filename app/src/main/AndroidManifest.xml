@@ -46,6 +46,12 @@
             android:parentActivityName=".tx.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity
+            android:name=".tx.CaptureBarcodeActivity"
+            android:label="@string/title_activity_capture"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity android:name=".tx.TxActivity"></activity>
     </application>
 

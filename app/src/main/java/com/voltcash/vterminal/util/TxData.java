@@ -1,6 +1,7 @@
 package com.voltcash.vterminal.util;
 
 import com.kofax.kmc.ken.engines.data.Image;
+import com.kofax.kmc.kui.uicontrols.BarCodeFoundEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,8 @@ public class TxData{
 //    public static Image CHECK_FRONT_IMAGEX = null;
 
     public static Map data = new HashMap<TxField, Object>();
+
+    public static BarCodeFoundEvent BARCODE_EVENT = null;
 
     public static Image getImage(TxField fieldName){
         return (Image)data.get(fieldName);

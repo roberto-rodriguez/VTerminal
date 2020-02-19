@@ -7,7 +7,9 @@ package com.voltcash.vterminal.util;
 public enum TxField {
     TX_FIELD("txField"),
     CHECK_FRONT("checkFront"),
-    CHECK_BACK("checkBack");
+    CHECK_BACK("checkBack"),
+    ID_FRONT("idFront"),
+    ID_BACK("idBack");
 
     private String name;
 
