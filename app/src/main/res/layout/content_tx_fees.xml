@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tx_fees_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="0dp"
+    android:layout_marginStart="0dp"
+    android:background="@color/VOLTCASH_GREEN"
+    android:backgroundTint="@color/VOLTCASH_GREEN"
+    android:columnCount="2"
+    android:paddingVertical="@dimen/activity_horizontal_margin"
+    android:visibility="gone"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.08"
+    tools:context="com.voltcash.vterminal.tx.TxActivity"
+    tools:showIn="@layout/activity_tx">
+
+    <TextView
+        android:id="@+id/tx_amount_text"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_columnSpan="2"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:text="Amount: "
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/tx_fee_text"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:text="Transaction Fee: "
+        android:textColor="@android:color/background_light"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tx_activation_fee_text"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:text="Activation Fee: "
+        android:textColor="@android:color/background_light"
+        android:textSize="15sp" />
+
+</GridLayout>

@@ -22,6 +22,8 @@ public class TxData{
         return (Image)data.get(fieldName);
     }
 
+
+
     public static void put(TxField fieldName, Object value) {
         data.put(fieldName, value);
     }
@@ -32,6 +34,49 @@ public class TxData{
 
     public static boolean contains(TxField fieldName) {
         return data.containsKey(fieldName);
+    }
+
+    public static void take(Map other, TxField... fields){
+        for (TxField field : fields) {
+            put(field, other.get(field));
+        }
+    }
+    public static String getString(TxField fieldName){
+        Object obj = data.get(fieldName);
+
+        if(obj != null){
+           return obj.toString();
+        }
+        return "";
+    }
+
+    //TODO fotmat amount
+    public static String getAmount(TxField fieldName){
+        Object obj = data.get(fieldName);
+
+        if(obj != null){
+            return "$ " + obj + ".00";
+        }
+        return "$ 0.00";
+    }
+
+
+    public static Boolean getBoolean(TxField fieldName){
+        Object obj = data.get(fieldName);
+
+        Boolean bool = false;
+
+        if(obj != null){
+            if(obj instanceof String){
+                bool = Boolean.parseBoolean(obj.toString());
+                data.put(fieldName, bool);
+            }else{
+                if(obj instanceof Boolean){
+                    bool = (Boolean)obj;
+                }
+            }
+        }
+        return bool;
     }
 
 }

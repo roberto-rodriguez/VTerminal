@@ -6,10 +6,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.kui.uicontrols.BarCodeFoundEvent;
@@ -19,17 +20,26 @@ import com.kofax.kmc.kut.utilities.Licensing;
 import com.kofax.samples.common.License;
 import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.interfaces.ServiceCallerActivity;
+import com.voltcash.vterminal.services.TxServiceFactory;
+import com.voltcash.vterminal.services.impl.TxServiceImpl;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.TxField;
+import com.voltcash.vterminal.util.ViewUtil;
 
-public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class TxActivity extends ServiceCallerActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
     private ProgressDialog mProgressDialog;
 
     private ImgReviewEditCntrl checkFrontImgReviewEditCntrl;
     private ImgReviewEditCntrl checkBackImgReviewEditCntrl;
+    private ImgReviewEditCntrl idFrontImgReviewEditCntrl;
     private ImgReviewEditCntrl idBackImgReviewEditCntrl;
 
     private TxField activeImgField = null;
@@ -41,16 +51,20 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    private List<Integer> showIfCardNotExist = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx);
-        getSupportActionBar().hide();
 
-        checkFrontImgReviewEditCntrl= (ImgReviewEditCntrl) findViewById(R.id.view_check_front_image);
-        checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.view_check_back_image);
-        idBackImgReviewEditCntrl    = (ImgReviewEditCntrl) findViewById(R.id.view_id_back_image);
+        setTitle("Check Transaction");
+
+        checkFrontImgReviewEditCntrl= (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
+        checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_back_image);
+        idFrontImgReviewEditCntrl    = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
+        idBackImgReviewEditCntrl    = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
 
         if (!mPermissionsManager.isGranted(PERMISSIONS)) {
             mPermissionsManager.request(PERMISSIONS);
@@ -58,6 +72,13 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
         AppContextProvider.setContext(getApplicationContext());
         Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
+
+        showIfCardNotExist = Arrays.asList(
+                R.id.tx_id_front_wrapper,
+                R.id.tx_id_back_wrapper,
+                R.id.tx_id_ssn_input,
+                R.id.tx_id_phone_input
+        );
     }
 
     @Override
@@ -76,8 +97,21 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         }
     }
 
+
+    public void onCalculateFees(View view){
+        String card = ((EditText)findViewById(R.id.tx_card_field)).getText().toString();
+        String amount = ((EditText)findViewById(R.id.tx_amount_input)).getText().toString();
+
+        TxData.put(TxField.CARD_NUMBER, card);
+        TxData.put(TxField.AMOUNT, amount);
+
+        TxServiceFactory.checkAuthLocationConfig(this, card, amount, "01");
+    }
+
+
+
     public void onSubmit(View view){
-            TxService.submit(this);
+        TxServiceFactory.submitTx(this);
     }
 
     public void onClickCheckFront(View view){
@@ -86,6 +120,10 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
     public void onClickCheckBack(View view){
         onCaptureClick(TxField.CHECK_BACK, checkBackImgReviewEditCntrl, CaptureActivity.class);
+    }
+
+    public void onClickIdFront(View view){
+        onCaptureClick(TxField.ID_FRONT, idFrontImgReviewEditCntrl, CaptureActivity.class);
     }
 
     public void onClickIdBack(View view){
@@ -144,14 +182,8 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
 
                     if(activeImgField == TxField.ID_BACK){
-                        new AlertDialog.Builder(this)
-                            .setTitle("Success")
-                            .setMessage( barCodeFoundEvent.getBarCode().getValue() )
-                            .setPositiveButton(android.R.string.ok, null)
-                            .setCancelable(true)
-                            .setIcon(R.drawable.error)
-                            .show();
-                          }
+                        ViewUtil.showError(this, "Success", barCodeFoundEvent.getBarCode().getValue() );
+                     }
                     break;
 
                 case Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID:
@@ -166,5 +198,33 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         }
 
 
+    }
+
+    @Override
+    public void onServiceCallback(String serviceType, Boolean success) {
+
+        switch(serviceType ){
+            case TxServiceImpl.CHECK_AUTH_LOCATION_CONFIG:
+                findViewById(R.id.tx_calculate_fees_layout).setVisibility(View.GONE);
+                findViewById(R.id.tx_fees_layout).setVisibility(View.VISIBLE);
+                findViewById(R.id.tx_grid_layout).setVisibility(View.VISIBLE);
+
+                Boolean cardExist    = TxData.getBoolean(TxField.CARD_EXIST);
+                String cardLoadFee   = TxData.getString(TxField.CARD_LOAD_FEE);
+                String activationFee   = TxData.getString(TxField.ACTIVATION_FEE);
+
+                if(!cardExist){
+                    for(int id : showIfCardNotExist){
+                        findViewById(id).setVisibility(View.VISIBLE);
+                    }
+                }
+
+                ((TextView)findViewById(R.id.tx_amount_text)).setText("Amount: " + TxData.getAmount(TxField.AMOUNT));
+                ((TextView)findViewById(R.id.tx_fee_text)).setText("Transaction Fee: " + cardLoadFee);
+                ((TextView)findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: " + activationFee);
+                break;
+            case TxServiceImpl.CHECK_AUTH:
+
+        }
     }
 }

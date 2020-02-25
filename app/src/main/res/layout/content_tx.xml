@@ -1,49 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tx_grid_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.voltcash.vterminal.MainActivity"
-    tools:showIn="@layout/activity_main">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:columnCount="2"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintTop_toBottomOf="@+id/tx_fees_layout"
+    app:layout_constraintVertical_bias="0.08"
+    tools:context="com.voltcash.vterminal.tx.TxActivity"
+    tools:showIn="@layout/activity_tx">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:onClick="onClickCheckFront"
         android:orientation="vertical">
 
-        <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
-            android:id="@+id/view_check_front_image"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="140dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerInside"
-            android:visibility="visible" />
+            android:layout_height="20dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+
+            android:text="Check Front" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="fill_horizontal"
+
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+                android:id="@+id/tx_check_front_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrey"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:visibility="visible" />
 
 
+        </LinearLayout>
     </LinearLayout>
+
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:onClick="onClickCheckBack"
         android:orientation="vertical">
 
-
-        <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
-            android:id="@+id/view_check_back_image"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="140dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerInside"
-            android:visibility="visible" />
+            android:layout_height="20dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
 
+            android:text="Check Back" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="fill_horizontal"
+            android:orientation="vertical"
+
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+                android:id="@+id/tx_check_back_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrey"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/tx_id_front_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:onClick="onClickIdFront"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+
+            android:text="ID Front" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="fill_horizontal"
+
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+                android:id="@+id/tx_id_front_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrey"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/tx_id_back_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:onClick="onClickIdBack"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+
+            android:text="ID Barcode" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="fill_horizontal"
+            android:orientation="vertical"
+
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
+                android:id="@+id/tx_id_back_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrey"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/tx_id_ssn_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:hint="SSN"
+        android:inputType="phone"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/tx_id_phone_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:hint="Phone"
+        android:inputType="textPersonName|phone"
+        android:visibility="gone" />
+</GridLayout>

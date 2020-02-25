@@ -6,151 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.voltcash.vterminal.tx.TxActivity">
 
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:columnCount="2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.08">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:onClick="onClickCheckFront"
-            android:orientation="vertical">
+    <include layout="@layout/content_tx_calculate_fees" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="fill_horizontal"
-                android:gravity="center"
+    <include  layout="@layout/content_tx_fees" />
 
-                android:text="Check Front" />
+    <include layout="@layout/content_tx" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="fill_horizontal"
-
-                android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin">
-
-                <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
-                    android:id="@+id/view_check_front_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey"
-                    android:gravity="center"
-                    android:scaleType="centerInside"
-                    android:visibility="visible" />
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:onClick="onClickCheckBack"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="fill_horizontal"
-                android:gravity="center"
-
-                android:text="Check Back" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="fill_horizontal"
-                android:orientation="vertical"
-
-                android:padding="@dimen/activity_horizontal_margin">
-
-                <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
-                    android:id="@+id/view_check_back_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey"
-                    android:gravity="center"
-                    android:scaleType="centerInside"
-                    android:visibility="visible" />
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="Tile3" />
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:onClick="onClickIdBack"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="fill_horizontal"
-                android:gravity="center"
-
-                android:text="ID Barcode" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="fill_horizontal"
-                android:orientation="vertical"
-
-                android:padding="@dimen/activity_horizontal_margin">
-
-                <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl
-                    android:id="@+id/view_id_back_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey"
-                    android:gravity="center"
-                    android:scaleType="centerInside"
-                    android:visibility="visible" />
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-    </GridLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -160,18 +22,17 @@
         android:layout_marginBottom="16dp"
         android:onClick="onClickCheckBack"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/tx_submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onSubmit"
             android:text="Submit" />
     </LinearLayout>
-
 
 
 

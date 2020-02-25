@@ -3,6 +3,11 @@ package com.voltcash.vterminal.util;
 import com.kofax.kmc.ken.engines.data.Image;
 
 public class Constants {
+
+    public static final int ENV_PROD = 0;
+    public static final int ENV_DEV  = 1;
+    public static final int ENV_LOCAL= 2;
+
     public static Image RESULT_IMAGEX = null;
     public final static String PHOTO_ALBUM_NAME = "KofaxMobileCapture";
 

@@ -9,7 +9,15 @@ public enum TxField {
     CHECK_FRONT("checkFront"),
     CHECK_BACK("checkBack"),
     ID_FRONT("idFront"),
-    ID_BACK("idBack");
+    ID_BACK("idBack"),
+    AMOUNT("amount"),
+    CARD_NUMBER("cardNumber"),
+    OPERATION("operation"),
+
+    //------- response ------
+    CARD_LOAD_FEE("crdldf"),
+    ACTIVATION_FEE("activationFee"),
+    CARD_EXIST("cardExists");
 
     private String name;
 

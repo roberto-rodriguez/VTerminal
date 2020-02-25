@@ -44,7 +44,7 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
 
         processImage(TxData.getImage( field));
-       
+
         mImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.view_review1);
 
         mfabRetake = (FloatingActionButton) findViewById(R.id.fab_retake);
