@@ -1,11 +1,15 @@
 package com.voltcash.vterminal.services;
 
-import com.voltcash.vterminal.interfaces.ServiceCallerActivity;
+import android.support.v7.app.AppCompatActivity;
+
+import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxService;
 import com.voltcash.vterminal.services.impl.TxServiceImpl;
 import com.voltcash.vterminal.services.stub.TxServiceStub;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Settings;
+import com.voltcash.vterminal.util.TxData;
+import com.voltcash.vterminal.util.TxField;
 import com.voltcash.vterminal.util.ViewUtil;
 
 /**
@@ -24,17 +28,17 @@ public class TxServiceFactory{
         }
     }
 
-    public static void checkAuthLocationConfig(ServiceCallerActivity caller, String cardNumber, String amount, String operation) {
+    public static void checkAuthLocationConfig(AppCompatActivity caller, ServiceCallback callback) {
         try {
-            service.checkAuthLocationConfig(caller, cardNumber, amount, operation);
+            service.checkAuthLocationConfig(caller, callback);
         }catch(Exception e){
             ViewUtil.showError(caller, "Error", e.getMessage());
         }
     }
 
-    public static void submitTx(ServiceCallerActivity caller) {
+    public static void tx(AppCompatActivity caller, ServiceCallback callback) {
         try {
-            service.submitTx(caller);
+            service.tx(caller, callback);
         }catch(Exception e){
             ViewUtil.showError(caller, "Error", e.getMessage());
         }

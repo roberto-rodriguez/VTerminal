@@ -1,5 +1,7 @@
 package com.voltcash.vterminal.interfaces;
 
+import java.util.Map;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -14,16 +16,23 @@ import retrofit2.http.Part;
 
 public interface TxServiceAPI {
     @Multipart
-    @POST("FrontTerminal/v1/tx/checkAuth")
-    Call<ResponseBody> upload(
+    @POST("FrontTerminal/v1/tx/tx")
+    Call<Map> tx(
             @Part MultipartBody.Part checkFront,
             @Part MultipartBody.Part checkBack,
-            @Part("username") RequestBody params
+            @Part MultipartBody.Part idFrontImage,
+            @Part MultipartBody.Part idBackImage,
+            @Part("amount") RequestBody amount,
+            @Part("cardNumber") RequestBody  cardNumber,
+            @Part("phone") RequestBody  phone,
+            @Part("ssn") RequestBody ssn,
+            @Part("operation") RequestBody operation,
+            @Part("dlDataScan") RequestBody dlDataScan
     );
 
     @Multipart
     @POST("FrontTerminal/v1/tx/checkAuthLocationConfig")
-    Call<ResponseBody> checkAuthLocationConfig(
+    Call<Map> checkAuthLocationConfig(
             @Part("cardNumber") RequestBody cardNumber,
             @Part("amount")     RequestBody amount,
             @Part("operation")  RequestBody operation

@@ -13,11 +13,14 @@ public enum TxField {
     AMOUNT("amount"),
     CARD_NUMBER("cardNumber"),
     OPERATION("operation"),
+    DL_DATA_SCAN("dlDataScan"),
+    SSN("ssn"),
+    PHONE("phone"),
 
     //------- response ------
-    CARD_LOAD_FEE("crdldf"),
-    ACTIVATION_FEE("activationFee"),
-    CARD_EXIST("cardExists");
+    CARD_LOAD_FEE("CRDLDF"),
+    ACTIVATION_FEE("ACTIVATION_FEE"),
+    CARD_EXIST("CARD_EXIST");
 
     private String name;
 

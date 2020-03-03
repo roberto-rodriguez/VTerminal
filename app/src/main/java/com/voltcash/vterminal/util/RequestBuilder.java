@@ -21,8 +21,8 @@ import okhttp3.RequestBody;
 
 public class RequestBuilder {
 
-    public static RequestBody buildStringBody(String str) throws IOException {
-        return RequestBody.create(MediaType.parse("text/plain"), str);
+    public static RequestBody buildStringBody(TxField fieldName) throws IOException {
+        return RequestBody.create(MediaType.parse("text/plain"), TxData.getString(fieldName));
     }
 
     public static MultipartBody.Part buildMultipartBody(TxField fieldName, List<File> filesToDelete) throws IOException {

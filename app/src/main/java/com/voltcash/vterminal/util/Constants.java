@@ -37,5 +37,6 @@ public class Constants {
     //activity state constants
     public final static String IMAGE_GALLERY_PATH_NAME = "SavedImageGalleryPath";
     public final static String IMAGE_EXTERNAL_PATH_NAME = "SavedImageExternalPath";
+    public final static String RECEIPT_LINES = "RECEIPT_LINES";
 }
 

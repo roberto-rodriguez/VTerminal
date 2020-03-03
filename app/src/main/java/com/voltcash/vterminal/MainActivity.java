@@ -18,9 +18,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        setTitle("Voltcash Terminal");
 
-        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
-        startActivity(txActivity);
+
+//        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
+//        startActivity(txActivity);
 
     }
 
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(intent);
 //    }
 
-    protected void onTerminalAuth(View view){
+    protected void onProcessCheck(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
         startActivity(txActivity);
     }

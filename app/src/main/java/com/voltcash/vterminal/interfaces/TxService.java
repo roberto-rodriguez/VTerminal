@@ -31,11 +31,11 @@ import static com.voltcash.vterminal.util.ViewUtil.showError;
  */
 
 public interface TxService {
-    public static final String CHECK_AUTH = "checkAuth";
+    public static final String TX = "tx";
     public static final String CHECK_AUTH_LOCATION_CONFIG = "checkAuthLocationConfig";
 
 
-    public void checkAuthLocationConfig(final ServiceCallerActivity caller, String cardNumber, String amount, String operation)throws Exception;
+    public void checkAuthLocationConfig(final AppCompatActivity caller, ServiceCallback callback)throws Exception;
 
-    public void submitTx(final ServiceCallerActivity caller) throws Exception;
+    public void tx(final AppCompatActivity caller, final ServiceCallback callback) throws Exception;
 }
