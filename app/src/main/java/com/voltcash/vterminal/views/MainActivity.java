@@ -1,12 +1,12 @@
-package com.voltcash.vterminal;
+package com.voltcash.vterminal.views;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import com.voltcash.vterminal.auth.AuthTerminalActivity;
-import com.voltcash.vterminal.auth.LoginActivity;
+
+import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
+import com.voltcash.vterminal.views.auth.LoginActivity;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
 

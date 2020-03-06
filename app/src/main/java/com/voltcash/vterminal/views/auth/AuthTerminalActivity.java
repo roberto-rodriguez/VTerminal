@@ -1,8 +1,7 @@
-package com.voltcash.vterminal.auth;
+package com.voltcash.vterminal.views.auth;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
-import com.voltcash.vterminal.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
@@ -42,12 +40,15 @@ public class AuthTerminalActivity extends AppCompatActivity {
         AuthService.connectTerminal(accessCode, new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
-
+                Log.i("AuthTerminalActivity", "onSuccess"  );
                 PreferenceUtil.write(getApplicationContext(), response,
                         Field.AUTH.TERMINAL_USERNAME,
                         Field.AUTH.TERMINAL_PASSWORD ,
                         Field.AUTH.TERMINAL_SERIAL_NUMBER
                 );
+
+                String serialNumber = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString( Field.AUTH.TERMINAL_SERIAL_NUMBER, null);
+                Log.i("After Save", "serialNumber" + serialNumber );
 
                 Intent loginView = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(loginView);

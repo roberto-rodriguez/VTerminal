@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.voltcash.vterminal.tx.ProcessImageActivity"
+    tools:context=".views.tx.ProcessImageActivity"
     tools:showIn="@layout/activity_process_image">
 
     <com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl

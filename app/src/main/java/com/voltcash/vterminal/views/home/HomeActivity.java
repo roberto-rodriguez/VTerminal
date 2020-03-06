@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.home;
+package com.voltcash.vterminal.views.home;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.voltcash.vterminal.R;
-import com.voltcash.vterminal.tx.TxActivity;
+import com.voltcash.vterminal.views.tx.TxActivity;
 
 public class HomeActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.auth;
+package com.voltcash.vterminal.views.auth;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
-import com.voltcash.vterminal.home.HomeActivity;
+import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;

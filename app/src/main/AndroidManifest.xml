@@ -22,43 +22,43 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".auth.AuthTerminalActivity" />
-        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".views.auth.AuthTerminalActivity" />
+        <activity android:name=".views.home.HomeActivity" />
         <activity
-            android:name=".tx.CaptureActivity"
+            android:name=".views.tx.CaptureActivity"
             android:label="@string/title_activity_capture"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".views.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".tx.PreviewActivity"
+            android:name=".views.tx.PreviewActivity"
             android:label="@string/title_activity_preview"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:parentActivityName=".tx.CaptureActivity"
+            android:parentActivityName=".views.tx.CaptureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".tx.ProcessImageActivity"
+            android:name=".views.tx.ProcessImageActivity"
             android:label="@string/title_activity_process_image"
-            android:parentActivityName=".tx.PreviewActivity"
+            android:parentActivityName=".views.tx.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
-            android:name=".tx.CaptureBarcodeActivity"
+            android:name=".views.tx.CaptureBarcodeActivity"
             android:label="@string/title_activity_capture"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".views.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <activity android:name=".tx.TxActivity"></activity>
+        <activity android:name=".views.tx.TxActivity"></activity>
 
         <activity android:name=".util.ReceiptActivity"></activity>
 
-        <activity android:name=".auth.LoginActivity"></activity>
+        <activity android:name=".views.auth.LoginActivity"></activity>
 
         <provider
             android:name="com.voltcash.vterminal.util.GenericFileProvider"

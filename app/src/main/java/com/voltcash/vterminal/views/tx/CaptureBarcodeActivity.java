@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.tx;
+package com.voltcash.vterminal.views.tx;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

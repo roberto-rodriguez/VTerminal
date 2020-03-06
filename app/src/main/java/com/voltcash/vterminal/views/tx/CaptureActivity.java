@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.tx;
+package com.voltcash.vterminal.views.tx;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -207,7 +207,7 @@ public class CaptureActivity extends AppCompatActivity
               //  Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
                 TxData.put(field, imageCapturedEvent.getImage());
 
-                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.PreviewActivity.class);
+                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
                 intent.putExtra( Field.TX.TX_FIELD , field);
                 startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
             } else {
