@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.Image;
+import com.kofax.kmc.ken.engines.processing.ColorDepth;
 import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
 import com.kofax.kmc.kut.utilities.error.ErrorInfo;
@@ -21,10 +22,11 @@ import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.SettingsHelperClass;
 import com.voltcash.vterminal.util.TxData;
+import com.voltcash.vterminal.util.ViewUtil;
 
 import java.util.Date;
 
-public class PreviewActivity extends AppCompatActivity implements ImageProcessor.ImageOutListener {
+public class PreviewActivity extends AppCompatActivity{
 
     private ImgReviewEditCntrl mImgReviewEditCntrl;
 
@@ -42,7 +44,7 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
 
         this.field = (String)getIntent().getExtras().get(Field.TX.TX_FIELD);
 
-        processImage(TxData.getImage( field));
+
 
         mImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.view_review1);
 
@@ -72,17 +74,19 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
             }
         });
 
-        if (mProgressDialog == null) {
-            isProgressDialog = true;
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setTitle("Please wait");
-            mProgressDialog.setMessage("Image is processing...");
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-        } else {
-            if (isProgressDialog && !mProgressDialog.isShowing()) mProgressDialog.show();
-        }
+        showImage(TxData.getImage(field));
+
+//        if (mProgressDialog == null) {
+//            isProgressDialog = true;
+//            mProgressDialog = new ProgressDialog(this);
+//            mProgressDialog.setTitle("Please wait");
+//            mProgressDialog.setMessage("Image is processing...");
+//            mProgressDialog.setCanceledOnTouchOutside(false);
+//            mProgressDialog.setCancelable(false);
+//            mProgressDialog.show();
+//        } else {
+//            if (isProgressDialog && !mProgressDialog.isShowing()) mProgressDialog.show();
+//        }
     }
 
     protected void onResume() {
@@ -101,57 +105,21 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         finish();
     }
 
-    private void processImage(Image srcImage) {
-        ImageProcessor imageProcessor = new ImageProcessor();
-        imageProcessor.addImageOutEventListener(this);
-        ImageProcessorConfiguration imageProcessingConfiguration = SettingsHelperClass.getImageProcessorConfiguration(this);
+    private void showImage(Image srcImage)  {
+        try{
+            mImgReviewEditCntrl.setImage(srcImage);
 
-        try {
-            imageProcessor.processImage(srcImage, imageProcessingConfiguration);
-        } catch (KmcException e) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage( "Image processing failed" )
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setCancelable(true)
-                    .setIcon(R.drawable.error)
-                    .show();
-        }
-    }
+            mfabRetake.setVisibility(View.VISIBLE);
+            mfabGoToProcessing.setVisibility(View.VISIBLE);
 
-    @Override
-    public void imageOut(ImageProcessor.ImageOutEvent event) {
-        if (event.getStatus() == ErrorInfo.KMC_SUCCESS) {
-            try {
-                mImgReviewEditCntrl.setImage( event.getImage() );
-
-                mfabRetake.setVisibility(View.VISIBLE);
-                mfabGoToProcessing.setVisibility(View.VISIBLE);
-
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                    isProgressDialog = false;
-                }
-
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                if (!prefs.contains("pref_key_shots_count") || !prefs.contains("pref_key_last_usage_date")) {
-                    SettingsHelperClass.initRestrictionPropertiesFields(prefs);
-                } else {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putInt("pref_key_shots_count", (prefs.getInt("pref_key_shots_count", -1) + 1));
-                    editor.putLong("pref_key_last_usage_date", new Date().getTime());
-                    editor.apply();
-                }
-
-            } catch (KmcException e) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage( "Image processing failed" )
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setCancelable(true)
-                        .setIcon(R.drawable.error)
-                        .show();
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+                isProgressDialog = false;
             }
+        }catch(Exception e){
+            e.printStackTrace();
+
+            ViewUtil.showError(this, "Error Showing Image", e.getMessage());
         }
     }
 }

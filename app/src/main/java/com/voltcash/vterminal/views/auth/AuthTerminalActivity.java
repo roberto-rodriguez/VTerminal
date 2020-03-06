@@ -34,7 +34,6 @@ public class AuthTerminalActivity extends AppCompatActivity {
     }
 
     protected void onAuth(View view){
-
         String accessCode = accessCodeTextView.getText().toString();
 
         AuthService.connectTerminal(accessCode, new ServiceCallback(this) {
@@ -54,6 +53,5 @@ public class AuthTerminalActivity extends AppCompatActivity {
                 startActivity(loginView);
             }
         });
-
     }
 }

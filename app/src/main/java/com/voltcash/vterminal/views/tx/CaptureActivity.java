@@ -2,21 +2,28 @@ package com.voltcash.vterminal.views.tx;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.DocumentDetectionSettings;
 import com.kofax.kmc.ken.engines.data.Image;
+import com.kofax.kmc.ken.engines.processing.ColorDepth;
+import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationEvent;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationFailedEvent;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationFailedListener;
@@ -27,11 +34,15 @@ import com.kofax.kmc.kui.uicontrols.ImageCapturedListener;
 import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperience;
 import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperienceCriteriaHolder;
 import com.kofax.kmc.kui.uicontrols.data.Flash;
+import com.kofax.kmc.kut.utilities.error.ErrorInfo;
+import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
 
+import java.util.Date;
+
 public class CaptureActivity extends AppCompatActivity
-        implements  CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
+        implements  CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener, ImageProcessor.ImageOutListener  {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -205,11 +216,16 @@ public class CaptureActivity extends AppCompatActivity
         if (imageCapturedEvent != null) {
             if (imageCapturedEvent.getImage() != null) {
               //  Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
-                TxData.put(field, imageCapturedEvent.getImage());
+                Image image = imageCapturedEvent.getImage();
 
-                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
-                intent.putExtra( Field.TX.TX_FIELD , field);
-                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
+                processImage(image);
+                 //TODO test this
+               // image.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
+               // TxData.put(field, image);
+
+//                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
+//                intent.putExtra( Field.TX.TX_FIELD , field);
+//                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
             } else {
                 onBackPressed();
             }
@@ -225,5 +241,54 @@ public class CaptureActivity extends AppCompatActivity
         onBackPressed();
     }
 
+
+    // ----------------  Process Image ---------------
+
+    private void processImage(Image srcImage) {
+        ImageProcessor imageProcessor = new ImageProcessor();
+        imageProcessor.addImageOutEventListener(this);
+        ImageProcessorConfiguration imageProcessingConfiguration = SettingsHelperClass.getImageProcessorConfiguration(this);
+
+        if(field.equalsIgnoreCase(Field.TX.ID_FRONT)){
+            imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
+        }else{
+            srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
+        }
+
+        try {
+            imageProcessor.processImage(srcImage, imageProcessingConfiguration);
+        } catch (KmcException e) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage( "Image processing failed" )
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setCancelable(true)
+                    .setIcon(R.drawable.error)
+                    .show();
+        }
+    }
+
+    @Override
+    public void imageOut(ImageProcessor.ImageOutEvent event) {
+        if (event.getStatus() == ErrorInfo.KMC_SUCCESS) {
+            try {
+                Image image = event.getImage();
+                TxData.put(field, image);
+
+                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
+                intent.putExtra( Field.TX.TX_FIELD , field);
+                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
+
+            } catch (Exception e) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage( "Image processing failed" )
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setCancelable(true)
+                        .setIcon(R.drawable.error)
+                        .show();
+            }
+        }
+    }
 
 }
