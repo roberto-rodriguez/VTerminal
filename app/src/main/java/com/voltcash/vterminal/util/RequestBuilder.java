@@ -3,14 +3,12 @@ package com.voltcash.vterminal.util;
 import android.graphics.Bitmap;
 
 import com.kofax.kmc.ken.engines.data.Image;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -21,16 +19,16 @@ import okhttp3.RequestBody;
 
 public class RequestBuilder {
 
-    public static RequestBody buildStringBody(TxField fieldName) throws IOException {
-        return RequestBody.create(MediaType.parse("text/plain"), TxData.getString(fieldName));
+    public static RequestBody buildStringBody(String value) throws IOException {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
-    public static MultipartBody.Part buildMultipartBody(TxField fieldName, List<File> filesToDelete) throws IOException {
+    public static MultipartBody.Part buildMultipartBody(String fieldName, List<File> filesToDelete) throws IOException {
         String path = android.os.Environment
                 .getExternalStorageDirectory()
                 + File.separator;
 
-        String fileName = fieldName.getName() + "_" + System.currentTimeMillis() + ".jpg";
+        String fileName = fieldName + "_" + System.currentTimeMillis() + ".jpg";
         final File file = new File(path, fileName);
 
         Image checkFront =  TxData.getImage(fieldName);
@@ -60,7 +58,7 @@ public class RequestBuilder {
         }
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData(fieldName.getName(), file.getName(), reqFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData(fieldName , file.getName(), reqFile);
 
         filesToDelete.add(file);
 

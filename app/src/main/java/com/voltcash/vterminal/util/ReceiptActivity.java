@@ -14,13 +14,11 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -28,16 +26,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.voltcash.vterminal.R;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by roberto.rodriguez on 2/25/2020.
  */
@@ -112,23 +106,11 @@ public class ReceiptActivity  extends AppCompatActivity {
 
         }
 
-        // Close Document after writting all content
         document.close();
-
-//        Toast.makeText(this, "PDF File is Created. Location : " + FILENAME,
-//                Toast.LENGTH_LONG).show();
 
         openGeneratedPDF();
     }
 
-    // Set PDF document Properties
-//    public void addMetaData(Document document) {
-////        document.addTitle("RESUME");
-////        document.addSubject("Person Info");
-////        document.addKeywords("Personal,	Education, Skills");
-////        document.addAuthor("TAG");
-////        document.addCreator("TAG");
-//    }
 
     public void addTitlePage(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
         // Font Style for Document
@@ -223,8 +205,6 @@ public class ReceiptActivity  extends AppCompatActivity {
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-             //   Toast.makeText( this, "No Application available to view pdf", Toast.LENGTH_LONG).show();
-
             }
         }
     }

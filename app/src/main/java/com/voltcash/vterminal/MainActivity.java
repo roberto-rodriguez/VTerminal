@@ -4,13 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import com.voltcash.vterminal.tx.TxActivity;
+import android.util.Log;
+import com.voltcash.vterminal.auth.AuthTerminalActivity;
+import com.voltcash.vterminal.auth.LoginActivity;
+import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,28 +19,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        setTitle("Voltcash Terminal");
+        String serialNumber = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_SERIAL_NUMBER);
 
+        Intent activity;
 
-//        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
-//        startActivity(txActivity);
+        if(serialNumber == null){
+            activity = new Intent(getApplicationContext(), AuthTerminalActivity.class);
+        }else{
+            activity = new Intent(getApplicationContext(), LoginActivity.class);
+        }
 
+        startActivity(activity);
     }
-
-//    protected void onCaptureClick(View view){
-//        mProgressDialog = new ProgressDialog(this);
-//        mProgressDialog.setTitle("Please wait");
-//        mProgressDialog.setMessage("Initializing...");
-//        mProgressDialog.show();
-//
-//        Intent intent = new Intent(this, CaptureActivity.class);
-//        startActivity(intent);
-//    }
-
-    protected void onProcessCheck(View view){
-        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
-        startActivity(txActivity);
-    }
-
-
 }

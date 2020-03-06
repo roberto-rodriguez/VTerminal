@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-
 import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
@@ -19,9 +18,9 @@ import com.kofax.kmc.kut.utilities.error.ErrorInfo;
 import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.SettingsHelperClass;
 import com.voltcash.vterminal.util.TxData;
-import com.voltcash.vterminal.util.TxField;
 
 import java.util.Date;
 
@@ -34,14 +33,14 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
     private ProgressDialog mProgressDialog;
     private boolean isProgressDialog;
 
-    private TxField field;
+    private String field;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
 
-        this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
+        this.field = (String)getIntent().getExtras().get(Field.TX.TX_FIELD);
 
         processImage(TxData.getImage( field));
 
@@ -99,7 +98,6 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
     @Override
     public void onBackPressed() {
         setResult(Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID);
-      //  super.onBackPressed();
         finish();
     }
 

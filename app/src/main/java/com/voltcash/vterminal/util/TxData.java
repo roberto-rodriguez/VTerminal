@@ -14,34 +14,34 @@ public class TxData{
 
 //    public static Image CHECK_FRONT_IMAGEX = null;
 
-    public static Map data = new HashMap<TxField, Object>();
+    public static Map data = new HashMap<String, Object>();
 
     public static BarCodeFoundEvent BARCODE_EVENT = null;
 
-    public static Image getImage(TxField fieldName){
+    public static Image getImage(String fieldName){
         return (Image)data.get(fieldName);
     }
 
-    public static void put(TxField fieldName, Object value) {
+    public static void put(String fieldName, Object value) {
         data.put(fieldName, value);
     }
 
-    public static void remove(TxField fieldName) {
+    public static void remove(String fieldName) {
         data.remove(fieldName);
     }
 
-    public static boolean contains(TxField fieldName) {
+    public static boolean contains(String fieldName) {
         return data.containsKey(fieldName);
     }
 
     public static void clear() { data.clear();}
 
-    public static void take(Map other, TxField... fields){
-        for (TxField field : fields) {
+    public static void take(Map other, String... fields){
+        for (String field : fields) {
             put(field, other.get(field));
         }
     }
-    public static String getString(TxField fieldName){
+    public static String getString(String fieldName){
         Object obj = data.get(fieldName);
 
         if(obj != null){
@@ -51,7 +51,7 @@ public class TxData{
     }
 
     //TODO fotmat amount
-    public static String getAmount(TxField fieldName){
+    public static String getAmount(String fieldName){
         Object obj = data.get(fieldName);
 
         if(obj != null){
@@ -60,7 +60,7 @@ public class TxData{
         return "$ 0.00";
     }
 
-    public static Double getDouble(TxField fieldName){
+    public static Double getDouble(String fieldName){
         Object obj = data.get(fieldName);
         Double d = 0.0;
         try{
@@ -74,7 +74,7 @@ public class TxData{
         return d;
     }
 
-    public static Boolean getBoolean(TxField fieldName){
+    public static Boolean getBoolean(String fieldName){
         Object obj = data.get(fieldName);
 
         Boolean bool = false;

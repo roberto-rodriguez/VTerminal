@@ -1,9 +1,6 @@
 package com.voltcash.vterminal.tx;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,14 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import com.kofax.kmc.ken.engines.data.DocumentDetectionSettings;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationEvent;
@@ -33,40 +27,15 @@ import com.kofax.kmc.kui.uicontrols.ImageCapturedListener;
 import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperience;
 import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperienceCriteriaHolder;
 import com.kofax.kmc.kui.uicontrols.data.Flash;
-import com.kofax.kmc.kut.utilities.AppContextProvider;
-import com.kofax.kmc.kut.utilities.Licensing;
-import com.kofax.samples.common.License;
-import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.http.GET;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
 
 public class CaptureActivity extends AppCompatActivity
         implements  CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
-    private TxField field;
+    private String field;
 
     private boolean mTorchFlag = false;
     private FloatingActionButton mFabTorch;
@@ -82,9 +51,7 @@ public class CaptureActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
-
+        this.field = (String)getIntent().getExtras().get( Field.TX.TX_FIELD);
         setUp();
     }
 
@@ -189,8 +156,6 @@ public class CaptureActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("CaptureActivity", requestCode + "onActivityResult:: requestCode = " + requestCode + " , resultCode = " + resultCode);
-
         switch(resultCode){
              case Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID:
                 setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);
@@ -242,9 +207,8 @@ public class CaptureActivity extends AppCompatActivity
               //  Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
                 TxData.put(field, imageCapturedEvent.getImage());
 
-                Toast.makeText(CaptureActivity.this, "onImageCaptured -> Show PreviewActivity", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.tx.PreviewActivity.class);
-                intent.putExtra(TxField.TX_FIELD.getName(), field);
+                intent.putExtra( Field.TX.TX_FIELD , field);
                 startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
             } else {
                 onBackPressed();
@@ -258,7 +222,6 @@ public class CaptureActivity extends AppCompatActivity
         if (message == null || message.equals("")) {
             message = getResources().getString(R.string.camera_unavailable);
         }
-        Toast.makeText(CaptureActivity.this, message, Toast.LENGTH_LONG).show();
         onBackPressed();
     }
 

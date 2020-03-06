@@ -23,15 +23,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
 import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.BuildConfig;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.TxData;
-import com.voltcash.vterminal.util.TxField;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -56,12 +54,12 @@ public class ProcessImageActivity extends AppCompatActivity
 
     private long mLastClickTime = 0;
 
-    private TxField field;
+    private String field;
 
     private boolean checkWritePermissions(final boolean isForGallery) {
         int permission = ActivityCompat.checkSelfPermission(ProcessImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        this.field = (TxField)getIntent().getExtras().get(TxField.TX_FIELD.getName());
+        this.field = (String)getIntent().getExtras().get(Field.TX.TX_FIELD );
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             new AlertDialog.Builder(ProcessImageActivity.this)

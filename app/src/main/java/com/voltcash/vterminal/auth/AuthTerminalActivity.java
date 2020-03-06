@@ -1,0 +1,58 @@
+package com.voltcash.vterminal.auth;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.home.HomeActivity;
+import com.voltcash.vterminal.interfaces.ServiceCallback;
+import com.voltcash.vterminal.services.AuthService;
+import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
+
+import java.util.Map;
+
+public class AuthTerminalActivity extends AppCompatActivity {
+
+    private TextView accessCodeTextView;
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_auth_terminal);
+
+        getSupportActionBar().hide();
+
+        accessCodeTextView = (TextView)findViewById(R.id.access_code);
+        accessCodeTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    protected void onAuth(View view){
+
+        String accessCode = accessCodeTextView.getText().toString();
+
+        AuthService.connectTerminal(accessCode, new ServiceCallback(this) {
+            @Override
+            public void onSuccess(Map response) {
+
+                PreferenceUtil.write(getApplicationContext(), response,
+                        Field.AUTH.TERMINAL_USERNAME,
+                        Field.AUTH.TERMINAL_PASSWORD ,
+                        Field.AUTH.TERMINAL_SERIAL_NUMBER
+                );
+
+                Intent loginView = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginView);
+            }
+        });
+
+    }
+}
