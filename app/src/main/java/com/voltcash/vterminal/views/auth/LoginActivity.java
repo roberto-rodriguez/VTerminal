@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
@@ -37,10 +38,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void onLogin(View view){
-        String email = emailTextView.getText().toString();
-        String password = passwordTextView.getText().toString();
+        String serialNumber     = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_SERIAL_NUMBER);
+        String terminalUsername = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_USERNAME);
+        String terminalPassword = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_PASSWORD);
 
-        AuthService.login(email, password, new ServiceCallback(this) {
+        String email            = emailTextView.getText().toString();
+        String password         = passwordTextView.getText().toString();
+
+        Log.i("LoginActivity", "email = " + email);
+        Log.i("LoginActivity", "password = " + password);
+
+        AuthService.login(serialNumber, terminalUsername, terminalPassword, email, password, new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
                 PreferenceUtil.write(getApplicationContext(), response,

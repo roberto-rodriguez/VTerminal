@@ -29,7 +29,7 @@ public class AuthConnectorStub implements AuthConnector {
     }
 
 
-    public void login(String email, String password, ServiceCallback callback)throws Exception{
+    public void login(String serialNumber, String terminalUsername, String terminalPassword, String email, String password, ServiceCallback callback)throws Exception{
          boolean success = "a".equalsIgnoreCase(email) && "a".equalsIgnoreCase(password);
 
         Map response = new HashMap();

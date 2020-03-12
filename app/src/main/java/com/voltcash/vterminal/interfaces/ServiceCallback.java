@@ -30,6 +30,10 @@ public abstract class ServiceCallback implements Callback<Map> {
         try{
             Map response = res.body();
 
+            if(response == null){
+                throw new Exception("Unexpected Server Error");
+            }
+
             Log.i("RESPONSE", response.toString());
 
             if(response.containsKey(Field.ERROR_MESSAGE)){

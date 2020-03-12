@@ -21,9 +21,12 @@ public interface AuthServiceAPI {
     );
 
     @Multipart
-    @POST("FrontTerminal/v1/auth/login")
+    @POST("FrontTerminal/v1/clerk/login")
     Call<Map> login(
-            @Part("email") RequestBody email,
-            @Part("password") RequestBody password
+            @Part("terminalSerialNumber") RequestBody terminalSerialNumber,
+            @Part("terminalUsername") RequestBody terminalUsername,
+            @Part("terminalPassword") RequestBody terminalPassword,
+            @Part("clerkEmail") RequestBody email,
+            @Part("clerkPassword") RequestBody password
     );
 }

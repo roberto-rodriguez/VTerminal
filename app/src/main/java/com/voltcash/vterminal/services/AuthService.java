@@ -31,9 +31,9 @@ public class AuthService {
         }
     }
 
-    public static void login(String email, String password, ServiceCallback callback) {
+    public static void login(String serialNumber, String terminalUsername, String terminalPassword, String email, String password, ServiceCallback callback) {
         try {
-            connector.login( email, password,  callback);
+            connector.login( serialNumber, terminalUsername, terminalPassword,email, password, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }

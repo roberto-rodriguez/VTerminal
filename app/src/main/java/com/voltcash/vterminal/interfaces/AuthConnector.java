@@ -10,5 +10,5 @@ public interface AuthConnector {
 
     public void connectTerminal(String activationCode, ServiceCallback callback)throws Exception;
 
-    public void login(String email, String password, ServiceCallback callback)throws Exception;
+    public void login(String serialNumber, String terminalUsername, String terminalPassword, String clerkEmail, String clerkPassword, ServiceCallback callback)throws Exception;
 }

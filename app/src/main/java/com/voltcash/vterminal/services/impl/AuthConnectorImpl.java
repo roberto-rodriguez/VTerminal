@@ -9,6 +9,7 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Part;
 
 import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
 
@@ -44,12 +45,15 @@ public class AuthConnectorImpl implements AuthConnector {
     }
 
 
-    public void login(String email, String password, ServiceCallback callback)throws Exception{
-        try{
-            RequestBody emailBody = buildStringBody(email);
-            RequestBody passwordBody = buildStringBody(password);
+    public void login(String serialNumber, String terminalUser , String terminalPassw , String email, String password, ServiceCallback callback)throws Exception{
+        try{ 
+            RequestBody terminalSerialNumber = buildStringBody(serialNumber);
+            RequestBody terminalUsername = buildStringBody(terminalUser);
+            RequestBody terminalPassword = buildStringBody(terminalPassw);
+            RequestBody emailBody        = buildStringBody(email);
+            RequestBody passwordBody     = buildStringBody(password);
 
-            Call<Map> call = getAPI().login(emailBody, passwordBody);
+            Call<Map> call = getAPI().login(terminalSerialNumber, terminalUsername, terminalPassword, emailBody, passwordBody);
 
             call.enqueue(callback);
 
