@@ -62,7 +62,6 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx);
-
         setTitle("Check Transaction");
 
         checkFrontImgReviewEditCntrl= (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
@@ -86,6 +85,9 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
         TxData.clear();
         TxData.put(Field.TX.OPERATION, "01");
+
+        ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111111");
+        ((EditText)findViewById(R.id.tx_amount_input)).setText("12.88");
     }
 
     @Override
@@ -106,8 +108,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
 
     public void onCalculateFees(View view){
-        final ProgressDialog mProgressDialog = buildProgressDialog(this, "Calculating Fees", "Please wait...");
-
+        Log.v("onCalculateFees", "start");
         final String cardNumber = ((EditText)findViewById(R.id.tx_card_field)).getText().toString();
         final String amount = ((EditText)findViewById(R.id.tx_amount_input)).getText().toString();
 
@@ -121,9 +122,9 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         TxService.checkAuthLocationConfig(new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
-                Boolean cardExist    = TxData.getBoolean(Field.TX.CARD_EXIST);
-                String cardLoadFee   = TxData.getString(Field.TX.CARD_LOAD_FEE);
-                String activationFee = TxData.getString(Field.TX.ACTIVATION_FEE);
+                Boolean cardExist    = (Boolean)response.get(Field.TX.CARD_EXIST);
+                String cardLoadFee   = response.get(Field.TX.CARD_LOAD_FEE) + "";
+                String activationFee = response.get(Field.TX.ACTIVATION_FEE)+ "";
 
                 TxData.put(Field.TX.CARD_LOAD_FEE , cardLoadFee);
                 TxData.put(Field.TX.ACTIVATION_FEE, activationFee);
@@ -140,21 +141,15 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                     }
                 }
 
-                ((TextView)findViewById(R.id.tx_amount_text)).setText("Amount: $" + amount);
-                ((TextView)findViewById(R.id.tx_fee_text   )).setText("Transaction Fee: $" + cardLoadFee);
+                ((TextView)findViewById(R.id.tx_amount_text        )).setText("Amount: $"         + amount       );
+                ((TextView)findViewById(R.id.tx_fee_text           )).setText("Transaction Fee: $"+ cardLoadFee  );
                 ((TextView)findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + activationFee);
-
-                if (mProgressDialog != null && mProgressDialog.isShowing()){
-                    mProgressDialog.dismiss();
-                }
             }
         });
     }
 
     public void onSubmit(View view){
         final AppCompatActivity _this = this;
-        final ProgressDialog mProgressDialog =  buildProgressDialog(this, "Sending Transaction", "Please wait...");
-
         final String ssn = ((EditText)findViewById(R.id.tx_id_ssn_input)).getText().toString();
         final String phone = ((EditText)findViewById(R.id.tx_id_phone_input)).getText().toString();
 
@@ -166,10 +161,6 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         TxService.tx(new ServiceCallback(this){
             @Override
             public void onSuccess(Map response) {
-                if (mProgressDialog != null && mProgressDialog.isShowing()){
-                    mProgressDialog.dismiss();
-                }
-
                 Intent intent = new Intent(_this, ReceiptActivity.class);
 
                 Double amount = TxData.getDouble(Field.TX.AMOUNT);
@@ -177,9 +168,9 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                 Double payout = amount - fee;
                 String card = TxData.getString(Field.TX.CARD_NUMBER);
 
-                Log.i("onSubmit", "amount = " + amount);
-                Log.i("onSubmit", "fee = " + fee);
-                Log.i("onSubmit", "payout = " + payout);
+                Log.v("onSubmit", "amount = " + amount);
+                Log.v("onSubmit", "fee = " + fee);
+                Log.v("onSubmit", "payout = " + payout);
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());
@@ -200,6 +191,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     }
 
     public void onClickCheckFront(View view){
+        Log.i("TxActivity", "onClickCheckFront - 1");
         onCaptureClick(Field.TX.CHECK_FRONT, checkFrontImgReviewEditCntrl, CaptureActivity.class);
     }
 
@@ -216,24 +208,28 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     }
 
     protected void onCaptureClick(String field, ImgReviewEditCntrl imgCmp, Class captureClazz){
+        Log.v("TxActivity", "onCaptureClick - 1");
         activeImgField = field;
         activeImgCmp = imgCmp;
-
+        Log.v("TxActivity", "onCaptureClick - 2");
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Please wait");
         mProgressDialog.setMessage("Initializing...");
         mProgressDialog.show();
-
+        Log.v("TxActivity", "onCaptureClick - 3");
         Intent intent = null;
 
-        if(activeImgField != Field.TX.ID_BACK && TxData.contains(activeImgField)){
+        if(  !Field.TX.ID_BACK.equals(activeImgField) && TxData.contains(activeImgField)){
+            Log.v("TxActivity", "onCaptureClick - 3.1");
             intent = new Intent(this,   PreviewActivity.class);
         }else{
+            Log.v("TxActivity", "onCaptureClick - 3.2");
             intent = new Intent(this, captureClazz );
         }
-
+        Log.v("TxActivity", "onCaptureClick - 4");
         intent.putExtra(Field.TX.TX_FIELD , activeImgField);
         startActivityForResult(intent, Constants.TAKE_IMAGE_REQUEST_ID);
+        Log.v("TxActivity", "onCaptureClick - 5");
     }
 
 
@@ -246,7 +242,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("TxActivity", "onActivityResult() requestCode = " + requestCode + " , resultCode = " + resultCode);
+        Log.v("TxActivity", "onActivityResult() requestCode = " + requestCode + " , resultCode = " + resultCode);
 
         try{
 

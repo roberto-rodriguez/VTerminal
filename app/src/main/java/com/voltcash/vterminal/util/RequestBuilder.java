@@ -19,6 +19,10 @@ import okhttp3.RequestBody;
 
 public class RequestBuilder {
 
+    public static RequestBody buildStringBodyFromTxData(String fieldName) throws IOException {
+        return buildStringBody(TxData.getString(fieldName));
+    }
+
     public static RequestBody buildStringBody(String value) throws IOException {
         return RequestBody.create(MediaType.parse("text/plain"), value);
     }
@@ -31,8 +35,11 @@ public class RequestBuilder {
         String fileName = fieldName + "_" + System.currentTimeMillis() + ".jpg";
         final File file = new File(path, fileName);
 
-        Image checkFront =  TxData.getImage(fieldName);
-        Bitmap bitmap = checkFront.getImageBitmap();
+        Image image =  TxData.getImage(fieldName);
+
+        if(image == null)return null;
+
+        Bitmap bitmap = image.getImageBitmap();
 
         if(!file.exists()){
             file.createNewFile();

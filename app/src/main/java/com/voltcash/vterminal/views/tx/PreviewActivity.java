@@ -10,21 +10,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.Image;
-import com.kofax.kmc.ken.engines.processing.ColorDepth;
-import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
-import com.kofax.kmc.kut.utilities.error.ErrorInfo;
-import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
-import com.voltcash.vterminal.util.SettingsHelperClass;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 
-import java.util.Date;
 
 public class PreviewActivity extends AppCompatActivity{
 
@@ -40,6 +33,8 @@ public class PreviewActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.v("PreviewActivity", "onCreate - 1");
         setContentView(R.layout.activity_preview);
 
         this.field = (String)getIntent().getExtras().get(Field.TX.TX_FIELD);

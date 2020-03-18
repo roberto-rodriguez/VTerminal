@@ -25,6 +25,8 @@ public class AuthService {
 
     public static void connectTerminal(String activationCode, ServiceCallback callback) {
         try {
+            callback.startProgressDialog();
+
             connector.connectTerminal(activationCode, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
@@ -33,6 +35,8 @@ public class AuthService {
 
     public static void login(String serialNumber, String terminalUsername, String terminalPassword, String email, String password, ServiceCallback callback) {
         try {
+            callback.startProgressDialog();
+
             connector.login( serialNumber, terminalUsername, terminalPassword,email, password, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);

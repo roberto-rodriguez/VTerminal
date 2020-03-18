@@ -1,5 +1,6 @@
 package com.voltcash.vterminal.interfaces;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.voltcash.vterminal.util.ViewUtil.buildProgressDialog;
 import static com.voltcash.vterminal.util.ViewUtil.showError;
 
 /**
@@ -20,14 +22,24 @@ import static com.voltcash.vterminal.util.ViewUtil.showError;
 public abstract class ServiceCallback implements Callback<Map> {
     private AppCompatActivity caller;
 
+    ProgressDialog mProgressDialog;
+
     public ServiceCallback(AppCompatActivity caller){
         this.caller = caller;
+    }
+
+    public void startProgressDialog(){
+        mProgressDialog = buildProgressDialog(caller, "Processing", "Please wait...");
     }
 
     @Override
     public void onResponse(Call<Map> call,
                            Response<Map> res) {
         try{
+            if (mProgressDialog != null && mProgressDialog.isShowing()){
+                mProgressDialog.dismiss();
+            }
+
             Map response = res.body();
 
             if(response == null){
@@ -52,6 +64,11 @@ public abstract class ServiceCallback implements Callback<Map> {
     @Override
     public void onFailure(Call<Map> call, Throwable t) {
         t.printStackTrace();
+
+        if (mProgressDialog != null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+
         showError(caller, "Unexpected Error", t.getMessage());
     }
 

@@ -286,7 +286,7 @@ public class ProcessImageActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_process_image, menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
     }
 
@@ -298,14 +298,14 @@ public class ProcessImageActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.menu.home_menu) {
+//            finish();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

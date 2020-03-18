@@ -25,6 +25,8 @@ public class TxService {
 
     public static void checkAuthLocationConfig(ServiceCallback callback) {
         try {
+            callback.startProgressDialog();
+
             connector.checkAuthLocationConfig(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
@@ -33,6 +35,8 @@ public class TxService {
 
     public static void tx(ServiceCallback callback) {
         try {
+            callback.startProgressDialog();
+
             connector.tx(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
