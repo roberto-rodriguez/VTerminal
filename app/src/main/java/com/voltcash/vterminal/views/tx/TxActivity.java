@@ -24,11 +24,14 @@ import com.kofax.samples.common.License;
 import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
+import com.voltcash.vterminal.interfaces.TxServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ReceiptActivity;
 import com.voltcash.vterminal.util.TxData;
+import com.voltcash.vterminal.util.ViewUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,6 +125,12 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         TxService.checkAuthLocationConfig(new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
+
+                if(response == null){
+                    ViewUtil.showError(getCtx(), "Server Error", "Error trying to calculate fees. Please contact Customer Support");
+                    return;
+                }
+
                 Boolean cardExist    = (Boolean)response.get(Field.TX.CARD_EXIST);
                 String cardLoadFee   = response.get(Field.TX.CARD_LOAD_FEE) + "";
                 String activationFee = response.get(Field.TX.ACTIVATION_FEE)+ "";
@@ -155,8 +164,6 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
         TxData.put(Field.TX.SSN, ssn);
         TxData.put(Field.TX.PHONE, phone);
-
-
 
         TxService.tx(new ServiceCallback(this){
             @Override
@@ -208,28 +215,24 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     }
 
     protected void onCaptureClick(String field, ImgReviewEditCntrl imgCmp, Class captureClazz){
-        Log.v("TxActivity", "onCaptureClick - 1");
         activeImgField = field;
         activeImgCmp = imgCmp;
-        Log.v("TxActivity", "onCaptureClick - 2");
+
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Please wait");
         mProgressDialog.setMessage("Initializing...");
         mProgressDialog.show();
-        Log.v("TxActivity", "onCaptureClick - 3");
+
         Intent intent = null;
 
         if(  !Field.TX.ID_BACK.equals(activeImgField) && TxData.contains(activeImgField)){
-            Log.v("TxActivity", "onCaptureClick - 3.1");
             intent = new Intent(this,   PreviewActivity.class);
         }else{
-            Log.v("TxActivity", "onCaptureClick - 3.2");
             intent = new Intent(this, captureClazz );
         }
-        Log.v("TxActivity", "onCaptureClick - 4");
+
         intent.putExtra(Field.TX.TX_FIELD , activeImgField);
         startActivityForResult(intent, Constants.TAKE_IMAGE_REQUEST_ID);
-        Log.v("TxActivity", "onCaptureClick - 5");
     }
 
 

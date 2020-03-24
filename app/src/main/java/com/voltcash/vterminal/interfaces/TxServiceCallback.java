@@ -19,13 +19,10 @@ import static com.voltcash.vterminal.util.ViewUtil.showError;
  * Created by roberto.rodriguez on 2/24/2020.
  */
 
-public abstract class ServiceCallback implements Callback<Map> {
-    protected AppCompatActivity caller;
+public abstract class TxServiceCallback extends ServiceCallback{
 
-    protected ProgressDialog mProgressDialog;
-
-    public ServiceCallback(AppCompatActivity caller){
-        this.caller = caller;
+    public TxServiceCallback(AppCompatActivity caller){
+        super(caller);
     }
 
     public void startProgressDialog(){
@@ -43,6 +40,11 @@ public abstract class ServiceCallback implements Callback<Map> {
 
               response = res.body();
 
+            //-------
+            showError(caller, "RESPONSE", response == null ? "was null" : response.toString());
+            if(true)return;
+            //-------
+
             if(response == null){
                 throw new Exception("Unexpected Server Error");
             }
@@ -57,11 +59,16 @@ public abstract class ServiceCallback implements Callback<Map> {
         }catch(Exception e){
             e.printStackTrace();
 
-            if(response != null){
-                showError(caller, "Server Error", response.toString());
-            }else{
-                onFailure(call, e);
-            }
+            //-------
+            showError(caller, "EXCEPTION", e.getMessage());
+            if(true)return;
+            //-------
+
+//            if(response != null){
+//                showError(caller, "Server Error", response.toString());
+//            }else{
+//                onFailure(call, e);
+//            }
         }
 
     }
@@ -70,17 +77,22 @@ public abstract class ServiceCallback implements Callback<Map> {
     public void onFailure(Call<Map> call, Throwable t) {
          t.printStackTrace();
 
-        if (mProgressDialog != null && mProgressDialog.isShowing()){
-            mProgressDialog.dismiss();
-        }
-
-        showError(caller, "Unexpected Error", t.getMessage());
+        //-------
+        showError(caller, "ON_FAILURE", t.getMessage());
+        if(true)return;
+        //-------
+//
+//        if (mProgressDialog != null && mProgressDialog.isShowing()){
+//            mProgressDialog.dismiss();
+//        }
+//
+//        showError(caller, "Unexpected Error", t.getMessage());
     }
 
     public abstract void onSuccess(Map map);
 
     public void onError( Map map){
-        showError(caller, "Unexpected Error", (String)map.get("errorMessage"));
+        showError(caller, "Error", (String)map.get("errorMessage"));
     }
 
     public AppCompatActivity getCtx(){

@@ -2,7 +2,6 @@ package com.voltcash.vterminal.interfaces;
 
 import java.util.Map;
 
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Multipart;
@@ -28,5 +27,11 @@ public interface AuthServiceAPI {
             @Part("terminalPassword") RequestBody terminalPassword,
             @Part("clerkEmail") RequestBody email,
             @Part("clerkPassword") RequestBody password
+    );
+
+    @Multipart
+    @POST("FrontTerminal/v1/clerk/logOut")
+    Call<Map> logOut(
+            @Part("sessionToken") RequestBody sessionToken
     );
 }

@@ -18,6 +18,7 @@ public interface TxServiceAPI {
     @Multipart
     @POST("FrontTerminal/v1/tx/tx")
     Call<Map> tx(
+            @Part("sessionToken") RequestBody sessionToken,
             @Part MultipartBody.Part checkFront,
             @Part MultipartBody.Part checkBack,
             @Part MultipartBody.Part idFrontImage,
@@ -33,6 +34,7 @@ public interface TxServiceAPI {
     @Multipart
     @POST("FrontTerminal/v1/tx/checkAuthLocationConfig")
     Call<Map> checkAuthLocationConfig(
+            @Part("sessionToken") RequestBody sessionToken,
             @Part("cardNumber") RequestBody cardNumber,
             @Part("amount")     RequestBody amount,
             @Part("operation")  RequestBody operation

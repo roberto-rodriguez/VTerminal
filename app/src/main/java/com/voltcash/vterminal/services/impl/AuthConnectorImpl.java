@@ -63,4 +63,18 @@ public class AuthConnectorImpl implements AuthConnector {
         }
     }
 
+    public void logOut(String sessionToken, ServiceCallback callback)throws Exception{
+        try{
+            RequestBody token = buildStringBody(sessionToken);
+
+            Call<Map> call = getAPI().logOut(token);
+
+            call.enqueue(callback);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailure(null, e);
+        }
+    }
+
 }

@@ -3,7 +3,7 @@ package com.voltcash.vterminal.views;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.util.Log;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
 import com.voltcash.vterminal.views.auth.LoginActivity;
@@ -19,9 +19,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        String serialNumber = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_SERIAL_NUMBER);
+        PreferenceUtil.loadFromFile(this);
+
+        String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
 
         Intent activity;
+
+        Log.i("MainActivity", "serialNumber = " + serialNumber );
 
         if(serialNumber == null){
             activity = new Intent(getApplicationContext(), AuthTerminalActivity.class);

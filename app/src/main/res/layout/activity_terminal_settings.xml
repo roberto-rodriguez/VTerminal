@@ -7,7 +7,7 @@
     tools:context=".views.settings.ClerkSettingsActivity">
 
     <TextView
-        android:id="@+id/settings_clerk_name"
+        android:id="@+id/settings_terminal_serial"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginTop="16dp"
@@ -18,28 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_change_password"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:onClick="onChangePassword"
-        android:text="Change Password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_clerk_name" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Log Out"
-        android:onClick="onLogOut"
+        android:text="Disconnect"
+        android:onClick="onDisconnect"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_change_password" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_serial" />
 </android.support.constraint.ConstraintLayout>

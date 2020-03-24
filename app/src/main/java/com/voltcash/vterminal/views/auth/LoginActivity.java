@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
@@ -37,32 +38,30 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
     }
 
-    protected void onLogin(View view){
-        String serialNumber     = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_SERIAL_NUMBER);
-        String terminalUsername = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_USERNAME);
-        String terminalPassword = PreferenceUtil.read(getApplicationContext(), Field.AUTH.TERMINAL_PASSWORD);
+    protected void onLogin(View view) {
+            String serialNumber     = PreferenceUtil.read( Field.AUTH.TERMINAL_SERIAL_NUMBER);
+            String terminalUsername = PreferenceUtil.read( Field.AUTH.TERMINAL_USERNAME);
+            String terminalPassword = PreferenceUtil.read( Field.AUTH.TERMINAL_PASSWORD);
 
-        String email            = emailTextView.getText().toString();
-        String password         = passwordTextView.getText().toString();
+            String email            = emailTextView.getText().toString();
+            String password         = passwordTextView.getText().toString();
 
-        Log.i("LoginActivity", "email = " + email);
-        Log.i("LoginActivity", "password = " + password);
+            Log.i("LoginActivity", "email = " + email);
+            Log.i("LoginActivity", "password = " + password);
 
-        AuthService.login(serialNumber, terminalUsername, terminalPassword, email, password, new ServiceCallback(this) {
-            @Override
-            public void onSuccess(Map response) {
-                PreferenceUtil.write(getApplicationContext(), response,
-                        Field.AUTH.CLERK_FIRST_NAME,
-                        Field.AUTH.CLERK_LAST_NAME ,
-                        Field.AUTH.CLERK_ID        ,
-                        Field.AUTH.SESSION_TOKEN
-                );
+            AuthService.login(serialNumber, terminalUsername, terminalPassword, email, password, new ServiceCallback(this) {
+                @Override
+                public void onSuccess(Map response) {
+                    PreferenceUtil.write(getCtx(), response,
+                            Field.AUTH.CLERK_FIRST_NAME,
+                            Field.AUTH.CLERK_LAST_NAME ,
+                            Field.AUTH.CLERK_ID        ,
+                            Field.AUTH.SESSION_TOKEN
+                    );
 
-                Intent homeView = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(homeView);
-            }
-        });
-
-
+                    Intent homeView = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(homeView);
+                }
+            });
     }
 }

@@ -14,6 +14,7 @@ import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.ViewUtil;
 
 import java.util.Map;
 
@@ -36,18 +37,18 @@ public class AuthTerminalActivity extends AppCompatActivity {
     protected void onAuth(View view){
         String accessCode = accessCodeTextView.getText().toString();
 
+
+
         AuthService.connectTerminal(accessCode, new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
                 Log.i("AuthTerminalActivity", "onSuccess"  );
-                PreferenceUtil.write(getApplicationContext(), response,
+
+                PreferenceUtil.write(getCtx(), response,
                         Field.AUTH.TERMINAL_USERNAME,
                         Field.AUTH.TERMINAL_PASSWORD ,
                         Field.AUTH.TERMINAL_SERIAL_NUMBER
                 );
-
-                String serialNumber = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString( Field.AUTH.TERMINAL_SERIAL_NUMBER, null);
-                Log.i("After Save", "serialNumber" + serialNumber );
 
                 Intent loginView = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(loginView);

@@ -42,4 +42,14 @@ public class AuthService {
             callback.onFailure(null, e);
         }
     }
+
+    public static void logOut(String sessionToken, ServiceCallback callback) {
+        try {
+            connector.logOut(sessionToken, callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
+
+
 }

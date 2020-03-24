@@ -6,6 +6,11 @@ import com.voltcash.vterminal.util.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
+import retrofit2.Call;
+
+import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
+
 /**
  * Created by roberto.rodriguez on 2/19/2020.
  */
@@ -48,4 +53,7 @@ public class AuthConnectorStub implements AuthConnector {
          }
     }
 
+    public void logOut(String sessionToken, ServiceCallback callback)throws Exception{
+        callback.onSuccess(new HashMap());
+    }
 }

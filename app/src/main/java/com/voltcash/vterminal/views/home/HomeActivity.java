@@ -12,6 +12,7 @@ import android.view.View;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
+import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
 import com.voltcash.vterminal.views.tx.TxActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -45,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), ClerkSettingsActivity.class);
                 break;
             case R.id.menu_terminal:
-                ViewUtil.showError(this, "Menu", "Click on Temrinal Menu");
+                intent = new Intent(getApplicationContext(), TerminalSettingsActivity.class);
                 break;
             default:
         }
