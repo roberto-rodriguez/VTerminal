@@ -32,7 +32,8 @@ public class PreferenceUtil {
             Field.AUTH.CLERK_FIRST_NAME,
             Field.AUTH.CLERK_LAST_NAME ,
             Field.AUTH.CLERK_ID        ,
-            Field.AUTH.SESSION_TOKEN
+            Field.AUTH.SESSION_TOKEN   ,
+            Field.AUTH.MERCHANT_NAME
     };
 
     public static String loadFromFile(AppCompatActivity view){

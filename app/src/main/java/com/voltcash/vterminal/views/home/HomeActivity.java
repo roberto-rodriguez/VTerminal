@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
 import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
@@ -26,8 +28,15 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    protected void onProcessCheck(View view){
+    protected void onTxCheck(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
+        txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CHECK);
+        startActivity(txActivity);
+    }
+
+    protected void onTxCash(View view){
+        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
+        txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CASH);
         startActivity(txActivity);
     }
 

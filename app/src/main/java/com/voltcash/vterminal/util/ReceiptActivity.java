@@ -31,7 +31,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
 /**
  * Created by roberto.rodriguez on 2/25/2020.
  */
@@ -40,14 +45,26 @@ public class ReceiptActivity  extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
     private String FILENAME;
-    private ArrayList<String> lines;
+    private String[] lines;
+    private String title = "";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.lines = (ArrayList<String>)getIntent().getStringArrayListExtra(Constants.RECEIPT_LINES);
+        this.title = (String)getIntent().getExtras().get(Constants.RECEIPT_TITLE);
+        String linesStr = (String)getIntent().getExtras().get(Constants.RECEIPT_LINES);
+
+        try{
+            this.lines = linesStr.split("@@");
+        }catch(Exception e){
+            e.printStackTrace();
+
+            ViewUtil.showError(this, "Ex", e.getMessage());
+        }
+
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkPermission()) {
@@ -79,15 +96,15 @@ public class ReceiptActivity  extends AppCompatActivity {
             myDir.mkdirs();
 
 
-        // Create Pdf Writer for Writting into New Created Document
         try {
             PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(FILENAME));
 
-            // Open Document for Writting into document
             document.open();
-            // User Define Method
-      //      addMetaData(document);
-            addTitlePage(document, pdfWriter);
+
+            addHeader(document, pdfWriter);
+            addBody(document, pdfWriter);
+
+            document.newPage();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -102,8 +119,6 @@ public class ReceiptActivity  extends AppCompatActivity {
             e.printStackTrace();
 
             ViewUtil.showError(this, "printPdf", Log.getStackTraceString(e));
-
-
         }
 
         document.close();
@@ -111,31 +126,26 @@ public class ReceiptActivity  extends AppCompatActivity {
         openGeneratedPDF();
     }
 
+    public void addHeader(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
 
-    public void addTitlePage(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
-        // Font Style for Document
-        Font headerFont= new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD  | Font.UNDERLINE, BaseColor.GRAY);
-        Font subHeaderFont  = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
-        Font footerFont= new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD  | Font.UNDERLINE, BaseColor.GRAY);
+        Font subHeaderFont  = new Font(Font.FontFamily.UNDEFINED, 14, Font.NORMAL);
 
-//        Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-//        Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
-
-        // Start New Paragraph
         Paragraph header = new Paragraph();
-        // Set Font in this Paragraph
-        header.setFont(headerFont);
-        // Add item into Paragraph
-        header.add("Voltcash\n");
-
         header.setFont(subHeaderFont);
-        header.add("\nDeposit Check Transaction \n\n");
+
+        header.add("Service Provided by\n");
+        header.add("Voltcash, Inc.\n");
+        header.add("1-800-249-3042\n");
+        header.add("www.voltcash.com\n");
+
+        header.add("\n" + this.title + "\n\n");
         header.setAlignment(Element.ALIGN_CENTER);
 
         // Add all above details into Document
         document.add(header);
+    }
 
-        // Create line separator
+    public void addBody(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
         PdfPTable separator = new PdfPTable(1);
         separator.setWidthPercentage(100.0f);
         PdfPCell line = new PdfPCell(new Paragraph(""));
@@ -146,11 +156,15 @@ public class ReceiptActivity  extends AppCompatActivity {
 
         StringBuilder body = new StringBuilder("<table style=\"width: 100%; margin-top: 40px;\">");
 
+        String dateTime = getDateTime();
+        String[] dateAndTime = dateTime.split(" ");
+
+        buildTR(body, "Date", dateAndTime[0]);
+        buildTR(body, "Time", dateAndTime[1]);
+
         for(String lineTuple: this.lines){
             String[] parts = lineTuple.split("->");
-            body.append("<tr style=\"width: 100%; height:30px;\">");
-            body.append(  "<td style=\"width: 50%;\"><b>" + parts[0] + ":</b></td><td style=\"width:  50%;\"><p style=\"width:100%; text-align: right;\">" +  parts[1]  + "</p></td>");
-            body.append("</tr>");
+            buildTR(body,  parts[0], parts[1]);
         }
 
         body.append("</table>");
@@ -159,6 +173,12 @@ public class ReceiptActivity  extends AppCompatActivity {
         worker.parseXHtml(pdfWriter, document, new StringReader(body.toString()));
 
         document.newPage();
+    }
+
+    private void buildTR(StringBuilder body, String name, String value){
+        body.append("<tr style=\"width: 100%; height:30px;\">");
+        body.append(  "<td style=\"width: 50%;\"><b>" + name + "</b></td><td style=\"width:  50%; float:right; text-align: right;\"><p style=\"width:100%; text-align: right; float:right\">" +  value  + "</p></td>");
+        body.append("</tr>");
     }
 
     private boolean checkPermission() {
@@ -207,5 +227,10 @@ public class ReceiptActivity  extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private String getDateTime(){
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return df.format(new Date());
     }
 }

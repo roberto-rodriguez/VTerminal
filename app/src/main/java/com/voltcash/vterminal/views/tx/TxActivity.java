@@ -24,15 +24,14 @@ import com.kofax.samples.common.License;
 import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
-import com.voltcash.vterminal.interfaces.TxServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptActivity;
+import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -52,20 +51,31 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     private String activeImgField = null;
     private ImgReviewEditCntrl activeImgCmp = null;
 
+    private String operation;
+    String operationName;
+
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    private List<Integer> showIfCardNotExist = new ArrayList<>();
-
+    private List<Integer> showIfCardNotExist = Arrays.asList(
+            R.id.tx_id_front_wrapper,
+            R.id.tx_id_back_wrapper,
+            R.id.tx_id_ssn_input,
+            R.id.tx_id_phone_input
+        );
+    private List<Integer> showIfCheck  = Arrays.asList(
+            R.id.tx_check_front_wrapper,
+            R.id.tx_check_back_wrapper
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx);
-        setTitle("Check Transaction");
+
 
         checkFrontImgReviewEditCntrl= (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
         checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_back_image);
@@ -79,17 +89,15 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         AppContextProvider.setContext(getApplicationContext());
         Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
 
-        showIfCardNotExist = Arrays.asList(
-                R.id.tx_id_front_wrapper,
-                R.id.tx_id_back_wrapper,
-                R.id.tx_id_ssn_input,
-                R.id.tx_id_phone_input
-        );
-
         TxData.clear();
-        TxData.put(Field.TX.OPERATION, "01");
 
-        ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111111");
+        this.operation = (String)getIntent().getExtras().get(Field.TX.OPERATION);
+        this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
+        TxData.put(Field.TX.OPERATION, this.operation);
+
+        setTitle(operationName + " Transaction");
+
+        ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111112");
         ((EditText)findViewById(R.id.tx_amount_input)).setText("12.88");
     }
 
@@ -111,6 +119,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
 
     public void onCalculateFees(View view){
+        final TxActivity _this = this;
         Log.v("onCalculateFees", "start");
         final String cardNumber = ((EditText)findViewById(R.id.tx_card_field)).getText().toString();
         final String amount = ((EditText)findViewById(R.id.tx_amount_input)).getText().toString();
@@ -150,6 +159,12 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                     }
                 }
 
+                if(Constants.OPERATION.isCheck(_this.operation)){
+                    for(int id : showIfCheck){
+                        findViewById(id).setVisibility(View.VISIBLE);
+                    }
+                }
+
                 ((TextView)findViewById(R.id.tx_amount_text        )).setText("Amount: $"         + amount       );
                 ((TextView)findViewById(R.id.tx_fee_text           )).setText("Transaction Fee: $"+ cardLoadFee  );
                 ((TextView)findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + activationFee);
@@ -158,7 +173,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     }
 
     public void onSubmit(View view){
-        final AppCompatActivity _this = this;
+        final TxActivity _this = this;
         final String ssn = ((EditText)findViewById(R.id.tx_id_ssn_input)).getText().toString();
         final String phone = ((EditText)findViewById(R.id.tx_id_phone_input)).getText().toString();
 
@@ -168,30 +183,32 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         TxService.tx(new ServiceCallback(this){
             @Override
             public void onSuccess(Map response) {
-                Intent intent = new Intent(_this, ReceiptActivity.class);
-
-                Double amount = TxData.getDouble(Field.TX.AMOUNT);
-                Double fee = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
-                Double payout = amount - fee;
-                String card = TxData.getString(Field.TX.CARD_NUMBER);
-
-                Log.v("onSubmit", "amount = " + amount);
-                Log.v("onSubmit", "fee = " + fee);
-                Log.v("onSubmit", "payout = " + payout);
+                Double amount   = TxData.getDouble(Field.TX.AMOUNT);
+                Double fee      = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
+                Double payout   = amount - fee;
+                String card     = TxData.getString(Field.TX.CARD_NUMBER);
+                String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
+                String requestId= (String)response.get("REQUEST_ID");
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());
                 }
 
-                ArrayList<String> receiptLines = new ArrayList<>();
-                receiptLines.add("Card -> **** **** **** " + card);
-                receiptLines.add("Deposit Amount -> $ " + amount);
-                receiptLines.add("Transaction Fee -> $ " + fee);
-                receiptLines.add("Payout Amount -> $ " + payout);
+
+
+                StringBuilder receiptLines = new StringBuilder();
+                receiptLines.append(_this.operationName + " Loading Fee -> $ "+ StringUtil.formatCurrency(fee));
+                receiptLines.append("@@Amount Loaded -> $ "  + StringUtil.formatCurrency(payout));
+                receiptLines.append("@@Location Name -> "    + merchant);
+                receiptLines.append("@@Transaction # -> " + requestId);
+                receiptLines.append("@@Card Number -> **** **** **** " + card);
+                receiptLines.append("@@Result Message -> Success");
 
                 TxData.clear();
 
-                intent.putStringArrayListExtra(Constants.RECEIPT_LINES, receiptLines);
+                Intent intent = new Intent(_this, ReceiptActivity.class);
+                intent.putExtra(Constants.RECEIPT_LINES, receiptLines.toString());
+                intent.putExtra(Constants.RECEIPT_TITLE, _this.operationName + " Load");
                 startActivity(intent);
             }
         });

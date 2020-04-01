@@ -58,8 +58,8 @@ public class ClerkSettingsActivity extends AppCompatActivity {
         AuthService.logOut(sessionToken, new ServiceCallback(this) {
             @Override
             public void onSuccess(Map response) {
-                Intent homeView = new Intent(getCtx(), HomeActivity.class);
-                startActivity(homeView);
+                Intent loginView = new Intent(getCtx(), LoginActivity.class);
+                startActivity(loginView);
             }
         });
 

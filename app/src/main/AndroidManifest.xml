@@ -69,7 +69,9 @@
 
         <activity android:name=".views.tx.TxActivity"  android:screenOrientation="portrait"/>
 
-        <activity android:name=".util.ReceiptActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".util.ReceiptActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".views.home.HomeActivity"/>
 
         <activity android:name=".views.auth.LoginActivity"  android:screenOrientation="portrait"/>
 

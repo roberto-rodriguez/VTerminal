@@ -46,8 +46,9 @@ public class AuthTerminalActivity extends AppCompatActivity {
 
                 PreferenceUtil.write(getCtx(), response,
                         Field.AUTH.TERMINAL_USERNAME,
-                        Field.AUTH.TERMINAL_PASSWORD ,
-                        Field.AUTH.TERMINAL_SERIAL_NUMBER
+                        Field.AUTH.TERMINAL_PASSWORD,
+                        Field.AUTH.TERMINAL_SERIAL_NUMBER,
+                        Field.AUTH.MERCHANT_NAME
                 );
 
                 Intent loginView = new Intent(getApplicationContext(), LoginActivity.class);

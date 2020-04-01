@@ -21,9 +21,13 @@ public class TerminalSettingsActivity extends AppCompatActivity {
 
         setTitle("Terminal Settings");
 
+        String merchant = PreferenceUtil.read( Field.AUTH.MERCHANT_NAME);
+        TextView terminalMerchantField = (TextView)findViewById(R.id.settings_terminal_merchant);
+        terminalMerchantField.setText("Merchant: " + merchant);
+
         String serialNumber = PreferenceUtil.read( Field.AUTH.TERMINAL_SERIAL_NUMBER);
         TextView terminalSerialField = (TextView)findViewById(R.id.settings_terminal_serial);
-        terminalSerialField.setText("Serial Number: " + serialNumber);
+        terminalSerialField.setText("Terminal Serial Number: " + serialNumber);
     }
 
 

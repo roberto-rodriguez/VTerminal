@@ -11,6 +11,7 @@ public final class Field {
         public static final String TERMINAL_USERNAME      = "username";
         public static final String TERMINAL_PASSWORD      = "password";
         public static final String TERMINAL_SERIAL_NUMBER = "serialNumber";
+        public static final String MERCHANT_NAME          = "merchant";
 
         public static final String CLERK_EMAIL      = "clerkEmail";
         public static final String CLERK_PASSWORD   = "clerkPassword";

@@ -38,5 +38,19 @@ public class Constants {
     public final static String IMAGE_GALLERY_PATH_NAME = "SavedImageGalleryPath";
     public final static String IMAGE_EXTERNAL_PATH_NAME = "SavedImageExternalPath";
     public final static String RECEIPT_LINES = "RECEIPT_LINES";
+    public final static String RECEIPT_TITLE = "RECEIPT_TITLE";
+
+    public static class OPERATION{
+        public static final String CHECK     = "01";
+        public static final String CASH      = "02";
+
+        public static boolean isCheck(String operation){
+            return CHECK.equals(operation);
+        }
+        public static boolean isCash(String operation){
+            return CASH.equals(operation);
+        }
+    }
+
 }
 
