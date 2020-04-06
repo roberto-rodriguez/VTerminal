@@ -20,7 +20,7 @@ public class SettingsHelperClass {
         static String pref_key_deskew_type_basic_mode = "None";
         static int pref_key_image_processing_scale = 200;
 
-        static boolean pref_key_show_gallery = true;
+        static boolean pref_key_show_gallery = false;
         static int pref_key_device_declination_value = 0;  // for pref_key_device_declination_roll and pref_key_device_declination_pitch
         static int pref_key_manual_capture_time = 10;
     }

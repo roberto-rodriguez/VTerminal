@@ -11,7 +11,7 @@ public class Constants {
     public static Image RESULT_IMAGEX = null;
     public final static String PHOTO_ALBUM_NAME = "KofaxMobileCapture";
 
-    public static boolean IS_TORCH_SUPPORTED = false;
+    public static boolean IS_TORCH_SUPPORTED = true;
 
     public static String VERSION = "";
 
