@@ -32,7 +32,7 @@ public class RequestBuilder {
                 .getExternalStorageDirectory()
                 + File.separator;
 
-        String fileName = fieldName + "_" + System.currentTimeMillis() + ".jpg";
+        String fileName = fieldName + "_" + System.currentTimeMillis() + ".tiff";
         final File file = new File(path, fileName);
 
         Image image =  TxData.getImage(fieldName);
@@ -46,7 +46,7 @@ public class RequestBuilder {
         }
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
         byte[] bitmapdata = bos.toByteArray();
 
 //write the bytes in file
@@ -67,7 +67,7 @@ public class RequestBuilder {
         RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData(fieldName , file.getName(), reqFile);
 
-        filesToDelete.add(file);
+   //     filesToDelete.add(file);
 
         return body;
     }

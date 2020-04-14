@@ -17,4 +17,14 @@
         app:srcCompat="@drawable/torch_button"
         android:visibility="gone"/>
 
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_torch"
+        android:layout_width="@dimen/fab_size_small"
+        android:layout_height="@dimen/fab_size_small"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
+        app:srcCompat="@drawable/torch_button" />
+
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,9 @@
 package com.voltcash.vterminal.services.impl;
 
+import android.support.v7.app.AlertDialog;
+
+import com.kofax.kmc.ken.engines.data.Image;
+import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxServiceAPI;
 import com.voltcash.vterminal.interfaces.TxConnector;

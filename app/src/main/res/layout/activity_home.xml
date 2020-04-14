@@ -6,32 +6,160 @@
     android:layout_height="match_parent"
     tools:context=".views.home.HomeActivity">
 
-
-        <Button
+        <LinearLayout
             android:id="@+id/button_home_tx_check"
-            android:layout_width="250dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="82dp"
-            android:layout_marginStart="82dp"
-            android:layout_marginTop="16dp"
-            android:onClick="onTxCheck"
-            android:text="Process Check"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
 
-        <Button
-            android:id="@+id/button_home_tx_cash"
-            android:layout_width="250dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="82dp"
-            android:layout_marginStart="82dp"
-            android:layout_marginTop="16dp"
-            android:onClick="onTxCash"
-            android:text="Process Cash"
-            android:visibility="invisible"
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@color/VOLTCASH_GREEN"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_home_tx_check" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="onTxCheck"
+            >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_check" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Deposit Check"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_home_tx_cash"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@color/VOLTCASH_GREEN"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onTxCash"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_home_tx_check">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_cash" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Deposit Cash"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_home_tx_card_to_bank"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@color/VOLTCASH_GREEN"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onTxCheck"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_home_tx_cash">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_card" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Card to Bank"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_home_tx_balance_inquiry"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@color/VOLTCASH_GREEN"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onTxCheck"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_home_tx_card_to_bank">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_balance" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Balance Inquiry"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/button_home_daily_report"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@color/VOLTCASH_GREEN"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onTxCheck"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_home_tx_balance_inquiry">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_report" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Daily Report"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

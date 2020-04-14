@@ -249,10 +249,21 @@ public class CaptureActivity extends AppCompatActivity
         imageProcessor.addImageOutEventListener(this);
         ImageProcessorConfiguration imageProcessingConfiguration = SettingsHelperClass.getImageProcessorConfiguration(this);
 
+
+
+//        new AlertDialog.Builder(this)
+//                .setTitle("DPI")
+//                .setMessage( "outputDPI = " + imageProcessingConfiguration.outputDPI )
+//                .setPositiveButton(android.R.string.ok, null)
+//                .setCancelable(true)
+//                .setIcon(R.drawable.error)
+//                .show();
+
         if(field.equalsIgnoreCase(Field.TX.ID_FRONT)){
             imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
         }else{
             srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
+      //      imageProcessingConfiguration.outputDPI = 200;
         }
 
         try {
