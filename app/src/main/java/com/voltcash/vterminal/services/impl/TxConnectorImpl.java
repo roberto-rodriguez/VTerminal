@@ -15,6 +15,7 @@ import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.TxData;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import okhttp3.MultipartBody;
@@ -112,7 +113,32 @@ public class TxConnectorImpl implements TxConnector {
                 });
         }
 
-        private RequestBody getSessionToken() throws Exception{
-           return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
-        }
+    public void balanceInquiry(final ServiceCallback callback) throws Exception{
+        RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
+
+        Call<Map> call = getAPI().balanceInquiry(
+                getSessionToken(),
+                cardNumber
+        );
+
+        call.enqueue(callback);
+    }
+
+    public void cardToBank(final ServiceCallback callback) throws Exception{
+        RequestBody cardNumber  = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
+        RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
+
+        Call<Map> call = getAPI().cardToBank(
+                getSessionToken(),
+                cardNumber,
+                amount
+        );
+
+        call.enqueue(callback);
+    }
+
+
+    private RequestBody getSessionToken() throws Exception{
+       return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
+    }
 }

@@ -5,7 +5,12 @@ package com.voltcash.vterminal.interfaces;
  */
 
 public interface TxConnector {
+
     public void checkAuthLocationConfig(ServiceCallback callback)throws Exception;
 
     public void tx(final ServiceCallback callback) throws Exception;
+
+    public void balanceInquiry(final ServiceCallback callback) throws Exception;
+
+    public void cardToBank(final ServiceCallback callback) throws Exception;
 }

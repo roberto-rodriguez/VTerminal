@@ -33,9 +33,11 @@ public class LoginActivity extends AppCompatActivity {
 
         emailTextView = (TextView)findViewById(R.id.login_email);
         emailTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
+        emailTextView.setText("roberto@girocheck.com");
 
         passwordTextView = (TextView)findViewById(R.id.login_password);
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
+        passwordTextView.setText("a");
     }
 
     protected void onLogin(View view) {

@@ -216,15 +216,16 @@ public class ReceiptActivity  extends AppCompatActivity {
         if (file.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
 
-//            Uri uri = Uri.fromFile(file);
             Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+
             intent.setDataAndType(uri, "application/pdf");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             try {
-                startActivity(intent);
+             startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
+                ViewUtil.showError(this,"openGeneratedPDF", e.getMessage());
             }
         }
     }

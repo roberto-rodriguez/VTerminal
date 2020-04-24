@@ -42,4 +42,24 @@ public class TxService {
             callback.onFailure(null, e);
         }
     }
+
+    public static void balanceInquiry(ServiceCallback callback) {
+        try {
+            callback.startProgressDialog();
+
+            connector.balanceInquiry(callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
+
+    public static void cardToBank(ServiceCallback callback) {
+        try {
+            callback.startProgressDialog();
+
+            connector.cardToBank(callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
 }

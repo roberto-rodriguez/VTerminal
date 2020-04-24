@@ -16,6 +16,8 @@ import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
 import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
 import com.voltcash.vterminal.views.tx.TxActivity;
+import com.voltcash.vterminal.views.tx.TxBalanceActivity;
+import com.voltcash.vterminal.views.tx.TxCardToBankActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,6 +41,19 @@ public class HomeActivity extends AppCompatActivity {
         txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CASH);
         startActivity(txActivity);
     }
+
+    protected void onTxBalanceInquiry(View view){
+        Intent txActivity = new Intent(getApplicationContext(), TxBalanceActivity.class);
+        startActivity(txActivity);
+    }
+
+
+    protected void onTxCardToBank(View view){
+        Intent txActivity = new Intent(getApplicationContext(), TxCardToBankActivity.class);
+        startActivity(txActivity);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

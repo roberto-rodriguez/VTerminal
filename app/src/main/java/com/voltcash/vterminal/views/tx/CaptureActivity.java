@@ -24,6 +24,7 @@ import com.kofax.kmc.ken.engines.data.DocumentDetectionSettings;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.ken.engines.processing.ColorDepth;
 import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
+import com.kofax.kmc.ken.engines.processing.RotateType;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationEvent;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationFailedEvent;
 import com.kofax.kmc.kui.uicontrols.CameraInitializationFailedListener;
@@ -263,7 +264,11 @@ public class CaptureActivity extends AppCompatActivity
             imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
         }else{
             srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-      //      imageProcessingConfiguration.outputDPI = 200;
+            imageProcessingConfiguration.outputDPI = 400;
+        }
+
+        if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
+            imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
         }
 
         try {

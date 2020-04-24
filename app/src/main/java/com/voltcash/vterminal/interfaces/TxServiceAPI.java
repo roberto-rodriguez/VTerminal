@@ -39,4 +39,20 @@ public interface TxServiceAPI {
             @Part("amount")     RequestBody amount,
             @Part("operation")  RequestBody operation
     );
+
+    @Multipart
+    @POST("FrontTerminal/v1/tx/balanceInquiry")
+    Call<Map> balanceInquiry(
+            @Part("sessionToken") RequestBody sessionToken,
+            @Part("cardNumber") RequestBody cardNumber
+    );
+
+
+    @Multipart
+    @POST("FrontTerminal/v1/tx/cardToBank")
+    Call<Map> cardToBank(
+            @Part("sessionToken") RequestBody sessionToken,
+            @Part("cardNumber") RequestBody cardNumber,
+            @Part("amount")     RequestBody amount
+    );
 }

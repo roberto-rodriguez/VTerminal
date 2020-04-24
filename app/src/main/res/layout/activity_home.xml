@@ -81,7 +81,7 @@
             android:background="@color/VOLTCASH_GREEN"
             android:clickable="true"
             android:gravity="center"
-            android:onClick="onTxCheck"
+            android:onClick="onTxCardToBank"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Card to Bank"
+                    android:text="ACH Transfer"
                     android:textColor="?android:attr/colorForeground" />
         </LinearLayout>
 
@@ -112,7 +112,7 @@
             android:background="@color/VOLTCASH_GREEN"
             android:clickable="true"
             android:gravity="center"
-            android:onClick="onTxCheck"
+            android:onClick="onTxBalanceInquiry"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

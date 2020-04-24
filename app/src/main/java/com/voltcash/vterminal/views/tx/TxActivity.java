@@ -95,7 +95,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
         TxData.put(Field.TX.OPERATION, this.operation);
 
-        setTitle(operationName + " Transaction");
+        setTitle("Deposit " + operationName );
 
         ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111112");
         ((EditText)findViewById(R.id.tx_amount_input)).setText("12.88");
@@ -188,7 +188,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                 Double payout   = amount - fee;
                 String card     = TxData.getString(Field.TX.CARD_NUMBER);
                 String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
-                String requestId= (String)response.get("REQUEST_ID");
+                String requestId= response.get("REQUEST_ID") + "";
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());

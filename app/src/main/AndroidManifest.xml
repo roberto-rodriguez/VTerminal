@@ -67,7 +67,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".views.tx.TxActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".views.tx.TxActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
+
+        <activity android:name=".views.tx.TxCardToBankActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
+
+        <activity android:name=".views.tx.TxBalanceActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
+
 
         <activity android:name=".util.ReceiptActivity"
             android:screenOrientation="portrait"
@@ -94,6 +99,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="${applicationId}.provider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_paths" />-->
+        <!--</provider>-->
     </application>
 
 </manifest>

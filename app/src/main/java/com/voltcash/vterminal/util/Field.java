@@ -38,5 +38,15 @@ public final class Field {
         public static final String CARD_LOAD_FEE = "CRDLDF";
         public static final String ACTIVATION_FEE= "ACTIVATION_FEE";
         public static final String CARD_EXIST    = "CARD_EXIST";
+        public static final String BALANCE       = "BALANCE";
+
+        public static final String REQUEST_ID      = "REQUEST_ID";
+        public static final String EXISTACH        = "EXISTACH";
+        public static final String MERCHANT_NAME   = "MERCHANT_NAME";
+        public static final String CUSTUMER_ADDRESS= "CUSTUMER_ADDRESS";
+        public static final String CUSTUMER_NAME   = "CUSTUMER_NAME";
+        public static final String BANK_NAME       = "BANK_NAME";
+        public static final String ROUTING_BANK_NUMBER = "ROUTING_BANK_NUMBER";
+        public static final String ACCOUNT_NUMBER  = "ACCOUNT_NUMBER";
     }
 }

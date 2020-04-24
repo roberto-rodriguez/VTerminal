@@ -1,8 +1,6 @@
 package com.voltcash.vterminal.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.BufferedReader;
