@@ -32,6 +32,9 @@ import com.voltcash.vterminal.util.ReceiptActivity;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
+import com.voltcash.vterminal.views.receipt.ReceiptView;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -194,21 +197,19 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                     card = card.substring(card.length() - 4, card.length());
                 }
 
+                List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                receiptLines.add(_this.operationName + " Loading Fee -> $ "+ StringUtil.formatCurrency(fee));
+                receiptLines.add("Amount Loaded -> $ "  + StringUtil.formatCurrency(payout));
+                receiptLines.add("Location Name -> "    + merchant);
+                receiptLines.add("Transaction # -> " + requestId);
+                receiptLines.add("Card Number -> **** " + card);
 
-
-                StringBuilder receiptLines = new StringBuilder();
-                receiptLines.append(_this.operationName + " Loading Fee -> $ "+ StringUtil.formatCurrency(fee));
-                receiptLines.append("@@Amount Loaded -> $ "  + StringUtil.formatCurrency(payout));
-                receiptLines.append("@@Location Name -> "    + merchant);
-                receiptLines.append("@@Transaction # -> " + requestId);
-                receiptLines.append("@@Card Number -> **** **** **** " + card);
-                receiptLines.append("@@Result Message -> Success");
+                String receiptContent = ReceiptBuilder.build(_this.operationName + " Load", receiptLines);
 
                 TxData.clear();
 
-                Intent intent = new Intent(_this, ReceiptActivity.class);
-                intent.putExtra(Constants.RECEIPT_LINES, receiptLines.toString());
-                intent.putExtra(Constants.RECEIPT_TITLE, _this.operationName + " Load");
+                Intent intent = new Intent(_this, ReceiptView.class);
+                intent.putExtra(Constants.RECEIPT, receiptContent);
                 startActivity(intent);
             }
         });

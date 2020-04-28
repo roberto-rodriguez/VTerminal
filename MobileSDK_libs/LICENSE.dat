@@ -1,0 +1,88 @@
+-------
+POSLINK
+-------
+These license terms are an agreement between you and PAX Technology. They apply to the software contained in and any PAX services or software updates. BY USING THIS SOFTWARE, YOU AGREE TO COMPLY WITH THESE LICENSE TERMS.
+
+INSTALLATION AND USE RIGHTS.
+    - General. You may install and use any number of copies of the software to develop and test your applications.
+    - Included PAX Applications. The software may include other PAX applications. These license terms apply to those included applications, if any, unless other license terms are provided with the other PAX applications.
+
+DATA.
+    The software may collect information about you and your use of the software and send that to PAX. PAX may use this information to provide services and improve PAX’s products and services. 
+
+SCOPE OF LICENSE.
+    The software is licensed, not sold. PAX reserves all other rights. Unless applicable law gives you more rights despite this limitation, you shall not (and have no right to):
+    - work around any technical limitations in the software that only allow you to use it in certain ways;
+    - reverse engineer, decompile or disassemble the software;
+    - remove, minimize, block, or modify any notices of PAX;
+    - use the software in any way that is against the law or to create or propagate malware; or
+    - share, publish, or lend the software, provide the software as a stand-alone hosted solution for others to use, or transfer the software or this agreement to any third party.
+
+EXPORT RESTRICTIONS.
+    You must comply with all domestic and international export laws and regulations that apply to the software, which include restrictions on destinations, end users, and end use.
+
+SUPPORT SERVICES.
+    PAX is not obligated under this agreement to provide any support services for the software. Any support provided is "as is", "with all faults", and without warranty of any kind.
+
+UPDATES.
+    The software may periodically check for updates and download and install them for you. You may obtain updates only from PAX or authorized sources. PAX may need to update your system to provide you with updates. You agree to receive these automatic updates without any additional notice. Updates may not include or support all existing software features, services, or peripheral devices.
+
+ENTIRE AGREEMENT.
+    This agreement, and any other terms PAX may provide for supplements, updates, or third-party applications, is the entire agreement for the software.
+
+APPLICABLE LAW AND PLACE TO RESOLVE DISPUTES.
+    This Agreement shall be governed and construed in accordance with the laws of the State of Florida without giving effect to its conflict of laws provisions. Any dispute arising from or in connection with this Agreement shall be submitted to the International Court of Arbitration of the International Chamber of Commerce and shall be finally settled under the Rules of Arbitration of the International Chamber of Commerce by three arbitrators appointed in accordance with the said Rules. The place of arbitration shall be in the City of Jacksonville, State of Florida, USA. The arbitration shall be held in English. The arbitral award shall be final and binding upon both parties.
+
+DISCLAIMER OF WARRANTY.
+    THE SOFTWARE IS LICENSED "AS IS." YOU BEAR THE RISK OF USING IT. PAX GIVES NO EXPRESS WARRANTIES, GUARANTEES, OR CONDITIONS. TO THE EXTENT PERMITTED UNDER APPLICABLE LAWS, PAX EXCLUDES ALL IMPLIED WARRANTIES, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+LIMITATION ON AND EXCLUSION OF DAMAGES.
+    IF YOU HAVE ANY BASIS FOR RECOVERING DAMAGES DESPITE THE PRECEDING DISCLAIMER OF WARRANTY, YOU CAN RECOVER FROM PAX AND ITS SUPPLIERS ONLY DIRECT DAMAGES UP TO U.S. $5.00. YOU CANNOT RECOVER ANY OTHER DAMAGES, INCLUDING CONSEQUENTIAL, LOST PROFITS, SPECIAL, INDIRECT, OR INCIDENTAL DAMAGES.
+    This limitation applies to (a) anything related to the software, services, content (including code) on third party Internet sites, or third party applications; and (b) claims for breach of contract, warranty, guarantee, or condition; strict liability, negligence, or other tort; or any other claim; in each case to the extent permitted by applicable law.
+
+It also applies even if PAX knew or should have known about the possibility of the damages. The above limitation or exclusion may not apply to you because your state, province, or country may not allow the exclusion or limitation of incidental, consequential, or other damages.
+
+-----
+DOM4J
+-----
+DOM4J is a third party developer not affiliated with PAX Technology Inc. 
+
+Copyright 2001-2016 (C) MetaStuff, Ltd. and DOM4J contributors. All Rights Reserved.
+
+Redistribution and use of this software and associated documentation
+("Software"), with or without modification, are permitted provided
+that the following conditions are met:
+
+1. Redistributions of source code must retain copyright
+   statements and notices.  Redistributions must also contain a
+   copy of this document.
+ 
+2. Redistributions in binary form must reproduce the
+   above copyright notice, this list of conditions and the
+   following disclaimer in the documentation and/or other
+   materials provided with the distribution.
+ 
+3. The name "DOM4J" must not be used to endorse or promote
+   products derived from this Software without prior written
+   permission of MetaStuff, Ltd.  For written permission,
+   please contact dom4j-info@metastuff.com.
+ 
+4. Products derived from this Software may not be called "DOM4J"
+   nor may "DOM4J" appear in their names without prior written
+   permission of MetaStuff, Ltd. DOM4J is a registered
+   trademark of MetaStuff, Ltd.
+ 
+5. Due credit should be given to the DOM4J Project - https://dom4j.github.io/
+ 
+THIS SOFTWARE IS PROVIDED BY METASTUFF, LTD. AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT
+NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+METASTUFF, LTD. OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.

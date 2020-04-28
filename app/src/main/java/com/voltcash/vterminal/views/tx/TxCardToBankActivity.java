@@ -20,7 +20,11 @@ import com.voltcash.vterminal.util.ReceiptCardToBankActivity;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
+import com.voltcash.vterminal.views.receipt.ReceiptView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TxCardToBankActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -59,13 +63,20 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
                     return;
                 }
 
-                StringBuilder receiptAchLines = new StringBuilder();
-                receiptAchLines.append("  Merhant Name -> "+ response.get(Field.TX.MERCHANT_NAME));
-                receiptAchLines.append("@@Bank Name -> "+ response.get(Field.TX.BANK_NAME));
-                receiptAchLines.append("@@Customer Name -> "+ response.get(Field.TX.CUSTUMER_NAME));
-                receiptAchLines.append("@@Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
-                receiptAchLines.append("@@Routing # -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
-                receiptAchLines.append("@@Account # -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
+                String customerName = (String)response.get(Field.TX.CUSTUMER_NAME);
+
+                List<String> receiptLines = new ArrayList();
+                receiptLines.add("Merhant Name -> "+ response.get(Field.TX.MERCHANT_NAME));
+                receiptLines.add("Funds Settlement Information");
+                receiptLines.add("Bank Name -> "+ response.get(Field.TX.BANK_NAME));
+                receiptLines.add("Customer Name -> "+ customerName);
+                receiptLines.add("Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
+                receiptLines.add("Routing # -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
+                receiptLines.add("Account # -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
+
+                receiptLines.add(ReceiptBuilder.achDisclaimer(customerName));
+
+                String achReceiptContent = ReceiptBuilder.build("ACH Authorization Form", receiptLines);
 
                 String card     = TxData.getString(Field.TX.CARD_NUMBER);
                 String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
@@ -73,22 +84,31 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());
-                } 
+                }
 
-                StringBuilder receiptLines = new StringBuilder();
-                receiptLines.append(" Location Name -> "    + merchant);
-                receiptLines.append("@@Card Number -> **** **** **** " + card);
-                receiptLines.append("@@Amount to Transfer -> " + amount);
-                receiptLines.append("@@Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
-                receiptLines.append("@@Transaction # -> " + requestId);
+                receiptLines = ReceiptBuilder.dateTimeLines();
+                receiptLines.add("Location Name -> "    + merchant);
+                receiptLines.add("Card Number -> **** " + card);
+                receiptLines.add("Amount to Transfer -> " + amount);
+                receiptLines.add("Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
+                receiptLines.add("Transaction # -> " + requestId);
 
+
+                StringBuilder receiptAchLines = new StringBuilder();
+                receiptAchLines.append("  Merchant Name -> "+ response.get(Field.TX.MERCHANT_NAME));
+                receiptAchLines.append("@@Bank Name -> "+ response.get(Field.TX.BANK_NAME));
+                receiptAchLines.append("@@Customer Name -> "+ response.get(Field.TX.CUSTUMER_NAME));
+                receiptAchLines.append("@@Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
+                receiptAchLines.append("@@Routing # -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
+                receiptAchLines.append("@@Account # -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
+
+                String txReceiptContent = ReceiptBuilder.build("ACH Transfer", receiptLines);
+
+                String receiptContent = ReceiptBuilder.div(achReceiptContent + "<br/><br/>" + txReceiptContent);
 
                 TxData.clear();
-
-                Intent intent = new Intent(_this, ReceiptActivity.class);
-                intent.putExtra(Constants.RECEIPT_TITLE, "ACH Transfer");
-                intent.putExtra(Constants.RECEIPT_LINES, receiptLines.toString());
-          //      intent.putExtra(Constants.RECEIPT_ACH_LINES, receiptAchLines.toString());
+                Intent intent = new Intent(_this, ReceiptView.class);
+                intent.putExtra(Constants.RECEIPT, receiptContent);
 
                 startActivity(intent);
             }

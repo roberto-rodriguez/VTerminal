@@ -14,10 +14,12 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-import com.voltcash.vterminal.util.ReceiptActivity;
-import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
+import com.voltcash.vterminal.views.receipt.ReceiptView;
+
+import java.util.List;
 import java.util.Map;
 
 public class TxBalanceActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -64,17 +66,17 @@ public class TxBalanceActivity extends AppCompatActivity implements ActivityComp
                     card = card.substring(card.length() - 4, card.length());
                 }
 
-                StringBuilder receiptLines = new StringBuilder();
-                receiptLines.append("Location Name -> "    + merchant);
-                receiptLines.append("@@Transaction # -> " + requestId);
-                receiptLines.append("@@Card Number -> **** **** **** " + card);
-                receiptLines.append("@@Balance -> " + balance);
+                List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                receiptLines.add("Location Name -> "    + merchant);
+                receiptLines.add("Card Number -> **** " + card);
+                receiptLines.add("Balance -> $" + balance);
+
+                String receiptContent = ReceiptBuilder.build("Balance Inquiry", receiptLines);
 
                 TxData.clear();
 
-                Intent intent = new Intent(_this, ReceiptActivity.class);
-                intent.putExtra(Constants.RECEIPT_LINES, receiptLines.toString());
-                intent.putExtra(Constants.RECEIPT_TITLE, "Balance Inquiry");
+                Intent intent = new Intent(_this, ReceiptView.class);
+                intent.putExtra(Constants.RECEIPT, receiptContent);
                 startActivity(intent);
             }
         });

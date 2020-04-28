@@ -90,6 +90,12 @@
             android:parentActivityName=".views.home.HomeActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".views.receipt.ReceiptView"
+            android:parentActivityName=".views.home.HomeActivity"
+            android:screenOrientation="portrait" />
+
+
         <provider
             android:name="com.voltcash.vterminal.util.GenericFileProvider"
             android:authorities="${applicationId}.provider"

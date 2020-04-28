@@ -39,6 +39,7 @@ public class Constants {
     public final static String IMAGE_EXTERNAL_PATH_NAME = "SavedImageExternalPath";
     public final static String RECEIPT_LINES = "RECEIPT_LINES";
 
+    public final static String RECEIPT  = "RECEIPT";
     public final static String RECEIPT_TITLE = "RECEIPT_TITLE";
     public final static String RECEIPT_ACH_LINES = "RECEIPT_ACH_LINES";
 
