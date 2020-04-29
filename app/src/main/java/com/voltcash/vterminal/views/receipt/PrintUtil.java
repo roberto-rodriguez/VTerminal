@@ -16,6 +16,27 @@ import java.util.Date;
  */
 
 public class PrintUtil {
+
+    public static Bitmap createBitmapFromView(View view) {
+        //Pre-measure the view so that height and width don't remain null.
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        //Assign a size and position to the view and all of its descendants
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        //Create the bitmap
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        //Create a canvas with the specified bitmap to draw into
+        Canvas c = new Canvas(bitmap);
+
+        //Render this view (and all of its children) to the given Canvas
+        view.draw(c);
+        return bitmap;
+    }
+
     public static Bitmap shotScrollView(ScrollView scrollView) {
         Bitmap bitmap = null;
         View childAt = scrollView.getChildAt(0);
@@ -29,7 +50,7 @@ public class PrintUtil {
 
     public static Bitmap shotWebView(WebView childAt) {
         Bitmap bitmap = null;
-        bitmap = Bitmap.createBitmap(childAt.getWidth(), childAt.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(childAt.getWidth(), childAt.getHeight(), Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(Color.WHITE);
         final Canvas canvas = new Canvas(bitmap);
         childAt.draw(canvas);

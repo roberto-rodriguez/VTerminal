@@ -12,12 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <Button
+            android:id="@+id/payment_receipt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Back"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"/>
+            android:layout_weight="2"/>
         <Button
-            android:id="@+id/payment_receipt_back"
+            android:id="@+id/payment_receipt_print"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,7 +39,8 @@
     <WebView
         android:id="@+id/payment_receipt"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top|center"
-        android:scrollbars="vertical"/>
+        android:layout_height="wrap_content"
+        android:gravity="top|left"
+        android:scrollbars="vertical"
+        android:textSize="24dp"/>
 </LinearLayout>

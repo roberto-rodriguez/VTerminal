@@ -22,7 +22,7 @@ public class ReceiptBuilder {
     }
 
     public static String div(String content){
-        return "<div>" + content + "</div>";
+        return "<div>" + content + "<br/><br/><br/><br/><br/><p style=\"width:100%;text-align: center;color:white\">____________________________________</p></div>";
     }
 
     public static List<String> dateTimeLines(){
@@ -61,25 +61,24 @@ public class ReceiptBuilder {
 
     private static void buildBody(StringBuilder sb, List<String>  lines){
         sb.append("<table  style=\"width: 100%;\">");
-
         for (String line: lines){
             buildLine(sb, line);
         }
         sb.append("</table>");
     }
 
-
-
     private static void buildLine(StringBuilder body, String line){
         body.append("<tr style=\"width: 100%;margin-top:8px\">");
-
         if(line.contains("->")){
             String[] parts = line.split("->");
             String name = parts[0];
             String value= parts[1];
             body.append(  "<td  colspan=\"1\" >" + name + "</td><td  colspan=\"1\" style=\"float:right; text-align: right;text-align: right; float:right;\">" +  value  + "</td>");
         }else{
-            body.append(  "<td colspan=\"2\"><span style=\"width: 100%;text-align: center;\"><p style=\"width: 100%;text-align: center;\">" + line +"</p></span></td>");
+            if(!line.startsWith("<")){
+                line = "<p style=\"width: 100%;text-align: center;\">" + line + "</p>";
+            }
+            body.append(  "<td colspan=\"2\">" + line + "</td>");
         }
         body.append("</tr>");
     }
@@ -93,11 +92,11 @@ public class ReceiptBuilder {
     }
 
     public static String achDisclaimer(String customerName){
-        return "<br/>I, " + customerName + " authorize Merchant to initiate ACH transfer entries and to debit account " +
+        return "<br/><span style=\"width: 100%;text-align: justify;\">I, " + customerName + " authorize Merchant to initiate ACH transfer entries and to debit account " +
                 "identified herein for purchase of good or services at Merchant location." +
                 "This authorization shall remain in effect unless and until Merchant has received written notification " +
                 "from myself that this authorization has been terminated in such time and manner to allow merchant to act." +
                 "Undersigned represents and warrants to Merchant that the person executing this Release is the Account owner referenced" +
-                "above and all information regarding the Account and Account Owner is true and correct.";
+                "above and all information regarding the Account and Account Owner is true and correct.</span>";
     }
 }

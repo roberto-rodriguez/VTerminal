@@ -2,12 +2,14 @@ package com.voltcash.vterminal.views.receipt;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 import com.pax.poslink.peripheries.POSLinkPrinter;
@@ -26,19 +28,56 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-
+        Log.i("ReceiptView", "onCreate -------------------------------------------------------------------");
         setTitle("Receipt");
+      //  getActionBar().hide();
 
         try{
             setContentView(R.layout.receipt_activity);
 
             String receipt = (String)getIntent().getExtras().get(Constants.RECEIPT);
 
-            Button m_Back = (Button)findViewById(R.id.payment_receipt_back);
-            m_Back.setOnClickListener(this);
+            Log.i("ReceiptView", "receipt -------------------------------------------------------------------");
 
-            WebView m_Receipt = (WebView)findViewById(R.id.payment_receipt);
-            m_Receipt.loadDataWithBaseURL(null, receipt, "text/html", "utf-8", null);
+            Button m_Back = (Button)findViewById(R.id.payment_receipt_back);
+            Button m_Print = (Button)findViewById(R.id.payment_receipt_print);
+            m_Back.setOnClickListener(this);
+            m_Print.setOnClickListener(this);
+
+
+            Log.i("ReceiptView", "after setOnClickListener");
+
+            final WebView v = (WebView)findViewById(R.id.payment_receipt);
+
+//            Log.i("ReceiptView", "after m_Receipt");
+//            m_Receipt.loadDataWithBaseURL(null, receipt, "text/html", "utf-8", null);
+//
+//            Log.i("ReceiptView", "after loadDataWithBaseURL");
+
+            v.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+
+                    v.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+//                            Bitmap bitmap = createBitmapFromView(v);
+//                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+//                            imageView.setImageDrawable(drawable);
+//                            imageView.setVisibility(VISIBLE);
+//                            removeAllViews();
+//                            if (listener != null) listener.onComplete();
+                        }
+                    }, 500);
+                }
+            });
+         //   v.setBackgroundColor(Color.TRANSPARENT);
+            //v.getSettings().setJavaScriptEnabled(true);
+            v.loadDataWithBaseURL("", receipt, "text/html", "utf-8", "");
+            v.setHorizontalScrollBarEnabled(false);
+            v.setVerticalScrollBarEnabled(false);
+
         }catch(Exception e){
             ViewUtil.showError(this, "Creating ReceiptView", e.getMessage());
         }
@@ -48,8 +87,9 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.payment_receipt_back:
-                print();
-               // ReceiptView.this.finish();
+                 ReceiptView.this.finish();
+            case R.id.payment_receipt_print:
+                 print();
                 break;
         }
     }
@@ -60,12 +100,15 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             final AppCompatActivity _this = this;
             Log.i("iii", "print-------------------------------------------------------------------");
             WebView vebView = (WebView) findViewById(R.id.payment_receipt);
-            final Bitmap resultBitmap = PrintUtil.shotWebView(vebView);
+
+            //receipt_scroll_view
+            //  final Bitmap resultBitmap = PrintUtil.shotWebView(vebView);
+              final Bitmap resultBitmap = PrintUtil.createBitmapFromView(vebView);
             Log.i("iii", "width---" + resultBitmap.getWidth());
             printMerchantCopy(new Runnable() {
                 @Override
                 public void run() {
-                    ViewUtil.showError(_this, "print", "Printed Successfully");
+
                 }
             }, resultBitmap);
 
@@ -93,7 +136,7 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void onError(ProcessResult processResult) {
                         dismissDialog(processingDialog, printFinish);
-                        toastError(processResult.getMessage());
+                        //toastError(processResult.getMessage());
                     }
                 });
             }

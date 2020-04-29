@@ -18,13 +18,9 @@ import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
  */
 
 public class AuthConnectorImpl implements AuthConnector {
-    private static AuthServiceAPI api = null;
 
     public static AuthServiceAPI getAPI(){
-        if(api == null){
-            api = ClientBuilder.build().create(AuthServiceAPI.class);
-        }
-        return api;
+        return ClientBuilder.build().create(AuthServiceAPI.class);
     }
 
 

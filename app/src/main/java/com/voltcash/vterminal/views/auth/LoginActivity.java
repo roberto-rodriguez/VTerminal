@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextView.setText("a");
     }
 
-    protected void onLogin(View view) {
+    public void onLogin(View view) {
             String serialNumber     = PreferenceUtil.read( Field.AUTH.TERMINAL_SERIAL_NUMBER);
             String terminalUsername = PreferenceUtil.read( Field.AUTH.TERMINAL_USERNAME);
             String terminalPassword = PreferenceUtil.read( Field.AUTH.TERMINAL_PASSWORD);

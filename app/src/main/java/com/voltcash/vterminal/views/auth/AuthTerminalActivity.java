@@ -34,7 +34,7 @@ public class AuthTerminalActivity extends AppCompatActivity {
         accessCodeTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
     }
 
-    protected void onAuth(View view){
+    public void onAuth(View view){
         String accessCode = accessCodeTextView.getText().toString();
 
 

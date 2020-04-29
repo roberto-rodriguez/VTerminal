@@ -30,25 +30,25 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    protected void onTxCheck(View view){
+    public void onTxCheck(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
         txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CHECK);
         startActivity(txActivity);
     }
 
-    protected void onTxCash(View view){
+    public void onTxCash(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
         txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CASH);
         startActivity(txActivity);
     }
 
-    protected void onTxBalanceInquiry(View view){
+    public void onTxBalanceInquiry(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxBalanceActivity.class);
         startActivity(txActivity);
     }
 
 
-    protected void onTxCardToBank(View view){
+    public void onTxCardToBank(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxCardToBankActivity.class);
         startActivity(txActivity);
     }

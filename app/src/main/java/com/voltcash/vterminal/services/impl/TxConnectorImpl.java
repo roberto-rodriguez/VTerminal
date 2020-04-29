@@ -31,16 +31,9 @@ import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
  */
 
 public class TxConnectorImpl implements TxConnector {
-    private static TxServiceAPI api = null;
-
     public static TxServiceAPI getAPI(){
-        if(api == null){
-            api = ClientBuilder.build().create(TxServiceAPI.class);
-        }
-        return api;
+        return ClientBuilder.build().create(TxServiceAPI.class);
     }
-
-
 
     public void checkAuthLocationConfig(final ServiceCallback callback) throws Exception{
         //      TODO Validator

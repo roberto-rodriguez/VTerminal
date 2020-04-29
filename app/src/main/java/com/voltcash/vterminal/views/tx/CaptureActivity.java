@@ -264,7 +264,7 @@ public class CaptureActivity extends AppCompatActivity
             imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
         }else{
             srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-            imageProcessingConfiguration.outputDPI = 400;
+            imageProcessingConfiguration.outputDPI = 300;
         }
 
         if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
