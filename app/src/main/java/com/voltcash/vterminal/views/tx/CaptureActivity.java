@@ -264,7 +264,7 @@ public class CaptureActivity extends AppCompatActivity
             imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
         }else{
             srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-            imageProcessingConfiguration.outputDPI = 300;
+            imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
         }
 
         if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
@@ -274,13 +274,13 @@ public class CaptureActivity extends AppCompatActivity
         try {
             imageProcessor.processImage(srcImage, imageProcessingConfiguration);
         } catch (KmcException e) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage( "Image processing failed" )
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setCancelable(true)
-                    .setIcon(R.drawable.error)
-                    .show();
+//            new AlertDialog.Builder(this)
+//                    .setTitle("Error")
+//                    .setMessage( "Image processing failed" )
+//                    .setPositiveButton(android.R.string.ok, null)
+//                    .setCancelable(true)
+//                    .setIcon(R.drawable.error)
+//                    .show();
         }
     }
 
@@ -296,13 +296,13 @@ public class CaptureActivity extends AppCompatActivity
                 startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
 
             } catch (Exception e) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage( "Image processing failed" )
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setCancelable(true)
-                        .setIcon(R.drawable.error)
-                        .show();
+//                new AlertDialog.Builder(this)
+//                        .setTitle("Error")
+//                        .setMessage( "Image processing failed" )
+//                        .setPositiveButton(android.R.string.ok, null)
+//                        .setCancelable(true)
+//                        .setIcon(R.drawable.error)
+//                        .show();
             }
         }
     }

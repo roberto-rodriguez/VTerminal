@@ -6,8 +6,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
@@ -15,14 +13,11 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-import com.voltcash.vterminal.util.ReceiptActivity;
-import com.voltcash.vterminal.util.ReceiptCardToBankActivity;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +63,7 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
                 List<String> dateTimeLines = ReceiptBuilder.dateTimeLines();
 
                 List<String> receiptLines = new ArrayList();
-                receiptLines.add("Merhant Name -> "+ response.get(Field.TX.MERCHANT_NAME));
+                receiptLines.add("Merchant Name -> "+ response.get(Field.TX.MERCHANT_NAME));
                 receiptLines.add("Funds Settlement Information");
                 receiptLines.add("Bank Name -> "+ response.get(Field.TX.BANK_NAME));
                 receiptLines.add("Customer Name -> "+ customerName);
@@ -86,7 +81,7 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
 
                 String card     = TxData.getString(Field.TX.CARD_NUMBER);
                 String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
-                String requestId= response.get("REQUEST_ID") + "";
+                String requestId= StringUtil.formatRequestId(response);;
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());

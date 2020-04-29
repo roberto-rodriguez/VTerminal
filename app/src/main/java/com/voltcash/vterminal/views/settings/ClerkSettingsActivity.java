@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ViewUtil;
-import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
 import com.voltcash.vterminal.views.auth.LoginActivity;
-import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.views.tx.TxActivity;
 
 import java.util.HashMap;
@@ -41,12 +38,12 @@ public class ClerkSettingsActivity extends AppCompatActivity {
     }
 
 
-    protected void onChangePassword(View view){
+    public void onChangePassword(View view){
         Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
         startActivity(txActivity);
     }
 
-    protected void onLogOut(View view){
+    public void onLogOut(View view){
         String sessionToken = PreferenceUtil.read(Field.AUTH.SESSION_TOKEN);
         //Clean all these fields in Preferences
         PreferenceUtil.write(this, new HashMap(),

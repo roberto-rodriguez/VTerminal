@@ -67,7 +67,7 @@ public class RequestBuilder {
         RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData(fieldName , file.getName(), reqFile);
 
-   //     filesToDelete.add(file);
+        filesToDelete.add(file);
 
         return body;
     }

@@ -22,7 +22,7 @@ public class ReceiptBuilder {
     }
 
     public static String div(String content){
-        return "<div>" + content + "<br/><br/><br/><br/><br/><p style=\"width:100%;text-align: center;color:white\">____________________________________</p></div>";
+        return "<div>" + content + "<br/><br/><br/><br/><p style=\"width:100%;text-align: center;color:white\">____________________________________</p></div>";
     }
 
     public static List<String> dateTimeLines(){
@@ -43,13 +43,6 @@ public class ReceiptBuilder {
         headerLine( sb,"Voltcash, Inc.");
         headerLine( sb,"1-800-249-3042");
         headerLine( sb,"www.voltcash.com");
-
-//        sb.append(centeredLine("Service Provided by"));
-//        sb.append(centeredLine("Service Provided by"));
-//        sb.append(centeredLine("Voltcash, Inc."));
-//        sb.append(centeredLine("1-800-249-3042"));
-//        sb.append(centeredLine("www.voltcash.com"));
-
 
         sb.append("</table>");
 

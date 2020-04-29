@@ -31,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onSubmit"
-            android:text="Submit" />
+            android:text="Submit"
+            android:visibility="invisible" />
     </LinearLayout>
 
 

@@ -7,28 +7,76 @@
     tools:context=".views.settings.TerminalSettingsActivity">
 
     <TextView
-        android:id="@+id/settings_terminal_merchant"
+        android:id="@+id/settings_terminal_merchant_label"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginTop="16dp"
-        android:text=""
         android:gravity="center"
+        android:text="Merchant"
         android:textSize="18dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/settings_terminal_serial"
+        android:id="@+id/settings_terminal_merchant"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:text=""
+        android:layout_marginTop="5dp"
         android:gravity="center"
+        android:text="Bass Brothers"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_merchant"  />
+        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_merchant_label" />
+
+    <TextView
+        android:id="@+id/settings_terminal_serial_label"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Terminal Serial Number"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_merchant" />
+
+    <TextView
+        android:id="@+id/settings_terminal_serial"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text=""
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_serial_label" />
+
+    <TextView
+        android:id="@+id/check_resolution_label"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:text="Check Image Resolution"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_serial" />
+
+    <SeekBar
+        android:id="@+id/check_image_resolution"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check_resolution_label" />
 
 
     <TextView
@@ -36,11 +84,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Disconnect"
         android:onClick="onDisconnect"
-        android:textColor="@color/colorPrimary"
+        android:text="Disconnect Terminal"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_terminal_serial" />
+        app:layout_constraintTop_toBottomOf="@+id/check_image_resolution" />
+
+
 </android.support.constraint.ConstraintLayout>

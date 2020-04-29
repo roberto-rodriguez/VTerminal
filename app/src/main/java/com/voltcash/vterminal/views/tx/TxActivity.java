@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.kofax.kmc.ken.engines.data.Image;
@@ -28,18 +29,14 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-import com.voltcash.vterminal.util.ReceiptActivity;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static com.voltcash.vterminal.util.ViewUtil.buildProgressDialog;
 
 public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -56,6 +53,8 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
     private String operation;
     String operationName;
+
+    private Button submitButton;
 
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -102,6 +101,8 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
 
         ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111112");
         ((EditText)findViewById(R.id.tx_amount_input)).setText("12.88");
+
+        submitButton = findViewById(R.id.tx_submit_button);
     }
 
     @Override
@@ -171,6 +172,8 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                 ((TextView)findViewById(R.id.tx_amount_text        )).setText("Amount: $"         + amount       );
                 ((TextView)findViewById(R.id.tx_fee_text           )).setText("Transaction Fee: $"+ cardLoadFee  );
                 ((TextView)findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + activationFee);
+
+                submitButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -191,7 +194,7 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                 Double payout   = amount - fee;
                 String card     = TxData.getString(Field.TX.CARD_NUMBER);
                 String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
-                String requestId= response.get("REQUEST_ID") + "";
+                String requestId= StringUtil.formatRequestId(response);
 
                 if(card != null && card.length() > 4){
                     card = card.substring(card.length() - 4, card.length());

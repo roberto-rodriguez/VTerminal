@@ -9,5 +9,7 @@ public class Settings {
 
     public static final String SERVER_URL = "http://149.97.166.38:8085/";
 
+    public static int CHECK_RESOLUTION = 300;
+
 }
 

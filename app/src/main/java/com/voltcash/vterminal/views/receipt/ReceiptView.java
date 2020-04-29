@@ -88,6 +88,7 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.payment_receipt_back:
                  ReceiptView.this.finish();
+                 break;
             case R.id.payment_receipt_print:
                  print();
                 break;

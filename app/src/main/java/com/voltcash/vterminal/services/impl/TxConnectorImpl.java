@@ -1,21 +1,15 @@
 package com.voltcash.vterminal.services.impl;
 
-import android.support.v7.app.AlertDialog;
-
-import com.kofax.kmc.ken.engines.data.Image;
-import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxServiceAPI;
 import com.voltcash.vterminal.interfaces.TxConnector;
 import com.voltcash.vterminal.util.ClientBuilder;
 import com.voltcash.vterminal.util.Field;
 import static com.voltcash.vterminal.util.RequestBuilder.*;
-
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.TxData;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import okhttp3.MultipartBody;
@@ -34,6 +28,8 @@ public class TxConnectorImpl implements TxConnector {
     public static TxServiceAPI getAPI(){
         return ClientBuilder.build().create(TxServiceAPI.class);
     }
+
+
 
     public void checkAuthLocationConfig(final ServiceCallback callback) throws Exception{
         //      TODO Validator
