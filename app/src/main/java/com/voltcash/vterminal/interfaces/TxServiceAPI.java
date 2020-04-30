@@ -55,4 +55,13 @@ public interface TxServiceAPI {
             @Part("cardNumber") RequestBody cardNumber,
             @Part("amount")     RequestBody amount
     );
+
+
+    @Multipart
+    @POST("FrontTerminal/v1/tx/activityReport")
+    Call<Map> activityReport(
+            @Part("sessionToken") RequestBody sessionToken,
+            @Part("startDate") RequestBody startDate,
+            @Part("endDate")     RequestBody endDate
+    );
 }

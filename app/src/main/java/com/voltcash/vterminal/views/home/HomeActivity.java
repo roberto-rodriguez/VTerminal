@@ -13,6 +13,7 @@ import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.views.report.ActivityReportActivity;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
 import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
 import com.voltcash.vterminal.views.tx.TxActivity;
@@ -53,6 +54,10 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(txActivity);
     }
 
+    public void onActivityReportActivity(View view){
+        Intent txActivity = new Intent(getApplicationContext(), ActivityReportActivity.class);
+        startActivity(txActivity);
+    }
 
 
     @Override

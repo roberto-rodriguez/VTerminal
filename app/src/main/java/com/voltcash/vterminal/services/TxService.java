@@ -62,4 +62,14 @@ public class TxService {
             callback.onFailure(null, e);
         }
     }
+
+    public static void activityReport(String startDate, String endDate, ServiceCallback callback) {
+        try {
+            callback.startProgressDialog();
+
+            connector.activityReport(startDate, endDate, callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
 }

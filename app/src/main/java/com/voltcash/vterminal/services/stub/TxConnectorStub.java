@@ -8,6 +8,10 @@ import com.voltcash.vterminal.util.TxData;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+
+import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
+
 /**
  * Created by roberto.rodriguez on 2/19/2020.
  */
@@ -67,5 +71,11 @@ public class TxConnectorStub implements TxConnector {
 
         callback.onSuccess(response);
     }
+
+
+    public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception{
+        callback.onSuccess( new HashMap());
+    }
+
 
 }

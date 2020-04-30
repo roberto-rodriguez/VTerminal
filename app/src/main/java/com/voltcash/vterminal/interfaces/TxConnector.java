@@ -13,4 +13,6 @@ public interface TxConnector {
     public void balanceInquiry(final ServiceCallback callback) throws Exception;
 
     public void cardToBank(final ServiceCallback callback) throws Exception;
+
+    public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception;
 }

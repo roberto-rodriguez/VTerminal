@@ -126,6 +126,16 @@ public class TxConnectorImpl implements TxConnector {
         call.enqueue(callback);
     }
 
+    public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception{
+        Call<Map> call = getAPI().cardToBank(
+                getSessionToken(),
+                buildStringBody(startDate),
+                buildStringBody(endDate)
+        );
+
+        call.enqueue(callback);
+    }
+
 
     private RequestBody getSessionToken() throws Exception{
        return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));

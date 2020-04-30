@@ -81,6 +81,12 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".views.report.ActivityReportActivity"
+            android:parentActivityName=".views.home.HomeActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <activity
             android:name=".views.settings.TerminalSettingsActivity"
             android:parentActivityName=".views.home.HomeActivity"
             android:screenOrientation="portrait" />
