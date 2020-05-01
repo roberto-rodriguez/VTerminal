@@ -143,9 +143,9 @@
             android:background="@color/VOLTCASH_GREEN"
             android:clickable="true"
             android:gravity="center"
-            android:onClick="onTxCheck"
+            android:onClick="onActivityReportActivity"
             android:orientation="horizontal"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_home_tx_balance_inquiry">
@@ -159,7 +159,7 @@
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Daily Report"
+                    android:text="Activity Report"
                     android:textColor="?android:attr/colorForeground" />
         </LinearLayout>
 

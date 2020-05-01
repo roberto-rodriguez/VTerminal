@@ -127,7 +127,7 @@ public class TxConnectorImpl implements TxConnector {
     }
 
     public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception{
-        Call<Map> call = getAPI().cardToBank(
+        Call<Map> call = getAPI().activityReport(
                 getSessionToken(),
                 buildStringBody(startDate),
                 buildStringBody(endDate)
