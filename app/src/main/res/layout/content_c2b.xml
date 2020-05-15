@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/c2b_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:columnCount="1"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintTop_toBottomOf="@+id/c2b_fees_layout"
+    app:layout_constraintVertical_bias="0.08"
+    tools:context=".views.tx.TxCardToBankActivity"
+    tools:showIn="@layout/activity_tx_cardtobank">
+
+    <LinearLayout
+        android:id="@+id/tx_check_front_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        >
+    <EditText
+        android:id="@+id/c2b_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:gravity="center"
+        android:hint="Card Number"
+        android:text="4111111111111112"
+        android:textSize="18dp"
+       />
+    </LinearLayout>
+</GridLayout>

@@ -7,75 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".views.tx.TxCardToBankActivity">
 
+    <include layout="@layout/content_c2b_calculate_fees" />
 
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/tx_cardtobank_layout"
+    <include layout="@layout/content_c2b_fees" />
+
+    <include layout="@layout/content_c2b" />
+
+    <LinearLayout
+        android:id="@+id/c2b_botom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/VOLTCASH_GREEN"
-        android:columnCount="2"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        android:paddingVertical="@dimen/activity_vertical_margin"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.08"
-        tools:context=".views.tx.TxActivity"
-        tools:showIn="@layout/activity_tx">
-        <EditText
-            android:id="@+id/tx_card_field"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center"
-            android:hint="Card Number"
-            android:inputType="phone"
-            android:textColor="@android:color/background_light"
-            android:textColorHint="@android:color/background_light" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <EditText
-            android:id="@+id/tx_amount_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center"
-            android:hint="Amount"
-            android:inputType="textPersonName|phone"
-            android:textColor="@android:color/background_light"
-            android:textColorHint="@android:color/background_light" />
 
         <Button
-            android:id="@+id/tx_calculate_fee_button"
-            android:layout_width="0dp"
+            android:id="@+id/tx_submit_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center"
             android:onClick="onCardToBank"
-            android:text="Check Balance" />
-    </GridLayout>
+            android:text="Submit"
+            android:visibility="invisible" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tx_balance_result"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_calculate_fees_layout"
-        app:layout_constraintVertical_bias="0.062" />
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -5,7 +5,11 @@ import com.voltcash.vterminal.interfaces.TxConnector;
 import com.voltcash.vterminal.services.impl.TxConnectorImpl;
 import com.voltcash.vterminal.services.stub.TxConnectorStub;
 import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.Settings;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by roberto.rodriguez on 2/25/2020.
@@ -53,11 +57,11 @@ public class TxService {
         }
     }
 
-    public static void cardToBank(ServiceCallback callback) {
+    public static void cardToBank(String operation, ServiceCallback callback) {
         try {
             callback.startProgressDialog();
 
-            connector.cardToBank(callback);
+            connector.cardToBank(operation, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -68,6 +72,16 @@ public class TxService {
             callback.startProgressDialog();
 
             connector.activityReport(startDate, endDate, callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
+
+    public static void calculateFee(String operation, String amount, final ServiceCallback callback){
+        try {
+            callback.startProgressDialog();
+
+            connector.calculateFee(operation, amount, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }

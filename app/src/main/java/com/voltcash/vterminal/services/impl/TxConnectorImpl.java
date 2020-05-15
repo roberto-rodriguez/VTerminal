@@ -50,8 +50,8 @@ public class TxConnectorImpl implements TxConnector {
     public void tx(final ServiceCallback callback) throws Exception{
                 final List<File> filesToDelete = new ArrayList<>();
 
-                MultipartBody.Part checkFront= buildMultipartBody(Field.TX.CHECK_FRONT, filesToDelete);
-                MultipartBody.Part checkBack = buildMultipartBody(Field.TX.CHECK_BACK, filesToDelete);
+                MultipartBody.Part checkFront= null;// buildMultipartBody(Field.TX.CHECK_FRONT, filesToDelete);
+                MultipartBody.Part checkBack = null;//buildMultipartBody(Field.TX.CHECK_BACK, filesToDelete);
                 RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
                 RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
                 RequestBody operation        = buildStringBodyFromTxData(Field.TX.OPERATION);
@@ -113,14 +113,16 @@ public class TxConnectorImpl implements TxConnector {
         call.enqueue(callback);
     }
 
-    public void cardToBank(final ServiceCallback callback) throws Exception{
+    public void cardToBank(String operation, final ServiceCallback callback) throws Exception{
         RequestBody cardNumber  = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
-        RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
+        RequestBody amount      = buildStringBodyFromTxData(Field.TX.AMOUNT);
+        RequestBody op          = operation == null ? null : buildStringBody(operation);
 
         Call<Map> call = getAPI().cardToBank(
                 getSessionToken(),
                 cardNumber,
-                amount
+                amount,
+                op
         );
 
         call.enqueue(callback);
@@ -135,6 +137,20 @@ public class TxConnectorImpl implements TxConnector {
 
         call.enqueue(callback);
     }
+
+    public void calculateFee(String operation, String amount, final ServiceCallback callback) throws Exception{
+        RequestBody operationBody  = buildStringBody(operation);
+        RequestBody amountBody     = buildStringBody(amount);
+
+        Call<Map> call = getAPI().calculateFee(
+                getSessionToken(),
+                operationBody,
+                amountBody
+        );
+
+        call.enqueue(callback);
+    }
+
 
 
     private RequestBody getSessionToken() throws Exception{

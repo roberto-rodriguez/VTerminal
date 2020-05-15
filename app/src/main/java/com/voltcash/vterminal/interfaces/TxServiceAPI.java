@@ -53,8 +53,9 @@ public interface TxServiceAPI {
     Call<Map> cardToBank(
             @Part("sessionToken") RequestBody sessionToken,
             @Part("cardNumber") RequestBody cardNumber,
-            @Part("amount")     RequestBody amount
-    );
+            @Part("amount")     RequestBody amount,
+            @Part("operation")  RequestBody operation
+            );
 
 
     @Multipart
@@ -63,5 +64,13 @@ public interface TxServiceAPI {
             @Part("sessionToken") RequestBody sessionToken,
             @Part("startDate") RequestBody startDate,
             @Part("endDate")     RequestBody endDate
+    );
+
+    @Multipart
+    @POST("FrontTerminal/v1/tx/calculateFee")
+    Call<Map> calculateFee(
+            @Part("sessionToken") RequestBody sessionToken,
+            @Part("operation") RequestBody cardNumber,
+            @Part("amount")     RequestBody amount
     );
 }

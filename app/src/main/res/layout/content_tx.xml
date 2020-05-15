@@ -205,4 +205,30 @@
         android:hint="Phone"
         android:inputType="textPersonName|phone"
         android:visibility="gone" />
+
+    <Switch
+        android:id="@+id/cash_back_checkbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:thumbTint="@color/VOLTCASH_GREEN"
+        android:trackTint="@color/colorPrimaryDark"
+        android:text="Get Cash Back"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/cash_back_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:hint="Cash Back Amount"
+        android:inputType="phone"
+        android:visibility="invisible"/>
 </GridLayout>

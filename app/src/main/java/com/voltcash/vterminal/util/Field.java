@@ -39,6 +39,7 @@ public final class Field {
         public static final String ACTIVATION_FEE= "ACTIVATION_FEE";
         public static final String CARD_EXIST    = "CARD_EXIST";
         public static final String BALANCE       = "BALANCE";
+        public static final String C2B_FEE       = "fee";
 
         public static final String REQUEST_ID      = "REQUEST_ID";
         public static final String EXISTACH        = "EXISTACH";

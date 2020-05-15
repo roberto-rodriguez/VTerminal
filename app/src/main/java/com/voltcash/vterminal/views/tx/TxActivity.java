@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.kui.uicontrols.BarCodeFoundEvent;
@@ -38,7 +40,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+import static com.voltcash.vterminal.views.receipt.ReceiptBuilder.buildCardToBankReceipt;
+
+public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, CompoundButton.OnCheckedChangeListener{
 
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
     private ProgressDialog mProgressDialog;
@@ -54,6 +58,8 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     private String operation;
     String operationName;
 
+    private EditText cashBackField = null;
+    private Switch cashBackSwitch = null;
     private Button submitButton;
 
     private static final String[] PERMISSIONS = {
@@ -100,9 +106,13 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         setTitle("Deposit " + operationName );
 
         ((EditText)findViewById(R.id.tx_card_field)).setText("4111111111111112");
-        ((EditText)findViewById(R.id.tx_amount_input)).setText("12.88");
+        ((EditText)findViewById(R.id.tx_amount_input)).setText("100");
 
+        cashBackField = (EditText)findViewById(R.id.cash_back_amount);
         submitButton = findViewById(R.id.tx_submit_button);
+
+        cashBackSwitch = ((Switch)findViewById(R.id.cash_back_checkbox));
+        cashBackSwitch.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -174,6 +184,9 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                 ((TextView)findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + activationFee);
 
                 submitButton.setVisibility(View.VISIBLE);
+                if(Constants.OPERATION.CHECK.equals(operation)){
+                    cashBackSwitch.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -186,10 +199,19 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         TxData.put(Field.TX.SSN, ssn);
         TxData.put(Field.TX.PHONE, phone);
 
+        String cashBackString = cashBackField.getText().toString().trim();
+
+        if(!cashBackString.matches("\\d+(?:\\.\\d+)?")){
+            ViewUtil.showError(this, "Error", "Invalid Cashback Amount");
+            return;
+        }
+
+        final Double cashBack = Double.parseDouble(cashBackString);
+
         TxService.tx(new ServiceCallback(this){
             @Override
             public void onSuccess(Map response) {
-                Double amount   = TxData.getDouble(Field.TX.AMOUNT);
+                final Double amount   = TxData.getDouble(Field.TX.AMOUNT);
                 Double fee      = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
                 Double payout   = amount - fee;
                 String card     = TxData.getString(Field.TX.CARD_NUMBER);
@@ -200,22 +222,56 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
                     card = card.substring(card.length() - 4, card.length());
                 }
 
-                List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                final List<String> receiptLines = ReceiptBuilder.dateTimeLines();
                 receiptLines.add(_this.operationName + " Loading Fee -> $ "+ StringUtil.formatCurrency(fee));
                 receiptLines.add("Amount Loaded -> $ "  + StringUtil.formatCurrency(payout));
                 receiptLines.add("Location Name -> "    + merchant);
                 receiptLines.add("Transaction # -> " + requestId);
                 receiptLines.add("Card Number -> **** " + card);
 
-                String receiptContent = ReceiptBuilder.build(_this.operationName + " Load", receiptLines);
+                final String receiptContent = ReceiptBuilder.build(_this.operationName + " Load", receiptLines);
 
-                TxData.clear();
+                if(cashBack == null){
+                    showReceipt(receiptContent);
+                }else{
+                    TxData.put(Field.TX.AMOUNT, cashBack + "");
 
-                Intent intent = new Intent(_this, ReceiptView.class);
-                intent.putExtra(Constants.RECEIPT, receiptContent);
-                startActivity(intent);
+                    TxService.cardToBank(null, new ServiceCallback(_this){
+                        @Override
+                        public void onSuccess(Map response) {
+                            String c2bReceiptContent = buildCardToBankReceipt(response, amount, null, null);
+
+                            String doubleReceipt = ReceiptBuilder.div(receiptContent + "<br/>" + c2bReceiptContent);
+                            showReceipt(doubleReceipt);
+                        }
+
+                        @Override
+                        public void onError(Map map) {
+                            new AlertDialog.Builder(_this)
+                                    .setTitle("Error Processing Cash Back")
+                                    .setMessage((String)map.get("errorMessage") + ". \n\nCheck transaction was processed successfully.")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+                                        public void onClick(DialogInterface dialog, int which){
+                                            dialog.dismiss();
+
+                                            showReceipt(receiptContent);
+                                        }
+                                    })
+                                    .setCancelable(true)
+                                    .setIcon(R.drawable.error)
+                                    .show();
+                        }
+                    });
+                }
             }
         });
+    }
+
+    private void showReceipt(String receiptContent){
+        TxData.clear();
+        Intent intent = new Intent(this, ReceiptView.class);
+        intent.putExtra(Constants.RECEIPT, receiptContent);
+        startActivity(intent);
     }
 
     public void onClickCheckFront(View view){
@@ -304,6 +360,12 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
         }
 
 
+    }
+
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        cashBackField.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+        cashBackField.setText("");
     }
 
 }

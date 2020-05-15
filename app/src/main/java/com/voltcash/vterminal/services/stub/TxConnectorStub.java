@@ -8,6 +8,7 @@ import com.voltcash.vterminal.util.TxData;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
@@ -58,7 +59,7 @@ public class TxConnectorStub implements TxConnector {
         callback.onSuccess(response);
     }
 
-    public void cardToBank(final ServiceCallback callback) throws Exception{
+    public void cardToBank(String operation, final ServiceCallback callback) throws Exception{
         Map response = new HashMap();
         response.put(Field.TX.REQUEST_ID,   "1");
         response.put(Field.TX.EXISTACH,     true);
@@ -77,5 +78,10 @@ public class TxConnectorStub implements TxConnector {
         callback.onSuccess( new HashMap());
     }
 
+    public void calculateFee(String operation, String amount, final ServiceCallback callback) throws Exception{
+        Map response = new HashMap(); 
+        response.put(Field.TX.C2B_FEE,     3.0 + "");
 
+        callback.onSuccess(response);
+    }
 }

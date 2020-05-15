@@ -1,10 +1,16 @@
 package com.voltcash.vterminal.views.receipt;
 
+import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.StringUtil;
+import com.voltcash.vterminal.util.TxData;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by roberto.rodriguez on 4/25/2020.
@@ -86,10 +92,62 @@ public class ReceiptBuilder {
 
     public static String achDisclaimer(String customerName){
         return "<br/><span style=\"width: 100%;text-align: justify;\">I, " + customerName + " authorize Merchant to initiate ACH transfer entries and to debit account " +
-                "identified herein for purchase of good or services at Merchant location." +
+                "identified herein for purchase of goods or services at Merchant's location." +
                 "This authorization shall remain in effect unless and until Merchant has received written notification " +
-                "from myself that this authorization has been terminated in such time and manner to allow merchant to act." +
-                "Undersigned represents and warrants to Merchant that the person executing this Release is the Account owner referenced" +
+                "from myself that this authorization has been terminated in such time and manner to allow merchant to act. " +
+                "Undersigned represents and warrants to Merchant that the person executing this Release is the Account owner referenced " +
                 "above and all information regarding the Account and Account Owner is true and correct.</span>";
+    }
+
+    public static String buildCardToBankReceipt(Map response, Double amt, Double fee, Double payout){
+        String amount = StringUtil.formatCurrency(amt);
+        String customerName = (String)response.get(Field.TX.CUSTUMER_NAME);
+
+        List<String> dateTimeLines = ReceiptBuilder.dateTimeLines();
+
+        List<String> receiptLines = new ArrayList();
+        receiptLines.add("Merchant -> "+ response.get(Field.TX.MERCHANT_NAME));
+        receiptLines.add("Funds Settlement Information");
+        receiptLines.add("Bank Name -> "+ response.get(Field.TX.BANK_NAME));
+        receiptLines.add("Customer -> "+ customerName);
+        receiptLines.add("Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
+        receiptLines.add("Routing# -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
+        receiptLines.add("Account# -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
+
+        receiptLines.add(ReceiptBuilder.achDisclaimer(customerName));
+        receiptLines.add("<br/>");
+        receiptLines.add("______________________________");
+        receiptLines.add("Customer Signature");
+        receiptLines.add(dateTimeLines.get(0).replace(" ->", ":"));
+
+        String achReceiptContent = ReceiptBuilder.build("ACH Authorization Form", receiptLines);
+
+        String card     = TxData.getString(Field.TX.CARD_NUMBER);
+        String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
+        String requestId= StringUtil.formatRequestId(response);;
+
+        if(card != null && card.length() > 4){
+            card = card.substring(card.length() - 4, card.length());
+        }
+
+        receiptLines = dateTimeLines;
+        receiptLines.add("Location Name -> "    + merchant);
+        receiptLines.add("Card Number -> **** " + card);
+        receiptLines.add("Amount to Transfer -> " + amount);
+
+        if(fee != null){
+            receiptLines.add("Fee Amount-> " +  StringUtil.formatCurrency(fee));
+        }
+
+        if(payout != null){
+            receiptLines.add("Payout Amount -> " +  StringUtil.formatCurrency(payout));
+        }
+
+        receiptLines.add("Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
+        receiptLines.add("Transaction # -> " + requestId);
+
+        String txReceiptContent = ReceiptBuilder.build("ACH Transfer", receiptLines);
+
+        return ReceiptBuilder.div(achReceiptContent + "<br/>" + txReceiptContent);
     }
 }

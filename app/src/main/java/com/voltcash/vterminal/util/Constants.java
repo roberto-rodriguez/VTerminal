@@ -49,6 +49,7 @@ public class Constants {
     public static class OPERATION{
         public static final String CHECK     = "01";
         public static final String CASH      = "02";
+        public static final String CARD2BANK_WITH_FEE = "03";
 
         public static boolean isCheck(String operation){
             return CHECK.equals(operation);
