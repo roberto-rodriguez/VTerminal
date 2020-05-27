@@ -2,7 +2,6 @@ package com.voltcash.vterminal.views.receipt;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
-import com.pax.poslink.peripheries.POSLinkPrinter;
-import com.pax.poslink.peripheries.ProcessResult;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.ViewUtil;
@@ -128,18 +125,18 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             @Override
             public void run() {
 
-                POSLinkPrinter.getInstance(ReceiptView.this).print(bitmap, POSLinkPrinter.CutMode.FULL_PAPER_CUT, new POSLinkPrinter.PrintListener() {
-                    @Override
-                    public void onSuccess() {
-                        dismissDialog(processingDialog, printFinish);
-                    }
-
-                    @Override
-                    public void onError(ProcessResult processResult) {
-                        dismissDialog(processingDialog, printFinish);
-                        //toastError(processResult.getMessage());
-                    }
-                });
+//                POSLinkPrinter.getInstance(ReceiptView.this).print(bitmap, POSLinkPrinter.CutMode.FULL_PAPER_CUT, new POSLinkPrinter.PrintListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        dismissDialog(processingDialog, printFinish);
+//                    }
+//
+//                    @Override
+//                    public void onError(ProcessResult processResult) {
+//                        dismissDialog(processingDialog, printFinish);
+//                        //toastError(processResult.getMessage());
+//                    }
+//                });
             }
         });
     }

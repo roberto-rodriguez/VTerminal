@@ -192,21 +192,25 @@ public class TxActivity extends AppCompatActivity implements ActivityCompat.OnRe
     }
 
     public void onSubmit(View view){
-        final TxActivity _this = this;
-        final String ssn = ((EditText)findViewById(R.id.tx_id_ssn_input)).getText().toString();
-        final String phone = ((EditText)findViewById(R.id.tx_id_phone_input)).getText().toString();
 
-        TxData.put(Field.TX.SSN, ssn);
-        TxData.put(Field.TX.PHONE, phone);
+            final TxActivity _this = this;
+            final String ssn = ((EditText) findViewById(R.id.tx_id_ssn_input)).getText().toString();
+            final String phone = ((EditText) findViewById(R.id.tx_id_phone_input)).getText().toString();
 
-        String cashBackString = cashBackField.getText().toString().trim();
+            TxData.put(Field.TX.SSN, ssn);
+            TxData.put(Field.TX.PHONE, phone);
 
-        if(!cashBackString.matches("\\d+(?:\\.\\d+)?")){
-            ViewUtil.showError(this, "Error", "Invalid Cashback Amount");
-            return;
-        }
+            String cashBackString = cashBackField.getText().toString().trim();
+            boolean hasCashBack = cashBackString != null && !cashBackString.isEmpty();
 
-        final Double cashBack = Double.parseDouble(cashBackString);
+            if (hasCashBack && !cashBackString.matches("\\d+(?:\\.\\d+)?")) {
+                ViewUtil.showError(this, "Error", "Invalid Cashback Amount");
+                return;
+            }
+
+            final Double cashBack = hasCashBack ? Double.parseDouble(cashBackString) : null;
+
+
 
         TxService.tx(new ServiceCallback(this){
             @Override
