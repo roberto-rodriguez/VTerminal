@@ -10,13 +10,13 @@ import com.zcs.sdk.DriverManager;
  */
 
 public class VTerminal extends Application {
-    public static DriverManager DRIVER_MANAGER;
+   public static DriverManager DRIVER_MANAGER;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        DRIVER_MANAGER = DriverManager.getInstance();
+      //  DRIVER_MANAGER = DriverManager.getInstance();
     }
 
 }

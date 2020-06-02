@@ -260,16 +260,29 @@ public class CaptureActivity extends AppCompatActivity
 //                .setIcon(R.drawable.error)
 //                .show();
 
-        if(field.equalsIgnoreCase(Field.TX.ID_FRONT)){
-            imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
-        }else{
-   //         srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-            imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
+        switch (field){
+            case Field.TX.ID_FRONT:
+                imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
+                break;
+            case Field.TX.CHECK_FRONT:
+                imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
+                break;
+            case Field.TX.CHECK_BACK:
+                imageProcessingConfiguration.outputDPI = 130;
+                imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
+                break;
         }
 
-        if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
-            imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
-        }
+//        if(field.equalsIgnoreCase(Field.TX.ID_FRONT)){
+//            imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
+//        }else{
+//            srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
+//            imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
+//        }
+//
+//        if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
+//            imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
+//        }
 
         try {
             imageProcessor.processImage(srcImage, imageProcessingConfiguration);

@@ -192,6 +192,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="SSN"
+        android:text="900700001"
         android:inputType="phone"
         android:visibility="gone" />
 
@@ -203,6 +204,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Phone"
+        android:text="7864540209"
         android:inputType="textPersonName|phone"
         android:visibility="gone" />
 

@@ -27,6 +27,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Card Number"
+        android:text="4111111111111111"
         android:inputType="phone"
         android:textColor="@android:color/background_light"
         android:textColorHint="@android:color/background_light" />
@@ -39,6 +40,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Amount"
+        android:text="1000"
         android:inputType="textPersonName|phone"
         android:textColor="@android:color/background_light"
         android:textColorHint="@android:color/background_light" />

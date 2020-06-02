@@ -60,8 +60,8 @@ public class TxActivity extends AppCompatActivity implements
     private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
     private ProgressDialog mProgressDialog;
 
-    private CardReaderManager mCardReadManager;
-    private MagCard mMagCard;
+//    private CardReaderManager mCardReadManager;
+//    private MagCard mMagCard;
 
     private ImgReviewEditCntrl checkFrontImgReviewEditCntrl;
     private ImgReviewEditCntrl checkBackImgReviewEditCntrl;
@@ -122,18 +122,24 @@ public class TxActivity extends AppCompatActivity implements
         setTitle("Deposit " + operationName);
 
         EditText cardField = ((EditText) findViewById(R.id.tx_card_field));
-        cardField.setText("Swipe Card"); //"4111111111111112"
+        cardField.setText("4111111111111112");
         cardField.setOnClickListener(this);
-        ((EditText) findViewById(R.id.tx_amount_input)).setText("100");
+        ((EditText) findViewById(R.id.tx_amount_input)).setText("1000");
 
         cashBackField = (EditText) findViewById(R.id.cash_back_amount);
         submitButton = findViewById(R.id.tx_submit_button);
 
+        if(submitButton != null){
+            submitButton.setOnClickListener(this);
+        }
+
+        ((Button) findViewById(R.id.tx_calculate_fee_button)).setOnClickListener(this);
+
         cashBackSwitch = ((Switch) findViewById(R.id.cash_back_checkbox));
         cashBackSwitch.setOnCheckedChangeListener(this);
 
-        mCardReadManager = VTerminal.DRIVER_MANAGER.getCardReadManager();
-        mMagCard = mCardReadManager.getMAGCard();
+//        mCardReadManager = VTerminal.DRIVER_MANAGER.getCardReadManager();
+//        mMagCard = mCardReadManager.getMAGCard();
 
         //Provissional
         ((Button) findViewById(R.id.tx_calculate_fee_button)).setOnClickListener(this);
@@ -155,6 +161,19 @@ public class TxActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.tx_calculate_fee_button:
+                onCalculateFees(view);
+                break;
+
+            case R.id.tx_submit_button:
+                onSubmit(view);
+                break;
+        }
+    }
 
     public void onCalculateFees(View view) {
         final TxActivity _this = this;
@@ -395,38 +414,6 @@ public class TxActivity extends AppCompatActivity implements
         cashBackField.setText("");
     }
 
-    @Override
-    public void onClick(View view) {
-        final TxActivity _this = this;
-        switch (view.getId()) {
-            case R.id.tx_card_field:
-//                ProgressDialog.show(this, "Reading Card", "Please Swipe Card", false, true, new DialogInterface.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(DialogInterface dialog) {
-//                        mCardReadManager.cancelSearchCard();
-//                    }
-//                });
-
-                try {
-                    mCardReadManager.cancelSearchCard();
-                    mCardReadManager.searchCard(CardReaderTypeEnum.MAG_CARD, 60 * 1000, mListener);
-                } catch (Exception e) {
-                    ViewUtil.showError(this, "Ex", e.getMessage());
-                }
-
-                break;
-
-            case R.id.tx_calculate_fee_button:
-                // onCalculateFees(view);
-
-                searchBankCard();
-                break;
-        }
-    }
-
-
-
-
     //--------------- Card Reader -----------------
 
 
@@ -434,8 +421,8 @@ public class TxActivity extends AppCompatActivity implements
 
       showSearchCardDialog("Waiting", "Please swipe card");
 
-        mCardReadManager.cancelSearchCard();
-        mCardReadManager.searchCard(CardReaderTypeEnum.MAG_CARD, 60 * 1000, mListener);
+//        mCardReadManager.cancelSearchCard();
+//        mCardReadManager.searchCard(CardReaderTypeEnum.MAG_CARD, 60 * 1000, mListener);
     }
 
     OnSearchCardListener mListener = new OnSearchCardListener() {
@@ -449,7 +436,7 @@ public class TxActivity extends AppCompatActivity implements
             switch (cardType) {
 
                 case MAG_CARD:
-                    readMagCard();
+                    //readMagCard();
                     break;
 
             }
@@ -480,44 +467,45 @@ public class TxActivity extends AppCompatActivity implements
         mProgressDialog = (ProgressDialog) DialogUtils.showProgress(this, title, msg, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                mCardReadManager.cancelSearchCard();
+//                mCardReadManager.cancelSearchCard();
             }
         });
     }
 
 
-    private void readMagCard() {
-        int a = 3;
-        a = 4;
-        // use `getMagReadData` to get mag track data and parse data. if it is bank card, then parse exp and card no
-        // use `getMagTrackData` to get origin track data
-        CardInfoEntity cardInfo = mMagCard.getMagReadData();
-
-//        Log.d(TAG, "cardInfo.getResultcode():" + cardInfo.getResultcode());
-        if (cardInfo.getResultcode() == SdkResult.SDK_OK) {
-//            //String exp = cardInfo.getExpiredDate();
-            String cardNo = cardInfo.getCardNo();
-//            //String tk1 = cardInfo.getTk1();
-            String tk2 = cardInfo.getTk2();
-//            //String tk3 = cardInfo.getTk3();
-//            Message msg = Message.obtain();
-//            msg.what = MSG_CARD_OK;
-//            msg.arg1 = cardInfo.getResultcode();
-//            msg.obj = cardInfo;
-//            mHandler.sendMessage(msg);
-        } else {
-            String k = "no card";
-        }
-        mMagCard.magCardClose();
-
-        mProgressDialog.dismiss();
-//        // search again
-        //      mCardReadManager.searchCard(mCardType, READ_TIMEOUT, mListener);
-    }
+//    private void readMagCard() {
+//        int a = 3;
+//        a = 4;
+//        // use `getMagReadData` to get mag track data and parse data. if it is bank card, then parse exp and card no
+//        // use `getMagTrackData` to get origin track data
+//        CardInfoEntity cardInfo = mMagCard.getMagReadData();
+//
+////        Log.d(TAG, "cardInfo.getResultcode():" + cardInfo.getResultcode());
+//        if (cardInfo.getResultcode() == SdkResult.SDK_OK) {
+////            //String exp = cardInfo.getExpiredDate();
+//            String cardNo = cardInfo.getCardNo();
+////            //String tk1 = cardInfo.getTk1();
+//            String tk2 = cardInfo.getTk2();
+////            //String tk3 = cardInfo.getTk3();
+////            Message msg = Message.obtain();
+////            msg.what = MSG_CARD_OK;
+////            msg.arg1 = cardInfo.getResultcode();
+////            msg.obj = cardInfo;
+////            mHandler.sendMessage(msg);
+//        } else {
+//            String k = "no card";
+//        }
+//        mMagCard.magCardClose();
+//
+//        mProgressDialog.dismiss();
+////        // search again
+//        //      mCardReadManager.searchCard(mCardType, READ_TIMEOUT, mListener);
+//    }
 
 
     void closeSearch() {
-        mCardReadManager.cancelSearchCard();
+
+        //mCardReadManager.cancelSearchCard();
     }
 
     @Override
@@ -528,7 +516,7 @@ public class TxActivity extends AppCompatActivity implements
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mCardReadManager.closeCard();
+     //   mCardReadManager.closeCard();
         super.onDestroy();
     }
 }

@@ -50,8 +50,8 @@ public class TxConnectorImpl implements TxConnector {
     public void tx(final ServiceCallback callback) throws Exception{
                 final List<File> filesToDelete = new ArrayList<>();
 
-                MultipartBody.Part checkFront= null;// buildMultipartBody(Field.TX.CHECK_FRONT, filesToDelete);
-                MultipartBody.Part checkBack = null;//buildMultipartBody(Field.TX.CHECK_BACK, filesToDelete);
+                MultipartBody.Part checkFront= buildMultipartBody(Field.TX.CHECK_FRONT, filesToDelete);
+                MultipartBody.Part checkBack = buildMultipartBody(Field.TX.CHECK_BACK, filesToDelete);
                 RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
                 RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
                 RequestBody operation        = buildStringBodyFromTxData(Field.TX.OPERATION);

@@ -42,7 +42,7 @@ public abstract class FragmentWithCardReader extends Fragment
     protected ProgressDialog progressDialog;
 
     protected TextView cardField;
-    protected String cardNumber;
+    protected String cardNumber = "4111111111111111";
 
     protected Button submitButton;
     protected GridLayout calculateFeesLayout;
@@ -51,27 +51,22 @@ public abstract class FragmentWithCardReader extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-     //   getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-
         mHandler = new CardReaderHandler(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         return inflater.inflate(getLayoutId(), parent, false);
     }
 
     //Call this after the children execute
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-//        setTitle("Balance Inquiry");
-//        ((Button)findViewById(R.id.tx_calculate_fee_button)).setOnClickListener(this);
-
         AppContextProvider.setContext(getActivity().getApplicationContext());
         TxData.clear();
 
         cardField = (TextView)findViewById(R.id.tx_card_field);
+        cardField.setText("**** **** **** 1111");
 
         cardField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +88,7 @@ public abstract class FragmentWithCardReader extends Fragment
         mCardReadManager = VTerminal.DRIVER_MANAGER.getCardReadManager();
         mMagCard = mCardReadManager.getMAGCard();
 
-        searchBankCard();
+     //   searchBankCard();
     }
 
     @Override

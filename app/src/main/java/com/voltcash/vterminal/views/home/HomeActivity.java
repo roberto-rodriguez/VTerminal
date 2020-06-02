@@ -10,11 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.report.ActivityReportActivity;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
 import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
+import com.voltcash.vterminal.views.tx.TxActivity;
 import com.voltcash.vterminal.views.tx.TxBalanceFragment;
 import com.voltcash.vterminal.views.tx.TxCardToBankFragment;
 import com.voltcash.vterminal.views.tx.TxFragment;
@@ -63,7 +65,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
     public void onTxCheck(View view){
-        openTxFragment("01");
+      //  openTxFragment("01");
+
+        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
+        txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CHECK);
+        startActivity(txActivity);
     }
 
     public void onTxCash(View view){
