@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="Magnetic stripe card"
+        android:title="Magnetic stripe card"/>
+
+</PreferenceScreen>

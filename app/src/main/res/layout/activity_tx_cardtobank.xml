@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".views.tx.TxCardToBankActivity">
 
-    <include layout="@layout/content_c2b_calculate_fees" />
+    <include layout="@layout/content_tx_calculate_fees" />
 
     <include layout="@layout/content_c2b_fees" />
 
@@ -29,7 +29,6 @@
             android:id="@+id/tx_submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onCardToBank"
             android:text="Submit"
             android:visibility="invisible" />
     </LinearLayout>

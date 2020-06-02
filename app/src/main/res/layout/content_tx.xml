@@ -228,7 +228,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:hint="Cash Back Amount"
+        android:hint="Amount"
         android:inputType="phone"
         android:visibility="invisible"/>
 </GridLayout>

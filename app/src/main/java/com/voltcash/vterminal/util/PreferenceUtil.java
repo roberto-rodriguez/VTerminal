@@ -1,5 +1,6 @@
 package com.voltcash.vterminal.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
@@ -73,7 +74,7 @@ public class PreferenceUtil {
         return PREFERENCES.get(field);
     }
 
-    public static void write(AppCompatActivity context, Map data, String... fields)  {
+    public static void write(Activity context, Map data, String... fields)  {
      try {
         for (String field : fields) {
             String value = data.get(field) + "";

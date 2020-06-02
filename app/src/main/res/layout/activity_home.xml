@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".views.home.HomeActivity">
 
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.voltcash.vterminal.views.MainActivity">
+
+
+        </FrameLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/home_menu_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
         <LinearLayout
             android:id="@+id/button_home_tx_check"
             android:layout_width="match_parent"
@@ -162,5 +179,9 @@
                     android:text="Activity Report"
                     android:textColor="?android:attr/colorForeground" />
         </LinearLayout>
+
+
+
+        </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

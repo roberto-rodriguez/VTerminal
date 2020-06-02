@@ -1,5 +1,6 @@
 package com.voltcash.vterminal.interfaces;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,11 +21,11 @@ import static com.voltcash.vterminal.util.ViewUtil.showError;
  */
 
 public abstract class ServiceCallback implements Callback<Map> {
-    protected AppCompatActivity caller;
+    protected Activity caller;
 
     protected ProgressDialog mProgressDialog;
 
-    public ServiceCallback(AppCompatActivity caller){
+    public ServiceCallback(Activity caller){
         this.caller = caller;
     }
 
@@ -81,7 +82,7 @@ public abstract class ServiceCallback implements Callback<Map> {
         showError(caller, "Unexpected Error", (String)map.get("errorMessage"));
     }
 
-    public AppCompatActivity getCtx(){
+    public Activity getCtx(){
         return caller;
     }
 }

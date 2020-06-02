@@ -2,44 +2,35 @@ package com.voltcash.vterminal.views.tx;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
-
-import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
-import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
-import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
+import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Map;
 
 import static com.voltcash.vterminal.util.Constants.OPERATION.CARD2BANK_WITH_FEE;
 import static com.voltcash.vterminal.views.receipt.ReceiptBuilder.buildCardToBankReceipt;
 
-public class TxCardToBankActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
-    private GridLayout calculateFeesLayout;
-    private GridLayout feesLayout;
-    private GridLayout contentLayout;
+public class TxCardToBankFragment extends FragmentWithCardReader
+        implements
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
+    private GridLayout feesLayout;
 
     private EditText amountField;
-    private TextView cardField;
-    private Button submitButton;
 
     private TextView feeText;
     private TextView payoutText;
@@ -49,44 +40,42 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
     private Double payout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tx_cardtobank);
-
-        AppContextProvider.setContext(getApplicationContext());
-        TxData.clear();
+    public void onViewCreated(View view,  Bundle savedInstanceState) {
+        setTitle("Card to Bank");
 
         feesLayout          = (GridLayout)findViewById(R.id.c2b_fees_layout);
-        contentLayout       = (GridLayout)findViewById(R.id.c2b_content);
 
         amountField= (EditText)findViewById(R.id.tx_amount_input);
-        cardField  = (TextView)findViewById(R.id.c2b_card);
-        submitButton = (Button)findViewById(R.id.tx_submit_button);
+
 
         feeText =  (TextView)findViewById(R.id.tx_fee_text);
         payoutText =  (TextView)findViewById(R.id.tx_payout_text);
         amountText =  (TextView)findViewById(R.id.tx_amount_text);
 
-        setTitle("Card to Bank");
         amountField.setText("12.88");
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
-    public void onCalculateFee(View view){
+    protected int getLayoutId(){
+        return R.layout.activity_tx_cardtobank;
+    }
+
+    public void onCalculateFees(View view){
         Double amountDouble = null;
         try{
                amountDouble = Double.parseDouble(amountField.getText() + "");
         }catch(Exception e){
-            ViewUtil.showError(this, "Invalid Input", "Amount has to be a numeric value");
+            ViewUtil.showError(this.getActivity(), "Invalid Input", "Amount has to be a numeric value");
             return;
         }
         final Double amount = amountDouble;
 
-        TxService.calculateFee(CARD2BANK_WITH_FEE, amount + "", new ServiceCallback(this) {
+        TxService.calculateFee(CARD2BANK_WITH_FEE, amount + "", new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
                 calculateFeesLayout.setVisibility(View.GONE);
                 feesLayout.setVisibility(View.VISIBLE);
-                contentLayout.setVisibility(View.VISIBLE);
                 cardField.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
 
@@ -99,19 +88,17 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
             }
         });
 
-
-
     }
 
 
-    public void onCardToBank(View view){
-        final TxCardToBankActivity _this = this;
+    public void onSubmit(View view){
+        final TxCardToBankFragment _this = this;
 
-        final String cardNumber = cardField.getText().toString();
+        final String cardNumber = getCardNumber();
         final String amount = amountField.getText().toString().trim();
 
         if(!amount.matches("\\d+(?:\\.\\d+)?")){
-            ViewUtil.showError(this, "Error", "Invalid Cashback Amount");
+            ViewUtil.showError(this.getActivity(), "Error", "Invalid Cashback Amount");
             return;
         }
         final Double amt = Double.parseDouble(amount);
@@ -119,7 +106,7 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
         TxData.put(Field.TX.CARD_NUMBER, cardNumber);
         TxData.put(Field.TX.AMOUNT, amount);
 
-        TxService.cardToBank(Constants.OPERATION.CARD2BANK_WITH_FEE, new ServiceCallback(this) {
+        TxService.cardToBank(Constants.OPERATION.CARD2BANK_WITH_FEE, new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
 
@@ -131,7 +118,7 @@ public class TxCardToBankActivity extends AppCompatActivity implements ActivityC
                 String receiptContent = buildCardToBankReceipt(response, amt, fee, payout);
 
                 TxData.clear();
-                Intent intent = new Intent(_this, ReceiptView.class);
+                Intent intent = new Intent(_this.getActivity(), ReceiptView.class);
                 intent.putExtra(Constants.RECEIPT, receiptContent);
 
                 startActivity(intent);

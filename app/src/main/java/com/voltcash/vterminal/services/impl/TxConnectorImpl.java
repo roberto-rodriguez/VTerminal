@@ -104,9 +104,10 @@ public class TxConnectorImpl implements TxConnector {
 
     public void balanceInquiry(final ServiceCallback callback) throws Exception{
         RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
+        RequestBody token       = getSessionToken();
 
         Call<Map> call = getAPI().balanceInquiry(
-                getSessionToken(),
+                token,
                 cardNumber
         );
 
@@ -154,6 +155,8 @@ public class TxConnectorImpl implements TxConnector {
 
 
     private RequestBody getSessionToken() throws Exception{
-       return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
+        String PROVISSIONAL_TOKEN = "a8dE30066fE3185d";
+        return buildStringBody(PROVISSIONAL_TOKEN);
+//       return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
     }
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.tx.TxBalanceActivity">
+    >
 
 
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,10 +24,9 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.08"
-        tools:context=".views.tx.TxActivity"
         tools:showIn="@layout/activity_tx">
 
-        <EditText
+        <TextView
             android:id="@+id/tx_card_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -35,9 +34,10 @@
             android:layout_gravity="fill_horizontal"
             android:gravity="center"
             android:hint="Card Number"
-            android:inputType="phone"
+            android:layout_marginBottom="10dp"
             android:textColor="@android:color/background_light"
-            android:textColorHint="@android:color/background_light" />
+            android:textColorHint="@android:color/background_light"
+            android:textSize="18sp" />
         <Button
             android:id="@+id/tx_calculate_fee_button"
             android:layout_width="0dp"
@@ -45,7 +45,6 @@
             android:layout_columnSpan="1"
             android:layout_gravity="fill_horizontal"
             android:gravity="center"
-            android:onClick="onCheckBalance"
             android:text="Check Balance" />
     </GridLayout>
 

@@ -1,5 +1,6 @@
 package com.voltcash.vterminal.interfaces;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -95,7 +96,7 @@ public abstract class TxServiceCallback extends ServiceCallback{
         showError(caller, "Error", (String)map.get("errorMessage"));
     }
 
-    public AppCompatActivity getCtx(){
+    public Activity getCtx(){
         return caller;
     }
 }
