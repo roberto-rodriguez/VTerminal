@@ -152,11 +152,7 @@ public class TxConnectorImpl implements TxConnector {
         call.enqueue(callback);
     }
 
-
-
     private RequestBody getSessionToken() throws Exception{
-        String PROVISSIONAL_TOKEN = "a8dE30066fE3185d";
-        return buildStringBody(PROVISSIONAL_TOKEN);
-//       return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
+        return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
     }
 }

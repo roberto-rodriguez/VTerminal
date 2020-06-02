@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-
 import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.VTerminal;
@@ -42,7 +41,7 @@ public abstract class FragmentWithCardReader extends Fragment
     protected ProgressDialog progressDialog;
 
     protected TextView cardField;
-    protected String cardNumber = "4111111111111111";
+    protected String cardNumber;
 
     protected Button submitButton;
     protected GridLayout calculateFeesLayout;
@@ -50,7 +49,6 @@ public abstract class FragmentWithCardReader extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mHandler = new CardReaderHandler(this);
     }
 
@@ -66,14 +64,7 @@ public abstract class FragmentWithCardReader extends Fragment
         TxData.clear();
 
         cardField = (TextView)findViewById(R.id.tx_card_field);
-        cardField.setText("**** **** **** 1111");
-
-        cardField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchBankCard();
-            }
-        });
+        cardField.setOnClickListener(this);
 
         submitButton = (Button)findViewById(R.id.tx_submit_button);
 
@@ -88,7 +79,7 @@ public abstract class FragmentWithCardReader extends Fragment
         mCardReadManager = VTerminal.DRIVER_MANAGER.getCardReadManager();
         mMagCard = mCardReadManager.getMAGCard();
 
-     //   searchBankCard();
+        searchBankCard();
     }
 
     @Override
@@ -101,6 +92,10 @@ public abstract class FragmentWithCardReader extends Fragment
 
             case R.id.tx_submit_button:
                 onSubmit(view);
+                break;
+
+            case R.id.tx_card_field:
+                searchBankCard();
                 break;
         }
     }
@@ -159,7 +154,8 @@ public abstract class FragmentWithCardReader extends Fragment
     }
 
     void closeSearch() {
-        mCardReadManager.cancelSearchCard();
+
+        //mCardReadManager.cancelSearchCard();
     }
 
     protected final <T extends View> T findViewById(int id) {

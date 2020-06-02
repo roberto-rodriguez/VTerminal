@@ -56,8 +56,6 @@ public abstract class ServiceCallback implements Callback<Map> {
               onSuccess(response);
             }
         }catch(Exception e){
-
-
             e.printStackTrace();
 
             onFailure(call, e);

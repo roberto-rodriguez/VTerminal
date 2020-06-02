@@ -25,7 +25,6 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:onClick="onClickCheckFront"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -67,7 +66,6 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
-        android:onClick="onClickCheckBack"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -109,7 +107,6 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
-        android:onClick="onClickIdFront"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -151,7 +148,6 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
-        android:onClick="onClickIdBack"
         android:orientation="vertical"
         android:visibility="gone">
 

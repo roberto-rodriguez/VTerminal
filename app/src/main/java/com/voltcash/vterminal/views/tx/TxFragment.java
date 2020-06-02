@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.kofax.kmc.ken.engines.data.Image;
@@ -98,7 +99,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
         this.operation =  getArguments().getString(Field.TX.OPERATION);
         this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
-        TxData.put(Field.TX.OPERATION, this.operation);
+
 
         getActivity().setTitle("Deposit " + operationName);
 
@@ -110,6 +111,26 @@ public class TxFragment extends FragmentWithCardReader implements
         cashBackSwitch.setOnCheckedChangeListener(this);
 
         super.onViewCreated(view, savedInstanceState);
+
+        TxData.put(Field.TX.OPERATION, this.operation);
+
+        addImageCaptureListeners();
+    }
+
+    private void addImageCaptureListeners(){
+        addImageCaptureListener(R.id.tx_check_front_wrapper, Field.TX.CHECK_FRONT, checkFrontImgReviewEditCntrl, CaptureActivity.class);
+        addImageCaptureListener(R.id.tx_check_back_wrapper , Field.TX.CHECK_BACK , checkBackImgReviewEditCntrl , CaptureActivity.class);
+        addImageCaptureListener(R.id.tx_id_front_wrapper   , Field.TX.ID_FRONT   , idFrontImgReviewEditCntrl   , CaptureActivity.class);
+        addImageCaptureListener(R.id.tx_id_back_wrapper    , Field.TX.ID_BACK    , idBackImgReviewEditCntrl    , CaptureBarcodeActivity.class);
+    }
+
+    private void addImageCaptureListener(int cmpId, final String fieldName, final ImgReviewEditCntrl imgReviewEditCntrl, final Class clz){
+        ((LinearLayout)findViewById(cmpId)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCaptureClick(fieldName, imgReviewEditCntrl, clz);
+            }
+        });
     }
 
     @Override
@@ -273,22 +294,6 @@ public class TxFragment extends FragmentWithCardReader implements
         startActivity(intent);
     }
 
-    public void onClickCheckFront(View view) {
-        onCaptureClick(Field.TX.CHECK_FRONT, checkFrontImgReviewEditCntrl, CaptureActivity.class);
-    }
-
-    public void onClickCheckBack(View view) {
-        onCaptureClick(Field.TX.CHECK_BACK, checkBackImgReviewEditCntrl, CaptureActivity.class);
-    }
-
-    public void onClickIdFront(View view) {
-        onCaptureClick(Field.TX.ID_FRONT, idFrontImgReviewEditCntrl, CaptureActivity.class);
-    }
-
-    public void onClickIdBack(View view) {
-        onCaptureClick(Field.TX.ID_BACK, idBackImgReviewEditCntrl, CaptureBarcodeActivity.class);
-    }
-
     protected void onCaptureClick(String field, ImgReviewEditCntrl imgCmp, Class captureClazz) {
         activeImgField = field;
         activeImgCmp = imgCmp;
@@ -313,6 +318,10 @@ public class TxFragment extends FragmentWithCardReader implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
+            if(progressDialog != null){
+                progressDialog.dismiss();
+            }
+
             switch (resultCode) {
                 case Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID:
                     Image image = null;
@@ -343,8 +352,6 @@ public class TxFragment extends FragmentWithCardReader implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
@@ -352,7 +359,4 @@ public class TxFragment extends FragmentWithCardReader implements
         cashBackField.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
         cashBackField.setText("");
     }
-
-
-
  }

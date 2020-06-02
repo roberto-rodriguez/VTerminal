@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.views.MainActivity;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
@@ -38,15 +39,23 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextView = (TextView)findViewById(R.id.login_password);
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
         passwordTextView.setText("a");
+
+        String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
+
+        if(serialNumber == null){
+            //If it gets here is because there was an error, need to restart the app
+            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(mainActivity);
+        }
     }
 
     public void onLogin(View view) {
-            String serialNumber     = PreferenceUtil.read( Field.AUTH.TERMINAL_SERIAL_NUMBER);
-            String terminalUsername = PreferenceUtil.read( Field.AUTH.TERMINAL_USERNAME);
-            String terminalPassword = PreferenceUtil.read( Field.AUTH.TERMINAL_PASSWORD);
+            String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
+            String terminalUsername = PreferenceUtil.read(Field.AUTH.TERMINAL_USERNAME);
+            String terminalPassword = PreferenceUtil.read(Field.AUTH.TERMINAL_PASSWORD);
 
-            String email            = emailTextView.getText().toString();
-            String password         = passwordTextView.getText().toString();
+            String email = emailTextView.getText().toString();
+            String password = passwordTextView.getText().toString();
 
             Log.i("LoginActivity", "email = " + email);
             Log.i("LoginActivity", "password = " + password);
@@ -56,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(Map response) {
                     PreferenceUtil.write(getCtx(), response,
                             Field.AUTH.CLERK_FIRST_NAME,
-                            Field.AUTH.CLERK_LAST_NAME ,
-                            Field.AUTH.CLERK_ID        ,
+                            Field.AUTH.CLERK_LAST_NAME,
+                            Field.AUTH.CLERK_ID,
                             Field.AUTH.SESSION_TOKEN
                     );
 

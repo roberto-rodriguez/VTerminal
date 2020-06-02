@@ -65,11 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     public void onTxCheck(View view){
-      //  openTxFragment("01");
-
-        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
-        txActivity.putExtra(Field.TX.OPERATION, Constants.OPERATION.CHECK);
-        startActivity(txActivity);
+       openTxFragment("01");
     }
 
     public void onTxCash(View view){

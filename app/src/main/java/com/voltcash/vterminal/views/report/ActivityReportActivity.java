@@ -9,23 +9,18 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
 import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
-import com.voltcash.vterminal.util.Field;
-import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,8 +53,8 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
         startDateField.setOnClickListener(this);
         endDateField.setOnClickListener(this);
 
-        String date = getDate("MM-dd-YYYY");
-        String dateDisplay = getDate("MM/dd/YYYY");
+        String date = getDate("MM-dd-yyyy");
+        String dateDisplay = getDate("MM/dd/yyyy");
 
         startDateField.setText(dateDisplay);
         endDateField.setText(dateDisplay);
@@ -159,8 +154,8 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
     }
 
     private String getDate(String format){
-        DateFormat df = new SimpleDateFormat(format);
-        return df.format(new Date());
+            DateFormat df = new SimpleDateFormat(format);
+            return df.format(new Date());
     }
 
     private boolean addReceiptSection(String title, String section, Map response, List<String> receiptLines){

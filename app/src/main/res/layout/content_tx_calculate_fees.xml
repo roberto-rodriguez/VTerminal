@@ -19,7 +19,7 @@
     tools:context=".views.tx.TxActivity"
     tools:showIn="@layout/activity_tx">
 
-    <EditText
+    <TextView
         android:id="@+id/tx_card_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,7 +27,6 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Card Number"
-        android:text="4111111111111111"
         android:inputType="phone"
         android:textColor="@android:color/background_light"
         android:textColorHint="@android:color/background_light" />
