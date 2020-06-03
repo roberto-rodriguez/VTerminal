@@ -1,10 +1,8 @@
 package com.voltcash.vterminal.views.tx;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -17,12 +15,12 @@ import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
+import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
-
+import java.util.List;
 import java.util.Map;
 
 import static com.voltcash.vterminal.util.Constants.OPERATION.CARD2BANK_WITH_FEE;
-import static com.voltcash.vterminal.views.receipt.ReceiptBuilder.buildCardToBankReceipt;
 
 public class TxCardToBankFragment extends FragmentWithCardReader
         implements
@@ -115,13 +113,9 @@ public class TxCardToBankFragment extends FragmentWithCardReader
                     return;
                 }
 
-                String receiptContent = buildCardToBankReceipt(response, amt, fee, payout);
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amt, fee, payout);
 
-                TxData.clear();
-                Intent intent = new Intent(_this.getActivity(), ReceiptView.class);
-                intent.putExtra(Constants.RECEIPT, receiptContent);
-
-                startActivity(intent);
+                ReceiptView.show(_this.getActivity(), receiptLines);
             }
         });
     }

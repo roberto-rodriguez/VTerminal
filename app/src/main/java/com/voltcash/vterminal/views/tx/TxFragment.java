@@ -39,11 +39,10 @@ import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static com.voltcash.vterminal.views.receipt.ReceiptBuilder.buildCardToBankReceipt;
 
 public class TxFragment extends FragmentWithCardReader implements
         ActivityCompat.OnRequestPermissionsResultCallback,
@@ -246,27 +245,29 @@ public class TxFragment extends FragmentWithCardReader implements
                     card = card.substring(card.length() - 4, card.length());
                 }
 
-                final List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                final List<String> receiptLines = new ArrayList<>();
+                ReceiptBuilder.addTitle(receiptLines, _this.operationName + " Load");
+                 ReceiptBuilder.addDateTimeLines(receiptLines);
                 receiptLines.add(_this.operationName + " Loading Fee -> $ " + StringUtil.formatCurrency(fee));
                 receiptLines.add("Amount Loaded -> $ " + StringUtil.formatCurrency(payout));
                 receiptLines.add("Location Name -> " + merchant);
                 receiptLines.add("Transaction # -> " + requestId);
                 receiptLines.add("Card Number -> " + getCardField().getText());
 
-                final String receiptContent = ReceiptBuilder.build(_this.operationName + " Load", receiptLines);
 
                 if (cashBack == null) {
-                    showReceipt(receiptContent);
+                    showReceipt(receiptLines);
                 } else {
                     TxData.put(Field.TX.AMOUNT, cashBack + "");
 
                     TxService.cardToBank(null, new ServiceCallback(_this.getActivity()) {
                         @Override
                         public void onSuccess(Map response) {
-                            String c2bReceiptContent = buildCardToBankReceipt(response, amount, null, null);
+                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, null, null);
 
-                            String doubleReceipt = ReceiptBuilder.div(receiptContent + "<br/>" + c2bReceiptContent);
-                            showReceipt(doubleReceipt);
+                            receiptLines.addAll(c2bReceiptLines);
+
+                              showReceipt(receiptLines);
                         }
 
                         @Override
@@ -278,7 +279,7 @@ public class TxFragment extends FragmentWithCardReader implements
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
 
-                                            showReceipt(receiptContent);
+                                            showReceipt(receiptLines);
                                         }
                                     })
                                     .setCancelable(true)
@@ -291,11 +292,8 @@ public class TxFragment extends FragmentWithCardReader implements
         });
     }
 
-    private void showReceipt(String receiptContent) {
-        TxData.clear();
-        Intent intent = new Intent(this.getActivity(), ReceiptView.class);
-        intent.putExtra(Constants.RECEIPT, receiptContent);
-        startActivity(intent);
+    private void showReceipt(List<String> receiptLines) {
+        ReceiptView.show(this.getActivity() , receiptLines);
     }
 
     protected void onCaptureClick(String field, ImgReviewEditCntrl imgCmp, Class captureClazz) {

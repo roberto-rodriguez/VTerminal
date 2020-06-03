@@ -16,6 +16,9 @@ import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,18 +63,14 @@ public class TxBalanceFragment extends FragmentWithCardReader
 
                 String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
 
-                List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                List<String> receiptLines = new ArrayList<>();
+                ReceiptBuilder.addTitle(receiptLines,"Balance Inquiry");
+                ReceiptBuilder.addDateTimeLines(receiptLines);
                 receiptLines.add("Location Name -> "    + merchant);
                 receiptLines.add("Card Number -> **** " + getCardField().getText());
                 receiptLines.add("Balance -> $" + balance);
 
-                String receiptContent = ReceiptBuilder.build("Balance Inquiry", receiptLines);
-
-                TxData.clear();
-
-                Intent intent = new Intent(_this.getActivity(), ReceiptView.class);
-                intent.putExtra(Constants.RECEIPT, receiptContent);
-                startActivity(intent);
+                ReceiptView.show(_this.getActivity(), receiptLines);
             }
         });
     }
