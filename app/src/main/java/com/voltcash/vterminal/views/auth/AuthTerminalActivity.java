@@ -3,7 +3,6 @@ package com.voltcash.vterminal.views.auth;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,7 @@ import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-import com.voltcash.vterminal.util.ViewUtil;
+import com.voltcash.vterminal.util.Settings;
 
 import java.util.Map;
 
@@ -32,6 +31,8 @@ public class AuthTerminalActivity extends AppCompatActivity {
 
         accessCodeTextView = (TextView)findViewById(R.id.access_code);
         accessCodeTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
+
+        ((TextView)findViewById(R.id.version_text)).setText(Settings.VERSION);
     }
 
     public void onAuth(View view){

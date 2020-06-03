@@ -3,9 +3,9 @@
     package="com.voltcash.vterminal">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+<!--    <uses-permission android:name="android.permission.GET_ACCOUNTS" />-->
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+<!--    <uses-permission android:name="android.permission.READ_CONTACTS" />-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -86,7 +86,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".views.receipt.ReceiptView"
+            android:name=".views.tx.receipt.ReceiptView"
             android:parentActivityName=".views.home.HomeActivity"
             android:screenOrientation="portrait" />
 

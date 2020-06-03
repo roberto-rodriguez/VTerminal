@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.views.lab.util;
+package com.voltcash.vterminal.util;
 
 import android.app.Activity;
 import android.app.Dialog;

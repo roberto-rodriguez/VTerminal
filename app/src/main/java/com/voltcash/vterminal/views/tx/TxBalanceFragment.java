@@ -1,6 +1,5 @@
 package com.voltcash.vterminal.views.tx;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -8,16 +7,14 @@ import android.widget.TextView;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
-import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
-import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
-import com.voltcash.vterminal.views.receipt.ReceiptView;
+import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

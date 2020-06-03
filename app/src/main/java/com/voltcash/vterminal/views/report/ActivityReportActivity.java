@@ -1,7 +1,6 @@
 package com.voltcash.vterminal.views.report;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +12,14 @@ import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
-import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
-import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
-import com.voltcash.vterminal.views.receipt.ReceiptView;
+import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +84,9 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
 
                 Double TOTAL_ROWS = (Double)response.get("TOTAL_ROWS");
 
-                List<String> receiptLines = ReceiptBuilder.dateTimeLines();
+                List<String> receiptLines = new ArrayList<>();
+                ReceiptBuilder.addTitle(receiptLines, "Activity Report");
+                ReceiptBuilder.addDateTimeLines(receiptLines);
 
                 receiptLines.add("From: "+ startDateDisplay + " TO: " + endDateDisplay );
 
@@ -105,12 +106,7 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
                     receiptLines.add("Net Cash Flow -> " + getFormattedAmount(response, "NET_CASH"));
                 }
 
-                String receiptContent = ReceiptBuilder.build("Activity Report", receiptLines);
-
-                Intent intent = new Intent(_this, ReceiptView.class);
-                intent.putExtra(Constants.RECEIPT, receiptContent);
-
-                startActivity(intent);
+                ReceiptView.show(_this, receiptLines);
             }
         });
     }
@@ -166,7 +162,7 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
         receiptLines.add("<br/>");
         receiptLines.add(title);
         receiptLines.add("<br/>");
-        receiptLines.add("<b>Date/Time</b> -> <b>Trans $</b>");
+        receiptLines.add("Date/Time -> Trans $");
 
         if(TRANSACTIONS != null){
             for (Map tx : TRANSACTIONS){

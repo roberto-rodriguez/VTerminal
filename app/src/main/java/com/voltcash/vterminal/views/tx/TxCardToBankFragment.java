@@ -11,12 +11,12 @@ import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
-import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
-import com.voltcash.vterminal.views.receipt.ReceiptView;
+import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import java.util.List;
 import java.util.Map;
 

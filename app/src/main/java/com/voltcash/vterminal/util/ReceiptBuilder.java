@@ -1,11 +1,7 @@
-package com.voltcash.vterminal.views.receipt;
+package com.voltcash.vterminal.util;
 
 import android.text.Layout;
 
-import com.voltcash.vterminal.util.Field;
-import com.voltcash.vterminal.util.PreferenceUtil;
-import com.voltcash.vterminal.util.StringUtil;
-import com.voltcash.vterminal.util.TxData;
 import com.zcs.sdk.Printer;
 import com.zcs.sdk.print.PrnStrFormat;
 import com.zcs.sdk.print.PrnTextFont;
@@ -17,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by roberto.rodriguez on 4/25/2020.
- */
 
 public class ReceiptBuilder {
     private static PrnStrFormat HEADER_FORMAT = new PrnStrFormat();
@@ -86,7 +78,7 @@ public class ReceiptBuilder {
         return sb.toString();
     }
 
-  //  @deprecated
+    //  @deprecated
     public static String build(String title, List<String> lines){
         StringBuilder sb = new StringBuilder();
 
@@ -280,3 +272,4 @@ public class ReceiptBuilder {
         return receiptLines;
     }
 }
+

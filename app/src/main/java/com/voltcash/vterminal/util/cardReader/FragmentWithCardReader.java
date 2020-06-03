@@ -17,7 +17,7 @@ import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.VTerminal;
 import com.voltcash.vterminal.util.TxData;
-import com.voltcash.vterminal.views.lab.util.DialogUtils;
+import com.voltcash.vterminal.util.DialogUtils;
 import com.zcs.sdk.SdkResult;
 import com.zcs.sdk.card.CardInfoEntity;
 import com.zcs.sdk.card.CardReaderManager;

@@ -29,12 +29,12 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
-import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
-import com.voltcash.vterminal.views.receipt.ReceiptView;
+import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
@@ -247,7 +247,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
                 final List<String> receiptLines = new ArrayList<>();
                 ReceiptBuilder.addTitle(receiptLines, _this.operationName + " Load");
-                 ReceiptBuilder.addDateTimeLines(receiptLines);
+                ReceiptBuilder.addDateTimeLines(receiptLines);
                 receiptLines.add(_this.operationName + " Loading Fee -> $ " + StringUtil.formatCurrency(fee));
                 receiptLines.add("Amount Loaded -> $ " + StringUtil.formatCurrency(payout));
                 receiptLines.add("Location Name -> " + merchant);
