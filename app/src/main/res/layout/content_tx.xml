@@ -14,7 +14,6 @@
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintTop_toBottomOf="@+id/tx_fees_layout"
     app:layout_constraintVertical_bias="0.08"
-    tools:context=".views.tx.TxActivity"
     tools:showIn="@layout/activity_tx">
 
     <LinearLayout

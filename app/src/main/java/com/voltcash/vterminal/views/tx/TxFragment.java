@@ -35,6 +35,10 @@ import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.receipt.ReceiptBuilder;
 import com.voltcash.vterminal.views.receipt.ReceiptView;
+import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
+import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
+import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

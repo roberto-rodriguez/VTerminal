@@ -12,8 +12,6 @@ import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.views.auth.LoginActivity;
-import com.voltcash.vterminal.views.tx.TxActivity;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,8 +37,7 @@ public class ClerkSettingsActivity extends AppCompatActivity {
 
 
     public void onChangePassword(View view){
-        Intent txActivity = new Intent(getApplicationContext(), TxActivity.class);
-        startActivity(txActivity);
+        ViewUtil.showMsg(this, "Coming Soon", "Thifs functionlity is under development");
     }
 
     public void onLogOut(View view){

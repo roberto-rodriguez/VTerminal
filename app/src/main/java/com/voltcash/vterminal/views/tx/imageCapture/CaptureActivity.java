@@ -1,24 +1,20 @@
-package com.voltcash.vterminal.views.tx;
+package com.voltcash.vterminal.views.tx.imageCapture;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-
 import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.DocumentDetectionSettings;
 import com.kofax.kmc.ken.engines.data.Image;
@@ -40,7 +36,6 @@ import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
 
-import java.util.Date;
 
 public class CaptureActivity extends AppCompatActivity
         implements  CameraInitializationListener, ImageCapturedListener, CameraInitializationFailedListener, ImageProcessor.ImageOutListener  {
@@ -304,7 +299,7 @@ public class CaptureActivity extends AppCompatActivity
                 Image image = event.getImage();
                 TxData.put(field, image);
 
-                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PreviewActivity.class);
                 intent.putExtra( Field.TX.TX_FIELD , field);
                 startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
 

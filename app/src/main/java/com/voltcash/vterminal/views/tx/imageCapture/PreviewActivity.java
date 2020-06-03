@@ -1,4 +1,4 @@
-package com.voltcash.vterminal.views.tx;
+package com.voltcash.vterminal.views.tx.imageCapture;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;

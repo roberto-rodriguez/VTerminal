@@ -41,37 +41,31 @@
         <activity android:name=".views.auth.AuthTerminalActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".views.home.HomeActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.auth.LoginActivity"/>
         <activity
-            android:name=".views.tx.CaptureActivity"
+            android:name=".views.tx.imageCapture.CaptureActivity"
             android:label="@string/title_activity_capture"
             android:parentActivityName=".views.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".views.tx.PreviewActivity"
+            android:name=".views.tx.imageCapture.PreviewActivity"
             android:label="@string/title_activity_preview"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:parentActivityName=".views.tx.CaptureActivity"
+            android:parentActivityName=".views.tx.imageCapture.CaptureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".views.tx.ProcessImageActivity"
+            android:name=".views.tx.imageCapture.ProcessImageActivity"
             android:label="@string/title_activity_process_image"
-            android:parentActivityName=".views.tx.PreviewActivity"
+            android:parentActivityName=".views.tx.imageCapture.PreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".views.tx.CaptureBarcodeActivity"
+            android:name=".views.tx.imageCapture.CaptureBarcodeActivity"
             android:label="@string/title_activity_capture"
             android:parentActivityName=".views.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
-
-        <activity android:name=".views.tx.TxActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
-
-        <activity android:name=".views.tx.TxCardToBankActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
-
-        <activity android:name=".views.tx.TxBalanceActivity"  android:screenOrientation="portrait" android:parentActivityName=".views.home.HomeActivity"/>
 
         <activity android:name=".views.auth.LoginActivity"  android:screenOrientation="portrait"/>
 
@@ -107,15 +101,6 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="${applicationId}.provider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/file_paths" />-->
-        <!--</provider>-->
     </application>
 
 </manifest>
