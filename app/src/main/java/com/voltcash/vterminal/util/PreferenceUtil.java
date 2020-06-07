@@ -2,7 +2,10 @@ package com.voltcash.vterminal.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+
+import com.voltcash.vterminal.views.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -72,6 +75,18 @@ public class PreferenceUtil {
 
     public static String read( String field){
         return PREFERENCES.get(field);
+    }
+
+    public static String getSerialNumber(Activity activity){
+        String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
+
+        if(serialNumber == null){
+            //If it gets here is because there was an error, need to restart the app
+            Intent mainActivity = new Intent(activity.getApplicationContext(), MainActivity.class);
+            activity.startActivity(mainActivity);
+        }
+
+        return serialNumber;
     }
 
     public static void write(Activity context, Map data, String... fields)  {

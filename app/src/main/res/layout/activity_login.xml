@@ -92,17 +92,15 @@
         app:layout_constraintTop_toBottomOf="@+id/login_passwordWrapper" />
 
 
+
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/disconnect_text"
         android:layout_width="wrap_content"
-        android:layout_height="39dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginStart="64dp"
+        android:layout_height="wrap_content"
+        android:text="Disconnect Terminal"
+        android:onClick="onDisconnect"
+        android:textSize="12sp"
         android:layout_marginBottom="30dp"
-        android:text="Request Clerk Credentials"
-        android:textColor="@color/VOLTCASH_GREEN"
-        android:textSize="15sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/version_text" />
@@ -111,8 +109,8 @@
         android:id="@+id/version_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="12sp"
+        android:text="Version 20.06.06"
+        android:textSize="11sp"
         android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

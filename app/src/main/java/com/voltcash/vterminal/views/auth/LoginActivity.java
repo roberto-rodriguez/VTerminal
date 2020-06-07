@@ -15,6 +15,8 @@ import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -39,20 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
         passwordTextView.setText("a");
 
-        String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
-
-        if(serialNumber == null){
-            //If it gets here is because there was an error, need to restart the app
-            Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(mainActivity);
-        }
+        //Check if not have Serial Number go to MainActivity
+        PreferenceUtil.getSerialNumber(this);
 
         ((TextView)findViewById(R.id.version_text)).setText(Settings.VERSION);
 
     }
 
     public void onLogin(View view) {
-            String serialNumber = PreferenceUtil.read(Field.AUTH.TERMINAL_SERIAL_NUMBER);
+            String serialNumber = PreferenceUtil.getSerialNumber(this);
+
+            if(serialNumber == null){return;}
+
             String terminalUsername = PreferenceUtil.read(Field.AUTH.TERMINAL_USERNAME);
             String terminalPassword = PreferenceUtil.read(Field.AUTH.TERMINAL_PASSWORD);
 
@@ -74,4 +74,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
     }
+
+    public void onDisconnect(View view){
+        //Clean all these fields in Preferences
+        PreferenceUtil.write(this, new HashMap(),
+                Field.AUTH.CLERK_FIRST_NAME,
+                Field.AUTH.CLERK_LAST_NAME ,
+                Field.AUTH.CLERK_ID        ,
+                Field.AUTH.SESSION_TOKEN);
+
+        Intent intent = new Intent(getApplicationContext(), AuthTerminalActivity.class);
+        startActivity(intent);
+    }
+
 }

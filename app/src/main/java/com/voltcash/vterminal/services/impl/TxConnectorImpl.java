@@ -1,5 +1,8 @@
 package com.voltcash.vterminal.services.impl;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxServiceAPI;
 import com.voltcash.vterminal.interfaces.TxConnector;
@@ -8,6 +11,8 @@ import com.voltcash.vterminal.util.Field;
 import static com.voltcash.vterminal.util.RequestBuilder.*;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.TxData;
+import com.voltcash.vterminal.views.MainActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,7 @@ public class TxConnectorImpl implements TxConnector {
             RequestBody operation        = buildStringBodyFromTxData(Field.TX.OPERATION);
 
             Call<Map> call = getAPI().checkAuthLocationConfig(
-                    getSessionToken(),
+                    getSessionToken(callback.getCtx()),
                     cardNumber,
                     amount,
                     operation
@@ -71,7 +76,7 @@ public class TxConnectorImpl implements TxConnector {
                 }
 
                 Call<Map> call = getAPI().tx(
-                        getSessionToken(),
+                        getSessionToken(callback.getCtx()),
                         checkFront,
                         checkBack,
                         idFront,
@@ -103,8 +108,8 @@ public class TxConnectorImpl implements TxConnector {
         }
 
     public void balanceInquiry(final ServiceCallback callback) throws Exception{
-        RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
-        RequestBody token       = getSessionToken();
+        RequestBody cardNumber  = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
+        RequestBody token       = getSessionToken(callback.getCtx());
 
         Call<Map> call = getAPI().balanceInquiry(
                 token,
@@ -120,7 +125,7 @@ public class TxConnectorImpl implements TxConnector {
         RequestBody op          = operation == null ? null : buildStringBody(operation);
 
         Call<Map> call = getAPI().cardToBank(
-                getSessionToken(),
+                getSessionToken(callback.getCtx()),
                 cardNumber,
                 amount,
                 op
@@ -131,7 +136,7 @@ public class TxConnectorImpl implements TxConnector {
 
     public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception{
         Call<Map> call = getAPI().activityReport(
-                getSessionToken(),
+                getSessionToken(callback.getCtx()),
                 buildStringBody(startDate),
                 buildStringBody(endDate)
         );
@@ -144,7 +149,7 @@ public class TxConnectorImpl implements TxConnector {
         RequestBody amountBody     = buildStringBody(amount);
 
         Call<Map> call = getAPI().calculateFee(
-                getSessionToken(),
+                getSessionToken(callback.getCtx()),
                 operationBody,
                 amountBody
         );
@@ -152,7 +157,15 @@ public class TxConnectorImpl implements TxConnector {
         call.enqueue(callback);
     }
 
-    private RequestBody getSessionToken() throws Exception{
-        return buildStringBody(PreferenceUtil.read(Field.AUTH.SESSION_TOKEN));
+    private RequestBody getSessionToken(Activity activity) throws Exception{
+        String token = PreferenceUtil.read(Field.AUTH.SESSION_TOKEN);
+
+        if(token == null){
+            //If it gets here is because there was an error, need to restart the app
+            Intent mainActivity = new Intent(activity.getApplicationContext(), MainActivity.class);
+            activity.startActivity(mainActivity);
+            return null;
+        }
+        return buildStringBody(token);
     }
 }
