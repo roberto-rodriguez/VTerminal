@@ -4,18 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.tx.CaptureBarcodeActivity">
+    tools:context=".views.tx.imageCapture.CaptureBarcodeActivity">
 
     <include layout="@layout/content_barcode_capture" />
-
+ 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_torch_barcode"
-        android:layout_width="@dimen/fab_size_small"
-        android:layout_height="@dimen/fab_size_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/torch_button"
-        android:visibility="gone"/>
+        app:fabCustomSize="50dp"
+        app:fabSize="auto"
+        app:maxImageSize="50dp"
+        app:useCompatPadding="true"
+        app:srcCompat="@drawable/torch_button" />
 
 
     <android.support.design.widget.FloatingActionButton

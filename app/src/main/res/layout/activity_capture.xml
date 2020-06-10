@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.tx.CaptureActivity">
+    tools:context=".views.tx.imageCapture.CaptureActivity">
 
     <include layout="@layout/content_capture" />
 
@@ -18,19 +18,27 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_force_capture"
-        android:layout_width="@dimen/fab_size"
-        android:layout_height="@dimen/fab_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/fab_margin"
+        app:fabCustomSize="66dp"
+        app:fabSize="auto"
+        app:maxImageSize="66dp"
+        app:useCompatPadding="true"
+        app:borderWidth="5dp"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_torch"
-        android:layout_width="@dimen/fab_size_small"
-        android:layout_height="@dimen/fab_size_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"
+        app:fabCustomSize="50dp"
+        app:fabSize="auto"
+        app:maxImageSize="50dp"
+        app:useCompatPadding="true"
         app:srcCompat="@drawable/torch_button" />
 
 </android.support.design.widget.CoordinatorLayout>
