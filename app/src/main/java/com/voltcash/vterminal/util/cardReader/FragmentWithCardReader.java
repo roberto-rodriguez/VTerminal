@@ -122,7 +122,7 @@ public abstract class FragmentWithCardReader extends Fragment
     public void onCardInfo(CardInfoEntity cardInfoEntity) {
         CardInfoEntity cardInfo = mMagCard.getMagReadData();
 
-        String card = "FAILED";
+        String card = "";
 
         if (cardInfo.getResultcode() == SdkResult.SDK_OK) {
             card = cardInfo.getCardNo();

@@ -1,6 +1,7 @@
 package com.voltcash.vterminal.views.tx.imageCapture;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -51,7 +52,7 @@ public class CaptureActivity extends AppCompatActivity
     private FloatingActionButton mForceCapture;
     private DocumentCaptureExperience mDocumentCaptureExperience;
 
-    public ProgressDialog mProgressDialog;
+    public ProgressDialog progressDialog;
 
 
 
@@ -65,6 +66,8 @@ public class CaptureActivity extends AppCompatActivity
 
 
     private void setUp() {
+        final CaptureActivity _this = this;
+
         setContentView(R.layout.activity_capture);
 
         mImageCaptureView = (ImageCaptureView) findViewById(R.id.view_capture);
@@ -95,40 +98,26 @@ public class CaptureActivity extends AppCompatActivity
         mForceCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Processing Image", "Please wait...", new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        _this.onBackPressed();
+                    }
+                });
                 mImageCaptureView.forceTakePicture();
             }
         });
 
-        if (Constants.IS_TORCH_SUPPORTED) {
-            mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
+        mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
 
-            mFabTorch.setVisibility(View.VISIBLE);
-
-            mFabTorch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mFabTorch.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), (mTorchFlag) ? R.drawable.torchoff : R.drawable.torchon));
-                    mImageCaptureView.setFlash((mTorchFlag) ? Flash.OFF : Flash.TORCH);
-                    mTorchFlag = !mTorchFlag;
-                }
-            });
-        }
-
-        FloatingActionButton fabGallery = (FloatingActionButton) findViewById(R.id.fab_gallery);
-
-        if (SettingsHelperClass.isGalleryEnabled(this)) {
-            fabGallery.setVisibility(View.VISIBLE);
-            fabGallery.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, Constants.GALLERY_IMPORT_REQUEST_ID);
+        mFabTorch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFabTorch.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), (mTorchFlag) ? R.drawable.torchoff : R.drawable.torchon));
+                mImageCaptureView.setFlash((mTorchFlag) ? Flash.OFF : Flash.TORCH);
+                mTorchFlag = !mTorchFlag;
             }
-            });
-        } else {
-            fabGallery.setVisibility(View.GONE);
-        }
+        });
     }
 
     @Override
@@ -137,8 +126,10 @@ public class CaptureActivity extends AppCompatActivity
 
         mForceCapture.setVisibility(View.GONE);
 
-        int manualCaptureTimeVal = SettingsHelperClass.getManualCaptureTime(this);
-        if (manualCaptureTimeVal == -1) manualCaptureTimeVal = Constants.DEFAULT_MANUAL_CAPTURE_TIME;
+//        int manualCaptureTimeVal = SettingsHelperClass.getManualCaptureTime(this);
+//        if (manualCaptureTimeVal == -1) manualCaptureTimeVal = Constants.DEFAULT_MANUAL_CAPTURE_TIME;
+
+        int manualCaptureTimeVal = 0;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -147,16 +138,6 @@ public class CaptureActivity extends AppCompatActivity
                 mForceCapture.setVisibility(View.VISIBLE);
             }
         }, manualCaptureTimeVal*1000);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (mDocumentCaptureExperience != null) {
-            mDocumentCaptureExperience.removeOnImageCapturedListener(this);
-            mDocumentCaptureExperience.destroy();
-        }
     }
 
     @Override
@@ -169,32 +150,6 @@ public class CaptureActivity extends AppCompatActivity
                 finish();
                 break;
         }
-
-    }
-
-    private Image decodeImageFromIntent(Intent data) {
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-        if (selectedImage == null) return null;
-
-        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-
-        if (cursor == null) return null;
-
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String filePath = cursor.getString(columnIndex);
-
-        Log.i("sendImage", "filePath:: " +filePath);
-        cursor.close();
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        if(bitmap == null) {
-            return null;
-        }
-
-
-        return new Image(bitmap);
     }
 
 
@@ -203,28 +158,38 @@ public class CaptureActivity extends AppCompatActivity
         mImageCaptureView.setUseVideoFrame(true);
         mImageCaptureView.setFlash(Flash.OFF);
 
-        if (mProgressDialog != null && mProgressDialog.isShowing()) mProgressDialog.dismiss();
+        dismissDialog();
+    }
+
+    private void dismissDialog(){
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
     @Override
     public void onImageCaptured(final ImageCapturedEvent imageCapturedEvent) {
+        final CaptureActivity _this = this;
+
+        progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Processing Image", "Please wait...", new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                _this.onBackPressed();
+            }
+        });
+
         Log.i("onImageCaptured",   " ----------");
         if (imageCapturedEvent != null) {
             if (imageCapturedEvent.getImage() != null) {
-              //  Constants.RESULT_IMAGE = imageCapturedEvent.getImage();
                 Image image = imageCapturedEvent.getImage();
 
                 processImage(image);
-                 //TODO test this
-               // image.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-               // TxData.put(field, image);
-
-//                Intent intent = new Intent(getApplicationContext(), com.voltcash.vterminal.views.tx.PreviewActivity.class);
-//                intent.putExtra( Field.TX.TX_FIELD , field);
-//                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
             } else {
+                dismissDialog();
+                Log.i("onImageCaptured",   "imageCapturedEvent = null");
                 onBackPressed();
             }
+        }else{
+            dismissDialog();
+            Log.i("onImageCaptured",   "imageCapturedEvent = null");
         }
     }
 
@@ -268,17 +233,6 @@ public class CaptureActivity extends AppCompatActivity
                 break;
         }
 
-//        if(field.equalsIgnoreCase(Field.TX.ID_FRONT)){
-//            imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
-//        }else{
-//            srcImage.setImageMimeType(Image.ImageMimeType.MIMETYPE_TIFF);
-//            imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
-//        }
-//
-//        if(field.equalsIgnoreCase(Field.TX.CHECK_BACK)){
-//            imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
-//        }
-
         try {
             imageProcessor.processImage(srcImage, imageProcessingConfiguration);
         } catch (KmcException e) {
@@ -299,6 +253,8 @@ public class CaptureActivity extends AppCompatActivity
                 Image image = event.getImage();
                 TxData.put(field, image);
 
+                dismissDialog();
+
                 Intent intent = new Intent(getApplicationContext(), PreviewActivity.class);
                 intent.putExtra( Field.TX.TX_FIELD , field);
                 startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
@@ -313,6 +269,41 @@ public class CaptureActivity extends AppCompatActivity
 //                        .show();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mDocumentCaptureExperience != null) {
+            mDocumentCaptureExperience.removeOnImageCapturedListener(this);
+            mDocumentCaptureExperience.destroy();
+        }
+    }
+
+    private Image decodeImageFromIntent(Intent data) {
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        if (selectedImage == null) return null;
+
+        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+
+        if (cursor == null) return null;
+
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String filePath = cursor.getString(columnIndex);
+
+        Log.i("sendImage", "filePath:: " +filePath);
+        cursor.close();
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        if(bitmap == null) {
+            return null;
+        }
+
+
+        return new Image(bitmap);
     }
 
 }
