@@ -7,7 +7,7 @@
     tools:context=".views.tx.imageCapture.CaptureBarcodeActivity">
 
     <include layout="@layout/content_barcode_capture" />
- 
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_torch_barcode"
         android:layout_width="wrap_content"
