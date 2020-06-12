@@ -2,13 +2,9 @@ package com.voltcash.vterminal.interfaces;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
 import com.voltcash.vterminal.util.Field;
-
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +26,11 @@ public abstract class ServiceCallback implements Callback<Map> {
     }
 
     public void startProgressDialog(){
-        mProgressDialog = buildProgressDialog(caller, "Processing", "Please wait...");
+        startProgressDialog("Please wait...");
+    }
+
+    public void startProgressDialog(String msg){
+        mProgressDialog = buildProgressDialog(caller, "Processing", msg);
     }
 
     @Override

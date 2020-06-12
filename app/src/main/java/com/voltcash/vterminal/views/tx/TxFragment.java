@@ -200,9 +200,9 @@ public class TxFragment extends FragmentWithCardReader implements
                     }
                 }
 
-                ((TextView) findViewById(R.id.tx_amount_text)).setText("Amount: $" + amount);
-                ((TextView) findViewById(R.id.tx_fee_text)).setText("Transaction Fee: $" + cardLoadFee);
-                ((TextView) findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + activationFee);
+                ((TextView) findViewById(R.id.tx_amount_text)).setText("Amount: $" + StringUtil.formatCurrency(amount));
+                ((TextView) findViewById(R.id.tx_fee_text)).setText("Fee: $" + StringUtil.formatCurrency(cardLoadFee));
+                ((TextView) findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + StringUtil.formatCurrency(activationFee));
 
                 submitButton.setVisibility(View.VISIBLE);
                 if (Constants.OPERATION.CHECK.equals(operation)) {
@@ -263,7 +263,7 @@ public class TxFragment extends FragmentWithCardReader implements
                     TxService.cardToBank(null, new ServiceCallback(_this.getActivity()) {
                         @Override
                         public void onSuccess(Map response) {
-                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, null, null);
+                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null);
 
                             receiptLines.addAll(c2bReceiptLines);
 
@@ -309,6 +309,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
         if (!Field.TX.ID_BACK.equals(activeImgField) && TxData.contains(activeImgField)) {
             intent = new Intent(this.getActivity(), PreviewActivity.class);
+            intent.putExtra("SHOW_PROCESSED_IMAGE", true);
         } else {
             intent = new Intent(this.getActivity(), captureClazz);
         }

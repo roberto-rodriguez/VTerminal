@@ -13,6 +13,14 @@ public class StringUtil {
         return str != null && !str.isEmpty();
     }
 
+    public static String formatCurrency(String value) {
+       try{
+           return formatCurrency(Double.parseDouble(value));
+       }catch(Exception e){
+           return "";
+       }
+    }
+
     public static String formatCurrency(Double doubleVal) {
         if(doubleVal == null)return "";
         return new DecimalFormat("##,##,##0.00").format(doubleVal);

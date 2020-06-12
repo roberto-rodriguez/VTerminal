@@ -39,7 +39,7 @@ public class TxService {
 
     public static void tx(ServiceCallback callback) {
         try {
-            callback.startProgressDialog();
+            callback.startProgressDialog("This operation can take few minutes. Please wait...");
 
             connector.tx(callback);
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package com.voltcash.vterminal.views.tx.imageCapture;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,25 +12,37 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+
+import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.Image;
+import com.kofax.kmc.ken.engines.processing.ColorDepth;
+import com.kofax.kmc.ken.engines.processing.ImageProcessorConfiguration;
+import com.kofax.kmc.ken.engines.processing.RotateType;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
+import com.kofax.kmc.kut.utilities.error.ErrorInfo;
+import com.kofax.kmc.kut.utilities.error.KmcException;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.Settings;
+import com.voltcash.vterminal.util.SettingsHelperClass;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 
 
-public class PreviewActivity extends AppCompatActivity{
+public class PreviewActivity extends AppCompatActivity implements ImageProcessor.ImageOutListener {
 
     private ImgReviewEditCntrl mImgReviewEditCntrl;
 
     private FloatingActionButton mfabRetake;
     private FloatingActionButton mfabGoToProcessing;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog progressDialog;
     private boolean isProgressDialog;
 
     private String field;
+
+    private boolean isProcessedImage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,32 +58,66 @@ public class PreviewActivity extends AppCompatActivity{
         mImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.view_review1);
 
         mfabRetake = (FloatingActionButton) findViewById(R.id.fab_retake);
-        mfabRetake.setVisibility(View.GONE);
+       // mfabRetake.setVisibility(View.GONE);
         mfabRetake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("PreviewActivity",   "PreviewActivity.super.onBackPressed();" );
+                dismissDialog();
                 setResult(Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID);
                 PreviewActivity.super.onBackPressed();
             }
         });
 
         mfabGoToProcessing = (FloatingActionButton) findViewById(R.id.fab_go_to_processing);
-        mfabGoToProcessing.setVisibility(View.GONE);
+     //   mfabGoToProcessing.setVisibility(View.GONE);
+
+        final PreviewActivity _this = this;
+
         mfabGoToProcessing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-         //   Constants.RESULT_IMAGE = mImgReviewEditCntrl.getImage();
-                TxData.put( field, mImgReviewEditCntrl.getImage());
 
-                Log.i("PreviewActivity",   "setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);" );
+                if(isProcessedImage){
+                    TxData.put( field, mImgReviewEditCntrl.getImage());
 
-            setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);
-            finish();
+                    Log.i("PreviewActivity",   "setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);" );
+
+                    setResult(Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID);
+                    finish();
+                }else{
+                    progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Processing Image", "Please wait...", new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            _this.onBackPressed();
+                        }
+                    });
+
+                    processImage( mImgReviewEditCntrl.getImage());
+                }
+
+
             }
         });
 
-        showImage(TxData.getImage(field));
+        Boolean SHOW_PROCESSED_IMAGE = (Boolean)getIntent().getExtras().get("SHOW_PROCESSED_IMAGE");
+
+        Image image = null;
+
+        if(SHOW_PROCESSED_IMAGE != null && SHOW_PROCESSED_IMAGE == true){
+            image = TxData.getImage(this.field); //Coming from TxFragment
+            isProcessedImage = true;
+        }else{
+            image = Constants.RAW_IMAGE; //Coming from image capture
+        }
+
+        if(image == null){
+            ViewUtil.showError(this, "Image is null", "Preview Activity received a null image");
+        }else{
+            showImage(image);
+        }
+
+      //  showImage(TxData.getImage(field));
 
 //        if (mProgressDialog == null) {
 //            isProgressDialog = true;
@@ -86,7 +134,7 @@ public class PreviewActivity extends AppCompatActivity{
 
     protected void onResume() {
         super.onResume();
-        if (mProgressDialog != null && isProgressDialog && !mProgressDialog.isShowing()) mProgressDialog.show();
+        dismissDialog();
     }
 
     @Override
@@ -96,6 +144,7 @@ public class PreviewActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
+        dismissDialog();
         setResult(Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID);
         finish();
     }
@@ -104,17 +153,70 @@ public class PreviewActivity extends AppCompatActivity{
         try{
             mImgReviewEditCntrl.setImage(srcImage);
 
-            mfabRetake.setVisibility(View.VISIBLE);
-            mfabGoToProcessing.setVisibility(View.VISIBLE);
+//            mfabRetake.setVisibility(View.VISIBLE);
+//            mfabGoToProcessing.setVisibility(View.VISIBLE);
 
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                mProgressDialog.dismiss();
-                isProgressDialog = false;
-            }
+           dismissDialog();
         }catch(Exception e){
             e.printStackTrace();
 
             ViewUtil.showError(this, "Error Showing Image", e.getMessage());
         }
+    }
+
+    private void processImage(Image srcImage) {
+        ImageProcessor imageProcessor = new ImageProcessor();
+        imageProcessor.addImageOutEventListener(this);
+        ImageProcessorConfiguration imageProcessingConfiguration = SettingsHelperClass.getImageProcessorConfiguration(this);
+
+        switch (field){
+            case Field.TX.ID_FRONT:
+                imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
+                break;
+            case Field.TX.CHECK_FRONT:
+                imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
+                break;
+            case Field.TX.CHECK_BACK:
+                imageProcessingConfiguration.outputDPI = 130;
+                imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
+                break;
+        }
+
+        try {
+            imageProcessor.processImage(srcImage, imageProcessingConfiguration);
+        } catch (KmcException e) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage( "Image processing failed" )
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setCancelable(true)
+                    .setIcon(R.drawable.error)
+                    .show();
+        }
+    }
+
+    @Override
+    public void imageOut(ImageProcessor.ImageOutEvent event) {
+        if (event.getStatus() == ErrorInfo.KMC_SUCCESS) {
+            try {
+                dismissDialog();
+
+                showImage(event.getImage());
+
+                isProcessedImage = true;
+            } catch (Exception e) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage( "Image processing failed" )
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setCancelable(true)
+                        .setIcon(R.drawable.error)
+                        .show();
+            }
+        }
+    }
+
+    private void dismissDialog(){
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 }

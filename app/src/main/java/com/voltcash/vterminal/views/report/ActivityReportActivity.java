@@ -177,7 +177,7 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
         }
         receiptLines.add("<br/>");
         receiptLines.add( "Total Trans -> " + COUNT );
-        receiptLines.add( "Total Trans $ -> " + TOTAL);
+        receiptLines.add( "Total Trans $ -> " + StringUtil.formatCurrency(TOTAL));
 
         return !"0.0".equals(COUNT);
     }

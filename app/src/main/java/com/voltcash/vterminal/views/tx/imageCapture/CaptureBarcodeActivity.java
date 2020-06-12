@@ -19,7 +19,6 @@ import com.kofax.kmc.kui.uicontrols.CameraInitializationListener;
 import com.kofax.kmc.kui.uicontrols.data.Flash;
 import com.kofax.kmc.kui.uicontrols.data.GuidingLine;
 import com.kofax.kmc.kui.uicontrols.data.Symbology;
-import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.TxData;
@@ -29,10 +28,7 @@ import java.util.Date;
 public class CaptureBarcodeActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, BarCodeFoundListener, /*ImageCapturedListener,*/ CameraInitializationFailedListener {
 
-
-    private final PermissionsManager mPermissionsManager = new PermissionsManager(this);
-
-    private boolean mTorchFlag = false;
+    private boolean mTorchFlag = true;
     private FloatingActionButton mFabTorch;
 
     private BarCodeCaptureView mBarcodeCaptureView;
@@ -63,21 +59,23 @@ public class CaptureBarcodeActivity extends AppCompatActivity
         mBarcodeCaptureView.setSymbologies(symbs);
         mBarcodeCaptureView.readBarcode();
 
-        if (Constants.IS_TORCH_SUPPORTED) {
-            mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
 
-            mFabTorch.setVisibility(View.VISIBLE);
+            mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
 
             mFabTorch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mFabTorch.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), (mTorchFlag) ? R.drawable.torchoff : R.drawable.torchon));
-                    mBarcodeCaptureView.setFlash((mTorchFlag) ? Flash.OFF : Flash.TORCH);
-                    mTorchFlag = !mTorchFlag;
+                    onTorchClick();
                 }
             });
-        }
 
+
+    }
+
+    private void onTorchClick(){
+        mFabTorch.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), (mTorchFlag) ? R.drawable.torchoff : R.drawable.torchon));
+        mBarcodeCaptureView.setFlash((mTorchFlag) ? Flash.OFF : Flash.TORCH);
+        mTorchFlag = !mTorchFlag;
     }
 
     @Override
@@ -89,7 +87,9 @@ public class CaptureBarcodeActivity extends AppCompatActivity
     @Override
     public void onCameraInitialized(CameraInitializationEvent arg0) {
         mBarcodeCaptureView.setUseVideoFrame(true);
-        mBarcodeCaptureView.setFlash(Flash.OFF);
+     //   mBarcodeCaptureView.setFlash(Flash.OFF);
+
+        onTorchClick();
     }
 
     @Override

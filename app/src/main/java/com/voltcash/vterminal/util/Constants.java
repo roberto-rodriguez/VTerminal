@@ -4,6 +4,8 @@ import com.kofax.kmc.ken.engines.data.Image;
 
 public class Constants {
 
+    public static Image RAW_IMAGE;
+
     public static final int ENV_PROD = 0;
     public static final int ENV_DEV  = 1;
     public static final int ENV_LOCAL= 2;

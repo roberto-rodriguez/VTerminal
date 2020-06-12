@@ -10,6 +10,7 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptBuilder;
+import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
@@ -65,7 +66,7 @@ public class TxBalanceFragment extends FragmentWithCardReader
                 ReceiptBuilder.addDateTimeLines(receiptLines);
                 receiptLines.add("Location Name -> "    + merchant);
                 receiptLines.add("Card Number -> **** " + getCardField().getText());
-                receiptLines.add("Balance -> $" + balance);
+                receiptLines.add("Balance -> $" + StringUtil.formatCurrency(balance));
 
                 ReceiptView.show(_this.getActivity(), receiptLines);
             }
