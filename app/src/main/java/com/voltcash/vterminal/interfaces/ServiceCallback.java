@@ -2,7 +2,10 @@ package com.voltcash.vterminal.interfaces;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.util.Log;
+
+import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.Field;
 import java.util.Map;
 import retrofit2.Call;
@@ -29,8 +32,21 @@ public abstract class ServiceCallback implements Callback<Map> {
         startProgressDialog("Please wait...");
     }
 
+    public void startNonCancellableProgressDialog(String msg){
+        //  mProgressDialog = buildProgressDialog(caller, "Processing", msg);
+        mProgressDialog = (ProgressDialog) DialogUtils.showNonCancellableProgress(caller, "Processing", msg, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+            }
+        });
+    }
+
     public void startProgressDialog(String msg){
-        mProgressDialog = buildProgressDialog(caller, "Processing", msg);
+        mProgressDialog = (ProgressDialog) DialogUtils.showProgress(caller, "Processing", msg, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+            }
+        });
     }
 
     @Override

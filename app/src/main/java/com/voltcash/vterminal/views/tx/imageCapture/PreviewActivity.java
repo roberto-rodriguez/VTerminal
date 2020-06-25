@@ -2,17 +2,13 @@ package com.voltcash.vterminal.views.tx.imageCapture;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-
 import com.kofax.kmc.ken.engines.ImageProcessor;
 import com.kofax.kmc.ken.engines.data.Image;
 import com.kofax.kmc.ken.engines.processing.ColorDepth;
@@ -177,8 +173,9 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
                 imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
                 break;
             case Field.TX.CHECK_BACK:
-                imageProcessingConfiguration.outputDPI = 130;
+              //  imageProcessingConfiguration.outputDPI = 130;
                 imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
+            //   imageProcessingConfiguration.documentDimensions = new DocumentDimensions(200F, 500F);
                 break;
         }
 

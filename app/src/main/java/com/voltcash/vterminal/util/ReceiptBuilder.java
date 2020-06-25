@@ -78,35 +78,21 @@ public class ReceiptBuilder {
         return sb.toString();
     }
 
-    //  @deprecated
-    public static String build(String title, List<String> lines){
-        StringBuilder sb = new StringBuilder();
-
-//        buildHeader(sb, title);
-//        buildBody(sb, lines);
-
-        return div(sb.toString());
-    }
-
     public static String appendContent(String existentContent, String newContent, Printer PRINTER){
         StringBuilder sb = new StringBuilder("<div>");
         if(!existentContent.isEmpty()){
-            sb.append(existentContent);
+            write(sb, PRINTER, existentContent);
         }
 
-        sb.append(newContent);
-        sb.append("<br/><br/><br/><br/> </div>");
+        write(sb, PRINTER, newContent);
+        write(sb, PRINTER, "<br/><br/><br/><br/> </div>");
 
-        PRINTER.setPrintAppendString(" ", LINE_FORMAT);
-        PRINTER.setPrintAppendString(" ", LINE_FORMAT);
-        PRINTER.setPrintAppendString(" ", LINE_FORMAT);
-        PRINTER.setPrintAppendString(" ", LINE_FORMAT);
+        print(PRINTER, " ", LINE_FORMAT);
+        print(PRINTER, " ", LINE_FORMAT);
+        print(PRINTER, " ", LINE_FORMAT);
+        print(PRINTER, " ", LINE_FORMAT);
 
         return sb.toString();
-    }
-
-    public static String div(String content){
-        return "<div>" + content + "<br/><br/><br/><br/><p style=\"width:100%;text-align: center;color:white\">____________________________________</p></div>";
     }
 
     public static void addTitle(List<String> receiptLines, String title){
@@ -138,39 +124,36 @@ public class ReceiptBuilder {
             title = title.substring(7);
         }
 
-        sb.append("<table  style=\"width: 100%;\">");
+        write(sb, PRINTER, "<table  style=\"width: 100%;\">");
 
         headerLine( sb,"Service Provided by", PRINTER);
         headerLine( sb,"Voltcash, Inc.", PRINTER);
         headerLine( sb,"1-800-249-3042", PRINTER);
         headerLine( sb,"www.voltcash.com", PRINTER);
 
-        sb.append("</table>");
+        write(sb, PRINTER, "</table>");
+        write(sb, PRINTER, "<p style=\"width: 100%;text-align: center;font-size:17px\">" + title + "</p>");
+        write(sb, PRINTER, "<br/>");
 
-        sb.append("<p style=\"width: 100%;text-align: center;font-size:17px\">" + title + "</p>");
-
-        sb.append("<br/>");
-
-        PRINTER.setPrintAppendString(title, HEADER_FORMAT);
-        PRINTER.setPrintAppendString("", HEADER_FORMAT);
+        print(PRINTER, title, HEADER_FORMAT);
+        print(PRINTER, "", HEADER_FORMAT);
     }
 
     private static void buildBody(StringBuilder sb, List<String>  lines, Printer PRINTER, int leftSideChars){
-        sb.append("<table  style=\"width: 100%;\">");
+        write(sb, PRINTER, "<table  style=\"width: 100%;\">");
         for (String line: lines){
             buildLine(sb, line, PRINTER, leftSideChars);
         }
-        sb.append("</table>");
+        write(sb, PRINTER, "</table>");
     }
 
-    private static void buildLine(StringBuilder body, String line, Printer PRINTER, int leftSideChars){
-        body.append("<tr style=\"width: 100%;margin-top:8px\">");
+    private static void buildLine(StringBuilder sb, String line, Printer PRINTER, int leftSideChars){
+        write(sb, PRINTER, "<tr style=\"width: 100%;margin-top:8px\">");
         if(line.contains("->")){
             String[] parts = line.split("->");
             String name = parts[0];
             String value= parts[1];
-            body.append(  "<td  colspan=\"1\" >" + name + "</td><td  colspan=\"1\" style=\"float:right; text-align: right;text-align: right; float:right;\">" +  value  + "</td>");
-
+            write(sb, PRINTER, "<td  colspan=\"1\" >" + name + "</td><td  colspan=\"1\" style=\"float:right; text-align: right;text-align: right; float:right;\">" +  value  + "</td>");
             StringBuilder spacer = new StringBuilder("    ");
             int spacesToBeAdded = leftSideChars - name.length();
 
@@ -180,20 +163,20 @@ public class ReceiptBuilder {
                 }
             }
 
-            PRINTER.setPrintAppendString(name +  spacer.toString() + value, LINE_FORMAT);
+            print(PRINTER, name +  spacer.toString() + value, LINE_FORMAT);
         }else{
             if(line.trim().equals("<br/>")){
-                PRINTER.setPrintAppendString("", CENTERED_LINE_FORMAT);
+                print(PRINTER, "", CENTERED_LINE_FORMAT);
             }else{
-                PRINTER.setPrintAppendString(line, CENTERED_LINE_FORMAT);
+                print(PRINTER, line, CENTERED_LINE_FORMAT);
             }
 
             if(!line.startsWith("<")){
                 line = "<p style=\"width: 100%;text-align: center;\">" + line + "</p>";
             }
-            body.append(  "<td colspan=\"2\">" + line + "</td>");
+            write(sb, PRINTER, "<td colspan=\"2\">" + line + "</td>");
         }
-        body.append("</tr>");
+        write(sb, PRINTER, "</tr>");
     }
 
     private static String centeredLine(String line){
@@ -201,13 +184,8 @@ public class ReceiptBuilder {
     }
 
     private static void headerLine(StringBuilder sb, String line, Printer PRINTER){
-        headerLine(sb, line);
-
-        PRINTER.setPrintAppendString(line, HEADER_FORMAT);
-    }
-
-    private static void headerLine(StringBuilder sb, String line){
-        sb.append("<tr style=\"width: 100%;text-align: center\"><td><span style=\"width: 100%;text-align: center\">" + line +"</span></td></tr>");
+        write(sb, PRINTER, "<tr style=\"width: 100%;text-align: center\"><td><span style=\"width: 100%;text-align: center\">" + line +"</span></td></tr>");
+        print(PRINTER, line, HEADER_FORMAT);
     }
 
     public static String achDisclaimer(String customerName){
@@ -270,6 +248,18 @@ public class ReceiptBuilder {
         receiptLines.add("Transaction # -> " + requestId);
 
         return receiptLines;
+    }
+
+    private static void print(Printer PRINTER, String text, PrnStrFormat format){
+        if(PRINTER != null){
+            PRINTER.setPrintAppendString(text, format);
+        }
+    }
+
+    private static void write(StringBuilder sb, Printer PRINTER, String text){
+        if(PRINTER == null){
+            sb.append(text);
+        }
     }
 }
 

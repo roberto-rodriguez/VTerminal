@@ -28,6 +28,7 @@ import static com.voltcash.vterminal.VTerminal.DRIVER_MANAGER;
 
 public class ReceiptView extends AppCompatActivity implements View.OnClickListener  {
     private Printer PRINTER;
+    private List<String> receiptLines;
 
     public static void show(Activity originActivity, List<String> receiptLines){
         TxData.clear();
@@ -46,9 +47,9 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
         try{
             PRINTER = DRIVER_MANAGER.getPrinter();
 
-            List<String> receiptLines = (List<String>)getIntent().getSerializableExtra("receiptLines");
+            receiptLines = (List<String>)getIntent().getSerializableExtra("receiptLines");
 
-            String receipt =  ReceiptBuilder.build(receiptLines, PRINTER);
+            String receipt =  ReceiptBuilder.build(receiptLines, null);
 
             Button m_Back = (Button)findViewById(R.id.payment_receipt_back);
             Button m_Print = (Button)findViewById(R.id.payment_receipt_print);
@@ -100,6 +101,8 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     }
 
     public void print() {
+        ReceiptBuilder.build(receiptLines, PRINTER);
+
         final Activity _this = this;
         new Thread(new Runnable() {
             @Override

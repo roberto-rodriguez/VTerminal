@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Settings;
-import com.voltcash.vterminal.views.MainActivity;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
@@ -29,13 +28,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       // setContentView(R.layout.content_progress_dialog);
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
 
         emailTextView = (TextView)findViewById(R.id.login_email);
         emailTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
-        emailTextView.setText("v");
+        emailTextView.setText("roberto@girocheck.com");
 
         passwordTextView = (TextView)findViewById(R.id.login_password);
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);

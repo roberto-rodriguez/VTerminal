@@ -16,7 +16,7 @@ public class VTerminal extends Application {
     public void onCreate() {
         super.onCreate();
 
-        DRIVER_MANAGER = DriverManager.getInstance();
+       DRIVER_MANAGER = DriverManager.getInstance();
     }
 
 }

@@ -39,8 +39,6 @@ public class TxService {
 
     public static void tx(ServiceCallback callback) {
         try {
-            callback.startProgressDialog("This operation can take few minutes. Please wait...");
-
             connector.tx(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
@@ -59,7 +57,7 @@ public class TxService {
 
     public static void cardToBank(String operation, ServiceCallback callback) {
         try {
-            callback.startProgressDialog();
+            callback.startNonCancellableProgressDialog("Please Wait...");
 
             connector.cardToBank(operation, callback);
         } catch (Exception e) {

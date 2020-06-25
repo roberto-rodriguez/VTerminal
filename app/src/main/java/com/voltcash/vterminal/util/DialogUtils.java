@@ -34,6 +34,10 @@ public class DialogUtils {
         return ProgressDialog.show(context, title, message);
     }
 
+    public static Dialog showNonCancellableProgress(Context context, String title, String message, DialogInterface.OnCancelListener cancelListener) {
+        return ProgressDialog.show(context, title, message, false, false, cancelListener);
+    }
+
     public static Dialog showProgress(Context context, String title, String message, DialogInterface.OnCancelListener cancelListener) {
         return ProgressDialog.show(context, title, message, false, true, cancelListener);
     }

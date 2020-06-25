@@ -25,12 +25,14 @@ public class AuthTerminalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth_terminal);
+         setContentView(R.layout.activity_auth_terminal);
 
         getSupportActionBar().hide();
 
         accessCodeTextView = (TextView)findViewById(R.id.access_code);
         accessCodeTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
+
+        accessCodeTextView.setText("a");
 
         ((TextView)findViewById(R.id.version_text)).setText(Settings.VERSION);
     }

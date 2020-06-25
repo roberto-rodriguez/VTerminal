@@ -1,16 +1,14 @@
 package com.voltcash.vterminal.util;
 
-import com.kofax.kmc.ken.engines.data.Image;
-
 public class Settings {
 
     public static final int ENV = Constants.ENV_DEV;
 
 
-    public static final String SERVER_URL = "http://149.97.166.38:8085/";
+    public static final String SERVER_URL = "http://test.girocheck.net:8085/";
 
     public static int CHECK_RESOLUTION = 200;// 175;
 
-    public static final String VERSION = "Version 20.06.03";
+    public static final String VERSION = "20.06.24 - Dev";
 }
 

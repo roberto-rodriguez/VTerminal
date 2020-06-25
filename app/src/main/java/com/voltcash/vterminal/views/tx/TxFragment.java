@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,15 +35,17 @@ import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
+import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
 
 public class TxFragment extends FragmentWithCardReader implements
         ActivityCompat.OnRequestPermissionsResultCallback,
@@ -63,6 +66,9 @@ public class TxFragment extends FragmentWithCardReader implements
 
     private EditText cashBackField = null;
     private Switch cashBackSwitch = null;
+
+    private ConstraintLayout txProgressDialog = null;
+    private Button submitBtn;
 
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -94,6 +100,9 @@ public class TxFragment extends FragmentWithCardReader implements
         idFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
         idBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
 
+        txProgressDialog = (ConstraintLayout)findViewById(R.id.tx_progress_dialog);
+        submitBtn = (Button)findViewById(R.id.tx_submit_button);
+
         if (!mPermissionsManager.isGranted(PERMISSIONS)) {
             mPermissionsManager.request(PERMISSIONS);
         }
@@ -106,7 +115,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
         getActivity().setTitle("Deposit " + operationName);
 
-        ((EditText) findViewById(R.id.tx_amount_input)).setText("100");
+        ((EditText) findViewById(R.id.tx_amount_input)).setText("1000");
 
         cashBackField = (EditText) findViewById(R.id.cash_back_amount);
 
@@ -212,7 +221,7 @@ public class TxFragment extends FragmentWithCardReader implements
         });
     }
 
-    public void onSubmit(View view) {
+    public void onSubmit(final View view) {
         final TxFragment _this = this;
         final String ssn = ((EditText) findViewById(R.id.tx_id_ssn_input)).getText().toString();
         final String phone = ((EditText) findViewById(R.id.tx_id_phone_input)).getText().toString();
@@ -230,6 +239,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
         final Double cashBack = hasCashBack ? Double.parseDouble(cashBackString) : null;
 
+        progressDialog(true);
 
         TxService.tx(new ServiceCallback(this.getActivity()) {
             @Override
@@ -272,13 +282,13 @@ public class TxFragment extends FragmentWithCardReader implements
 
                         @Override
                         public void onError(Map map) {
+                            progressDialog(false);
+
                             new AlertDialog.Builder(_this.getActivity())
                                     .setTitle("Error Processing Cash Back")
                                     .setMessage((String) map.get("errorMessage") + ". \n\nCheck transaction was processed successfully.")
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-
                                             showReceipt(receiptLines);
                                         }
                                     })
@@ -286,13 +296,39 @@ public class TxFragment extends FragmentWithCardReader implements
                                     .setIcon(R.drawable.error)
                                     .show();
                         }
+
+                        @Override
+                        public void onFailure(Call<Map> call, Throwable t) {
+                            progressDialog(false);
+                            super.onFailure(call, t);
+                        }
                     });
                 }
+            }
+
+
+            @Override
+            public void onError(Map map) {
+                progressDialog(false);
+                super.onError(map);
+            }
+
+            @Override
+            public void onFailure(Call<Map> call, Throwable t) {
+                progressDialog(false);
+                super.onFailure(call, t);
             }
         });
     }
 
+    private void progressDialog(boolean show){
+        ((HomeActivity)getActivity()).setEnableOnBack(!show);
+        txProgressDialog.setVisibility(show ? View.VISIBLE : View.GONE);
+        submitBtn.setVisibility(show ? View.GONE :  View.VISIBLE);
+    }
+
     private void showReceipt(List<String> receiptLines) {
+        progressDialog(false);
         ReceiptView.show(this.getActivity() , receiptLines);
     }
 

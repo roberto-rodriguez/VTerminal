@@ -25,6 +25,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private Fragment openFragment = null;
 
+    private boolean onBackEnabled = true;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +95,15 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    public void setEnableOnBack(boolean onBackEnabled){
+        this.onBackEnabled = onBackEnabled;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(!onBackEnabled)return true;
+
         Intent intent = null;
 
         switch (item.getItemId()) {
@@ -116,13 +127,13 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        if(!onBackEnabled)return;
+
         if(this.openFragment != null){
             resetHome();
             getFragmentManager().beginTransaction().remove(openFragment).commit();
             homeMenu.setVisibility(View.VISIBLE);
             this.openFragment = null;
-        }else{
-            String a = "";
         }
     }
 }
