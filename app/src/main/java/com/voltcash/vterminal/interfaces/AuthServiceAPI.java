@@ -34,4 +34,15 @@ public interface AuthServiceAPI {
     Call<Map> logOut(
             @Part("sessionToken") RequestBody sessionToken
     );
+
+    @Multipart
+    @POST("FrontTerminal/v1/clerk/changePassword")
+    Call<Map> changePassword(
+            @Part("sessionToken") RequestBody sessionToken,
+            @Part("clerkId") RequestBody clerkId,
+            @Part("currentPassword") RequestBody currentPassword,
+            @Part("newPassword") RequestBody newPassword
+    );
+
+
 }

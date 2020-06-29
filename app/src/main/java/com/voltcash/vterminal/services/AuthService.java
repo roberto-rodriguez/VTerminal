@@ -51,5 +51,11 @@ public class AuthService {
         }
     }
 
-
+    public static void changePassword(String currentPassword, String newPassword, ServiceCallback callback) {
+        try {
+            connector.changePassword(currentPassword, newPassword, callback);
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
 }

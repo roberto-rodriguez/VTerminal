@@ -92,6 +92,11 @@
             android:parentActivityName=".views.home.HomeActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".views.settings.ChangePasswordActivity"
+            android:parentActivityName=".views.settings.ClerkSettingsActivity"
+            android:screenOrientation="portrait" />
+
 
         <provider
             android:name="com.voltcash.vterminal.util.GenericFileProvider"

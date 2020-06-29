@@ -112,10 +112,7 @@ public class TxFragment extends FragmentWithCardReader implements
         this.operation =  getArguments().getString(Field.TX.OPERATION);
         this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
 
-
         getActivity().setTitle("Deposit " + operationName);
-
-        ((EditText) findViewById(R.id.tx_amount_input)).setText("1000");
 
         cashBackField = (EditText) findViewById(R.id.cash_back_amount);
 

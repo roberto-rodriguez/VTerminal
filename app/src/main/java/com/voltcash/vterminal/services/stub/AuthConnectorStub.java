@@ -3,6 +3,8 @@ package com.voltcash.vterminal.services.stub;
 import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +56,10 @@ public class AuthConnectorStub implements AuthConnector {
     }
 
     public void logOut(String sessionToken, ServiceCallback callback)throws Exception{
+        callback.onSuccess(new HashMap());
+    }
+
+    public void changePassword(String currentPasswordStr, String newPasswordStr, ServiceCallback callback)throws Exception {
         callback.onSuccess(new HashMap());
     }
 }

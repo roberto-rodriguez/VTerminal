@@ -13,4 +13,6 @@ public interface AuthConnector {
     public void login(String serialNumber, String terminalUsername, String terminalPassword, String clerkEmail, String clerkPassword, ServiceCallback callback)throws Exception;
 
     public void logOut(String sessionToken, ServiceCallback callback)throws Exception;
+
+    public void changePassword(String currentPassword, String newPassword, ServiceCallback callback) throws Exception;
 }

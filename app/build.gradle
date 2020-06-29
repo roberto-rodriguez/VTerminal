@@ -7,8 +7,8 @@ android {
         applicationId "com.voltcash.vterminal"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 8
-        versionName "20.06.24 - Dev"
+        versionCode 9
+        versionName "20.06.25 - UAT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 		
 
@@ -64,5 +64,4 @@ dependencies {
 	compile fileTree(dir: '../MobileSDK_libs', include: ['*.jar'])
 
     compile(name: 'sdk-release', ext: 'aar')
-
 }

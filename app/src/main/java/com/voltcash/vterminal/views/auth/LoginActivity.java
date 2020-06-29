@@ -1,6 +1,8 @@
 package com.voltcash.vterminal.views.auth;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -14,7 +16,6 @@ import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,20 +30,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // setContentView(R.layout.content_progress_dialog);
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
 
         emailTextView = (TextView)findViewById(R.id.login_email);
         emailTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
-        emailTextView.setText("roberto@girocheck.com");
 
         passwordTextView = (TextView)findViewById(R.id.login_password);
         passwordTextView.getBackground().setColorFilter(R.color.VOLTCASH_GREEN, PorterDuff.Mode.SRC_ATOP);
-        passwordTextView.setText("a");
 
-        //Check if not have Serial Number go to MainActivity
         PreferenceUtil.getSerialNumber(this);
 
         ((TextView)findViewById(R.id.version_text)).setText(Settings.VERSION);
@@ -77,15 +74,33 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onDisconnect(View view){
-        //Clean all these fields in Preferences
-        PreferenceUtil.write(this, new HashMap(),
-                Field.AUTH.CLERK_FIRST_NAME,
-                Field.AUTH.CLERK_LAST_NAME ,
-                Field.AUTH.CLERK_ID        ,
-                Field.AUTH.SESSION_TOKEN);
+        final LoginActivity _this = this;
 
-        Intent intent = new Intent(getApplicationContext(), AuthTerminalActivity.class);
-        startActivity(intent);
+        new AlertDialog.Builder(_this)
+                .setTitle("Caution")
+                .setMessage("When the terminal is disconnected, a new Access Code will need to be requested to Voltcash to connect it again. " +
+                        "Are you sure you want to disconnect the terminal?")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        PreferenceUtil.write(_this, new HashMap(),
+                                Field.AUTH.CLERK_FIRST_NAME,
+                                Field.AUTH.CLERK_LAST_NAME ,
+                                Field.AUTH.CLERK_ID        ,
+                                Field.AUTH.SESSION_TOKEN);
+
+                        Intent intent = new Intent(getApplicationContext(), AuthTerminalActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .show();
+
+
     }
 
 }

@@ -1,9 +1,15 @@
 package com.voltcash.vterminal.services.impl;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.AuthServiceAPI;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.util.ClientBuilder;
+import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.views.MainActivity;
 
 import java.util.Map;
 
@@ -71,6 +77,37 @@ public class AuthConnectorImpl implements AuthConnector {
             e.printStackTrace();
             callback.onFailure(null, e);
         }
+    }
+
+    public void changePassword(String currentPasswordStr, String newPasswordStr, ServiceCallback callback)throws Exception {
+        RequestBody sessionToken = getSessionToken(callback.getCtx());
+        String clerkIdStr = PreferenceUtil.read(Field.AUTH.CLERK_ID);
+
+        RequestBody clerkID =  buildStringBody(clerkIdStr);
+        RequestBody currentPassword =  buildStringBody(currentPasswordStr);
+        RequestBody newPassword =  buildStringBody(newPasswordStr);
+
+        try {
+            Call<Map> call = getAPI().changePassword(sessionToken, clerkID, currentPassword, newPassword);
+
+            call.enqueue(callback);
+
+        } catch (Exception e) {
+            callback.onFailure(null, e);
+        }
+    }
+
+
+    private static RequestBody getSessionToken(Activity activity) throws Exception{
+        String token = PreferenceUtil.read(Field.AUTH.SESSION_TOKEN);
+
+        if(token == null){
+            //If it gets here is because there was an error, need to restart the app
+            Intent mainActivity = new Intent(activity.getApplicationContext(), MainActivity.class);
+            activity.startActivity(mainActivity);
+            return null;
+        }
+        return buildStringBody(token);
     }
 
 }

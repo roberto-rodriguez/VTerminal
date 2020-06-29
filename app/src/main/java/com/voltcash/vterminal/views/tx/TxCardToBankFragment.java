@@ -41,16 +41,12 @@ public class TxCardToBankFragment extends FragmentWithCardReader
     public void onViewCreated(View view,  Bundle savedInstanceState) {
         setTitle("Card to Bank");
 
-        feesLayout          = (GridLayout)findViewById(R.id.c2b_fees_layout);
-
-        amountField= (EditText)findViewById(R.id.tx_amount_input);
-
+        feesLayout  = (GridLayout)findViewById(R.id.c2b_fees_layout);
+        amountField = (EditText)findViewById(R.id.tx_amount_input);
 
         feeText =  (TextView)findViewById(R.id.tx_fee_text);
         payoutText =  (TextView)findViewById(R.id.tx_payout_text);
         amountText =  (TextView)findViewById(R.id.tx_amount_text);
-
-        amountField.setText("12.88");
 
         super.onViewCreated(view, savedInstanceState);
     }
