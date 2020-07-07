@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 import com.kofax.kmc.kut.utilities.AppContextProvider;
@@ -18,6 +19,7 @@ import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.VTerminal;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.DialogUtils;
+import com.voltcash.vterminal.util.ViewUtil;
 import com.zcs.sdk.SdkResult;
 import com.zcs.sdk.card.CardInfoEntity;
 import com.zcs.sdk.card.CardReaderManager;
@@ -43,6 +45,8 @@ public abstract class FragmentWithCardReader extends Fragment
     protected TextView cardField;
     protected String cardNumber;
 
+    private EditText amountField;
+
     protected Button submitButton;
     protected GridLayout calculateFeesLayout;
 
@@ -65,6 +69,8 @@ public abstract class FragmentWithCardReader extends Fragment
 
         cardField = (TextView)findViewById(R.id.tx_card_field);
         cardField.setOnClickListener(this);
+
+        amountField = (EditText)findViewById(R.id.tx_amount_input);
 
         submitButton = (Button)findViewById(R.id.tx_submit_button);
 
@@ -183,6 +189,26 @@ public abstract class FragmentWithCardReader extends Fragment
     }
 
     public String getCardNumber() {
+        if(cardNumber == null || cardNumber.isEmpty()){
+            ViewUtil.showError(this.getActivity(), "Invalid Input", "Please click in the Card Number field and swipe your card");
+            return null;
+        }
         return cardNumber;
+    }
+
+    protected Double getAmount(){
+        String amountStr = amountField.getText().toString();
+
+        if(amountStr == null || amountStr.isEmpty()){
+            ViewUtil.showError(this.getActivity(), "Invalid Input", "Please enter amount");
+            return 0D;
+        }
+
+        try{
+            return Double.parseDouble( amountStr);
+        }catch(Exception e){
+            ViewUtil.showError(this.getActivity(), "Invalid Input", "Amount has to be a numeric value");
+            return 0D;
+        }
     }
 }

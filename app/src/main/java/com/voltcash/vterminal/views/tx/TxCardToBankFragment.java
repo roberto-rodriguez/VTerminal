@@ -28,7 +28,7 @@ public class TxCardToBankFragment extends FragmentWithCardReader
 
     private GridLayout feesLayout;
 
-    private EditText amountField;
+
 
     private TextView feeText;
     private TextView payoutText;
@@ -39,10 +39,9 @@ public class TxCardToBankFragment extends FragmentWithCardReader
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-        setTitle("Card to Bank");
+        setTitle("Cash Back");
 
         feesLayout  = (GridLayout)findViewById(R.id.c2b_fees_layout);
-        amountField = (EditText)findViewById(R.id.tx_amount_input);
 
         feeText =  (TextView)findViewById(R.id.tx_fee_text);
         payoutText =  (TextView)findViewById(R.id.tx_payout_text);
@@ -56,14 +55,9 @@ public class TxCardToBankFragment extends FragmentWithCardReader
     }
 
     public void onCalculateFees(View view){
-        Double amountDouble = null;
-        try{
-               amountDouble = Double.parseDouble(amountField.getText() + "");
-        }catch(Exception e){
-            ViewUtil.showError(this.getActivity(), "Invalid Input", "Amount has to be a numeric value");
-            return;
-        }
-        final Double amount = amountDouble;
+        final Double amount = getAmount();
+
+        if(amount == 0D) return;
 
         TxService.calculateFee(CARD2BANK_WITH_FEE, amount + "", new ServiceCallback(this.getActivity()) {
             @Override
@@ -89,13 +83,14 @@ public class TxCardToBankFragment extends FragmentWithCardReader
         final TxCardToBankFragment _this = this;
 
         final String cardNumber = getCardNumber();
-        final String amount = amountField.getText().toString().trim();
 
-        if(!amount.matches("\\d+(?:\\.\\d+)?")){
-            ViewUtil.showError(this.getActivity(), "Error", "Invalid Cashback Amount");
+        if(cardNumber == null){
             return;
         }
-        final Double amt = Double.parseDouble(amount);
+
+        final Double amount = getAmount();
+
+        if(amount == 0D) return;
 
         TxData.put(Field.TX.CARD_NUMBER, cardNumber);
         TxData.put(Field.TX.AMOUNT, amount);
@@ -109,7 +104,7 @@ public class TxCardToBankFragment extends FragmentWithCardReader
                     return;
                 }
 
-                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amt, fee, payout);
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, fee, payout);
 
                 ReceiptView.show(_this.getActivity(), receiptLines);
             }

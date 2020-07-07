@@ -162,7 +162,14 @@ public class TxFragment extends FragmentWithCardReader implements
     public void onCalculateFees(View view) {
         final TxFragment _this = this;
         final String cardNumber = getCardNumber();
-        final String amount = ((EditText) findViewById(R.id.tx_amount_input)).getText().toString();
+
+        if(cardNumber == null){
+            return;
+        }
+
+        final Double amount = getAmount();
+
+        if(amount == 0D) return;
 
         TxData.put(Field.TX.CARD_NUMBER, cardNumber);
         TxData.put(Field.TX.AMOUNT, amount);

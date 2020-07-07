@@ -38,7 +38,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Amount"
-        android:text="1000"
+        android:text=""
         android:inputType="textPersonName|phone"
         android:textColor="@android:color/background_light"
         android:textColorHint="@android:color/background_light" />

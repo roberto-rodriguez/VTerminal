@@ -39,10 +39,10 @@ public class TxBalanceFragment extends FragmentWithCardReader
 
         final String cardNumber = getCardNumber();
 
-        if(cardNumber == null || cardNumber.isEmpty()){
-            ViewUtil.showError(getActivity(), "Invalid Input", "Please enter card number");
+        if(cardNumber == null){
             return;
         }
+
         TxData.put(Field.TX.CARD_NUMBER, cardNumber);
 
         TxService.balanceInquiry(new ServiceCallback(this.getActivity()) {

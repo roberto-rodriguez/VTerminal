@@ -113,7 +113,7 @@
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Card to Bank"
+                    android:text="Cash Back"
                     android:textColor="?android:attr/colorForeground" />
         </LinearLayout>
 
