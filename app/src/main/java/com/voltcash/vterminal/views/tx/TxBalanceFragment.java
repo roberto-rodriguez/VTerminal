@@ -7,6 +7,8 @@ import android.widget.TextView;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
+import com.voltcash.vterminal.util.AudioUtil;
+import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptBuilder;
@@ -49,6 +51,7 @@ public class TxBalanceFragment extends FragmentWithCardReader
             @Override
             public void onSuccess(Map response) {
 
+
                 if(response == null){
                     ViewUtil.showError(getCtx(), "Server Error", "Error trying to check balance. Please contact Customer Support");
                     return;
@@ -67,8 +70,12 @@ public class TxBalanceFragment extends FragmentWithCardReader
                 receiptLines.add("Card Number -> **** " + getCardField().getText());
                 receiptLines.add("Balance -> $" + StringUtil.formatCurrency(balance));
 
+                Constants.receiptLines = receiptLines;
+
                 ReceiptView.show(_this.getActivity(), receiptLines);
             }
         });
     }
+
+
 }

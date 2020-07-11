@@ -2,6 +2,8 @@ package com.voltcash.vterminal.util;
 
 import com.kofax.kmc.ken.engines.data.Image;
 
+import java.util.List;
+
 public class Constants {
 
     public static Image RAW_IMAGE;
@@ -61,5 +63,6 @@ public class Constants {
         }
     }
 
+   public static List<String> receiptLines = null;
 }
 

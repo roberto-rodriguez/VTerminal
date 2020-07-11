@@ -104,7 +104,9 @@ public class TxCardToBankFragment extends FragmentWithCardReader
                     return;
                 }
 
-                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, fee, payout);
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, fee, payout, true);
+
+                Constants.receiptLines = receiptLines;
 
                 ReceiptView.show(_this.getActivity(), receiptLines);
             }

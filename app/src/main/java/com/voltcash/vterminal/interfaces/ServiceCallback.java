@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.Field;
 import java.util.Map;
@@ -81,6 +82,8 @@ public abstract class ServiceCallback implements Callback<Map> {
 
     @Override
     public void onFailure(Call<Map> call, Throwable t) {
+        AudioUtil.playBellSound(caller);
+
          t.printStackTrace();
 
         if (mProgressDialog != null && mProgressDialog.isShowing()){
@@ -93,6 +96,7 @@ public abstract class ServiceCallback implements Callback<Map> {
     public abstract void onSuccess(Map map);
 
     public void onError( Map map){
+        AudioUtil.playBellSound(caller);
         showError(caller, "Unexpected Error", (String)map.get("errorMessage"));
     }
 

@@ -9,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.report.ActivityReportActivity;
@@ -18,6 +21,7 @@ import com.voltcash.vterminal.views.settings.TerminalSettingsActivity;
 import com.voltcash.vterminal.views.tx.TxBalanceFragment;
 import com.voltcash.vterminal.views.tx.TxCardToBankFragment;
 import com.voltcash.vterminal.views.tx.TxFragment;
+import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -81,6 +85,15 @@ public class HomeActivity extends AppCompatActivity {
     public void onTxCardToBank(View view){
         openFragment(new TxCardToBankFragment());
     }
+
+    public void onPrintLastReceipt(View view){
+        if(Constants.receiptLines != null){
+            ReceiptView.show(this , Constants.receiptLines);
+        }else{
+            Toast.makeText(this, "No receipt to print", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     public void onActivityReportActivity(View view){
         Intent txActivity = new Intent(getApplicationContext(), ActivityReportActivity.class);

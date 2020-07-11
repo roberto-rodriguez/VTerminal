@@ -1,6 +1,7 @@
 package com.voltcash.vterminal.views.tx;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,6 +36,7 @@ import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
+import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
@@ -42,6 +44,7 @@ import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +72,8 @@ public class TxFragment extends FragmentWithCardReader implements
 
     private ConstraintLayout txProgressDialog = null;
     private Button submitBtn;
+
+    private Boolean cardExist = true;
 
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -188,7 +193,7 @@ public class TxFragment extends FragmentWithCardReader implements
                     return;
                 }
 
-                Boolean cardExist = (Boolean) response.get(Field.TX.CARD_EXIST);
+                 cardExist = (Boolean) response.get(Field.TX.CARD_EXIST);
                 String cardLoadFee = response.get(Field.TX.CARD_LOAD_FEE) + "";
                 String activationFee = response.get(Field.TX.ACTIVATION_FEE) + "";
 
@@ -230,6 +235,16 @@ public class TxFragment extends FragmentWithCardReader implements
         final String ssn = ((EditText) findViewById(R.id.tx_id_ssn_input)).getText().toString();
         final String phone = ((EditText) findViewById(R.id.tx_id_phone_input)).getText().toString();
 
+        if(!cardExist && (ssn == null || ssn.isEmpty())){
+            ViewUtil.showError(getActivity(), "Error", "Social Security Number is required");
+            return;
+        }
+
+        if(!cardExist && (phone == null || phone.isEmpty())){
+            ViewUtil.showError(getActivity(), "Error", "Phone Number is required");
+            return;
+        }
+
         TxData.put(Field.TX.SSN, ssn);
         TxData.put(Field.TX.PHONE, phone);
 
@@ -245,29 +260,25 @@ public class TxFragment extends FragmentWithCardReader implements
 
         progressDialog(true);
 
+        String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
+
+        final List<String> receiptLines = new ArrayList<>();
+        ReceiptBuilder.addTitle(receiptLines, _this.operationName + " Load");
+        ReceiptBuilder.addDateTimeLines(receiptLines);
+
+        receiptLines.add("Location Name -> " + merchant);
+        receiptLines.add("Card Number -> " + getCardField().getText());
+
         TxService.tx(new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
                 final Double amount = TxData.getDouble(Field.TX.AMOUNT);
                 Double fee = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
                 Double payout = amount - fee;
-                String card = TxData.getString(Field.TX.CARD_NUMBER);
-                String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
-                String requestId = StringUtil.formatRequestId(response);
-
-                if (card != null && card.length() > 4) {
-                    card = card.substring(card.length() - 4, card.length());
-                }
-
-                final List<String> receiptLines = new ArrayList<>();
-                ReceiptBuilder.addTitle(receiptLines, _this.operationName + " Load");
-                ReceiptBuilder.addDateTimeLines(receiptLines);
                 receiptLines.add(_this.operationName + " Loading Fee -> $ " + StringUtil.formatCurrency(fee));
                 receiptLines.add("Amount Loaded -> $ " + StringUtil.formatCurrency(payout));
-                receiptLines.add("Location Name -> " + merchant);
+                String requestId = StringUtil.formatRequestId(response);
                 receiptLines.add("Transaction # -> " + requestId);
-                receiptLines.add("Card Number -> " + getCardField().getText());
-
 
                 if (cashBack == null) {
                     showReceipt(receiptLines);
@@ -277,34 +288,24 @@ public class TxFragment extends FragmentWithCardReader implements
                     TxService.cardToBank(null, new ServiceCallback(_this.getActivity()) {
                         @Override
                         public void onSuccess(Map response) {
-                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null);
+                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null, true);
 
                             receiptLines.addAll(c2bReceiptLines);
 
-                              showReceipt(receiptLines);
+                            showReceipt(receiptLines);
                         }
 
                         @Override
-                        public void onError(Map map) {
-                            progressDialog(false);
+                        public void onError(Map response) {
+                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null, true);
+                            receiptLines.addAll(c2bReceiptLines);
 
-                            new AlertDialog.Builder(_this.getActivity())
-                                    .setTitle("Error Processing Cash Back")
-                                    .setMessage((String) map.get("errorMessage") + ". \n\nCheck transaction was processed successfully.")
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            showReceipt(receiptLines);
-                                        }
-                                    })
-                                    .setCancelable(true)
-                                    .setIcon(R.drawable.error)
-                                    .show();
+                            showError("Error Processing Cash Back", response.get("errorMessage") + ". \n\nCheck transaction was processed successfully.", receiptLines);
                         }
 
                         @Override
                         public void onFailure(Call<Map> call, Throwable t) {
-                            progressDialog(false);
-                            super.onFailure(call, t);
+                            showError("Error Processing Cash Back", t.getMessage() + ". \n\nCheck transaction was processed successfully.", receiptLines);
                         }
                     });
                 }
@@ -312,15 +313,13 @@ public class TxFragment extends FragmentWithCardReader implements
 
 
             @Override
-            public void onError(Map map) {
-                progressDialog(false);
-                super.onError(map);
+            public void onError(Map response) {
+                showError("Unexpected Error", (String)response.get("errorMessage"),  receiptLines);
             }
 
             @Override
             public void onFailure(Call<Map> call, Throwable t) {
-                progressDialog(false);
-                super.onFailure(call, t);
+                showError("Unexpected Error", t.getMessage(),  receiptLines);
             }
         });
     }
@@ -331,8 +330,38 @@ public class TxFragment extends FragmentWithCardReader implements
         submitBtn.setVisibility(show ? View.GONE :  View.VISIBLE);
     }
 
+    private void showError(final String title, final String message, final List<String> receiptLines){
+        final Activity _this = this.getActivity();
+
+        progressDialog(false);
+
+        Constants.receiptLines = receiptLines;
+
+        new AlertDialog.Builder(this.getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Print Receipt", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        receiptLines.add("Result Message -> " + message);
+
+                        ReceiptView.show(_this , receiptLines);
+                    }
+                })
+                .setCancelable(true)
+                .setIcon(R.drawable.error)
+                .show();
+    }
+
     private void showReceipt(List<String> receiptLines) {
         progressDialog(false);
+
+        Constants.receiptLines = receiptLines;
+
         ReceiptView.show(this.getActivity() , receiptLines);
     }
 

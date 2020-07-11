@@ -197,7 +197,7 @@ public class ReceiptBuilder {
                 "above and all information regarding the Account and Account Owner is true and correct.";
     }
 
-    public static List<String> buildCardToBankReceiptLines(Map response, Double amt, Double fee, Double payout){
+    public static List<String> buildCardToBankReceiptLines(Map response, Double amt, Double fee, Double payout, boolean includeDisclaimer){
         String amount = StringUtil.formatCurrency(amt);
         String customerName = (String)response.get(Field.TX.CUSTUMER_NAME);
 
@@ -214,10 +214,14 @@ public class ReceiptBuilder {
         receiptLines.add("Routing# -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
         receiptLines.add("Account# -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
         receiptLines.add("<br/>");
-        receiptLines.add(ReceiptBuilder.achDisclaimer(customerName));
-        receiptLines.add("<br/>");
-        receiptLines.add("______________________________");
-        receiptLines.add("Customer Signature");
+
+        if(includeDisclaimer){
+            receiptLines.add(ReceiptBuilder.achDisclaimer(customerName));
+            receiptLines.add("<br/>");
+            receiptLines.add("______________________________");
+            receiptLines.add("Customer Signature");
+        }
+
         receiptLines.add(dateTimeLines.get(0).replace(" ->", ":"));
 
         String card     = TxData.getString(Field.TX.CARD_NUMBER);

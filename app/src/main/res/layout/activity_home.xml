@@ -181,6 +181,37 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/button_home_print_last_receipt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onPrintLastReceipt"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_home_daily_report">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:srcCompat="@drawable/icon_printer" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Print Last Receipt"
+                    android:textColor="?android:attr/colorForeground" />
+        </LinearLayout>
 
         </android.support.constraint.ConstraintLayout>
 
