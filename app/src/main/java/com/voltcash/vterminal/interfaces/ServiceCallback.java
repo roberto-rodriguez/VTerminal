@@ -86,11 +86,15 @@ public abstract class ServiceCallback implements Callback<Map> {
 
          t.printStackTrace();
 
+        dismissDialog();
+
+        showError(caller, "Unexpected Error", t.getMessage());
+    }
+
+    protected void dismissDialog(){
         if (mProgressDialog != null && mProgressDialog.isShowing()){
             mProgressDialog.dismiss();
         }
-
-        showError(caller, "Unexpected Error", t.getMessage());
     }
 
     public abstract void onSuccess(Map map);

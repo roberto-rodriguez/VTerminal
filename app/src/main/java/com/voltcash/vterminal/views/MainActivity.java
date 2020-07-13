@@ -9,7 +9,6 @@ import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
 import com.voltcash.vterminal.views.auth.LoginActivity;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
-import com.zcs.sdk.Printer;
 
 
 public class MainActivity extends AppCompatActivity {

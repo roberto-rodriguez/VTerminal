@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLogin(View view) {
+
             String serialNumber = PreferenceUtil.getSerialNumber(this);
 
             if(serialNumber == null){return;}

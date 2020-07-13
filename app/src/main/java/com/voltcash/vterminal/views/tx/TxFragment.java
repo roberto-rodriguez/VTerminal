@@ -28,6 +28,7 @@ import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
+import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
@@ -272,6 +273,7 @@ public class TxFragment extends FragmentWithCardReader implements
         TxService.tx(new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
+
                 final Double amount = TxData.getDouble(Field.TX.AMOUNT);
                 Double fee = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
                 Double payout = amount - fee;
@@ -331,6 +333,8 @@ public class TxFragment extends FragmentWithCardReader implements
     }
 
     private void showError(final String title, final String message, final List<String> receiptLines){
+        AudioUtil.playBellSound(this.getActivity());
+
         final Activity _this = this.getActivity();
 
         progressDialog(false);
@@ -358,6 +362,8 @@ public class TxFragment extends FragmentWithCardReader implements
     }
 
     private void showReceipt(List<String> receiptLines) {
+        AudioUtil.playBellSound(this.getActivity());
+
         progressDialog(false);
 
         Constants.receiptLines = receiptLines;

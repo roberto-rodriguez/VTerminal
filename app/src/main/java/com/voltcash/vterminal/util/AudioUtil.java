@@ -5,6 +5,8 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
+import com.voltcash.vterminal.R;
+
 public class AudioUtil {
 
     public static void playBellSound(Activity ctx){
@@ -14,15 +16,13 @@ public class AudioUtil {
     private static void playSound(Activity ctx, String audio){
 
         try {
-            MediaPlayer mediaPlayer = new MediaPlayer();
+            MediaPlayer mediaPlayer = MediaPlayer.create(ctx, R.raw.bell);
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-            AssetFileDescriptor afd = ctx.getAssets().openFd(audio);
-            mediaPlayer.setDataSource(afd.getFileDescriptor());
-            mediaPlayer.prepare();
+          //  mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (Exception e) {
+            String m = e.getMessage();
+
             e.printStackTrace();
         }
     }

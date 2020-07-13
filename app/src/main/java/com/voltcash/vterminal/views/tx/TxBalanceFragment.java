@@ -50,7 +50,7 @@ public class TxBalanceFragment extends FragmentWithCardReader
         TxService.balanceInquiry(new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
-
+                AudioUtil.playBellSound(_this.getActivity());
 
                 if(response == null){
                     ViewUtil.showError(getCtx(), "Server Error", "Error trying to check balance. Please contact Customer Support");
