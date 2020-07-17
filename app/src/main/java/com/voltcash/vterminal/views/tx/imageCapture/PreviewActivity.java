@@ -166,17 +166,20 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         ImageProcessorConfiguration imageProcessingConfiguration = SettingsHelperClass.getImageProcessorConfiguration(this);
 
         switch (field){
+            case Field.TX.CHECK_BACK:
+                //  imageProcessingConfiguration.outputDPI = 130;
+                imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
+                //   imageProcessingConfiguration.documentDimensions = new DocumentDimensions(200F, 500F);
+          //      break;
+
             case Field.TX.ID_FRONT:
+            case Field.TX.CHECK_FRONT:
                 imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
                 break;
-            case Field.TX.CHECK_FRONT:
-                imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
-                break;
-            case Field.TX.CHECK_BACK:
-              //  imageProcessingConfiguration.outputDPI = 130;
-                imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
-            //   imageProcessingConfiguration.documentDimensions = new DocumentDimensions(200F, 500F);
-                break;
+        }
+
+        if(Field.TX.CHECK_FRONT.equals(field)){
+            imageProcessingConfiguration.outputDPI = Settings.CHECK_RESOLUTION;
         }
 
         try {
