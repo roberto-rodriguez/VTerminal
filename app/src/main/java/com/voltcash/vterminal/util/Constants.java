@@ -32,6 +32,7 @@ public class Constants {
     public final static int PROCESSED_IMAGE_RETAKE_RESPONSE_ID  = 156;
     public final static int PROCESSED_IMAGE_ACCEPT_RESPONSE_ID  = 157;
     public final static int PROCESSED_IMAGE_EMAIL_IS_SENT_RESPONSE_ID = 158;
+    public final static int UNEXPECTED_EXCEPTION_APP_CRASHING  = 999;
 
     public static final int CAPTURE_CHECK_FRONT_REQUEST_ID = 1001;
     public static final int CAPTURE_CHECK_BACK_REQUEST_ID = 1002;

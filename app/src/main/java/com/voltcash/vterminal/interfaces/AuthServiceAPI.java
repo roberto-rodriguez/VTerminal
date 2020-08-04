@@ -25,8 +25,8 @@ public interface AuthServiceAPI {
             @Part("terminalSerialNumber") RequestBody terminalSerialNumber,
             @Part("terminalUsername") RequestBody terminalUsername,
             @Part("terminalPassword") RequestBody terminalPassword,
-            @Part("clerkEmail") RequestBody email,
-            @Part("clerkPassword") RequestBody password
+            @Part("clerkEmail")       RequestBody email,
+            @Part("clerkPassword")    RequestBody password
     );
 
     @Multipart
@@ -38,11 +38,19 @@ public interface AuthServiceAPI {
     @Multipart
     @POST("FrontTerminal/v1/clerk/changePassword")
     Call<Map> changePassword(
-            @Part("sessionToken") RequestBody sessionToken,
-            @Part("clerkId") RequestBody clerkId,
+            @Part("sessionToken")    RequestBody sessionToken,
+            @Part("clerkId")         RequestBody clerkId,
             @Part("currentPassword") RequestBody currentPassword,
-            @Part("newPassword") RequestBody newPassword
+            @Part("newPassword")     RequestBody newPassword
     );
 
+    @Multipart
+    @POST("FrontTerminal/v1/clerk/notifyIssue")
+    Call<Map> notifyIssue(
+            @Part("serialNumber")  RequestBody serialNumber,
+            @Part("clerkId")       RequestBody clerkId,
+            @Part("functionality") RequestBody functionality,
+            @Part("errorMessage")  RequestBody errorMessage
+    );
 
 }

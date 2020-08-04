@@ -31,6 +31,7 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
@@ -99,37 +100,43 @@ public class TxFragment extends FragmentWithCardReader implements
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-        mPermissionsManager = new PermissionsManager(this.getActivity());
 
-        checkFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
-        checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_back_image);
-        idFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
-        idBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
+        try{
+            mPermissionsManager = new PermissionsManager(this.getActivity());
 
-        txProgressDialog = (ConstraintLayout)findViewById(R.id.tx_progress_dialog);
-        submitBtn = (Button)findViewById(R.id.tx_submit_button);
+            checkFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
+            checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_back_image);
+            idFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
+            idBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
 
-        if (!mPermissionsManager.isGranted(PERMISSIONS)) {
-            mPermissionsManager.request(PERMISSIONS);
+            txProgressDialog = (ConstraintLayout)findViewById(R.id.tx_progress_dialog);
+            submitBtn = (Button)findViewById(R.id.tx_submit_button);
+
+            if (!mPermissionsManager.isGranted(PERMISSIONS)) {
+                mPermissionsManager.request(PERMISSIONS);
+            }
+
+            Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
+
+            this.operation =  getArguments().getString(Field.TX.OPERATION);
+            this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
+
+            getActivity().setTitle("Deposit " + operationName);
+
+            cashBackField = (EditText) findViewById(R.id.cash_back_amount);
+
+            cashBackSwitch = ((Switch) findViewById(R.id.cash_back_checkbox));
+            cashBackSwitch.setOnCheckedChangeListener(this);
+
+            super.onViewCreated(view, savedInstanceState);
+
+            TxData.put(Field.TX.OPERATION, this.operation);
+
+            addImageCaptureListeners();
+
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this.getActivity(), "TxFragment.onViewCreated()", e);
         }
-
-        Licensing.setMobileSDKLicense(License.PROCESS_PAGE_SDK_LICENSE);
-
-        this.operation =  getArguments().getString(Field.TX.OPERATION);
-        this.operationName = Constants.OPERATION.isCheck(this.operation) ? "Check" : "Cash";
-
-        getActivity().setTitle("Deposit " + operationName);
-
-        cashBackField = (EditText) findViewById(R.id.cash_back_amount);
-
-        cashBackSwitch = ((Switch) findViewById(R.id.cash_back_checkbox));
-        cashBackSwitch.setOnCheckedChangeListener(this);
-
-        super.onViewCreated(view, savedInstanceState);
-
-        TxData.put(Field.TX.OPERATION, this.operation);
-
-        addImageCaptureListeners();
     }
 
     private void addImageCaptureListeners(){
@@ -299,7 +306,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
                         @Override
                         public void onError(Map response) {
-                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null, true);
+                            List<String> c2bReceiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, cashBack, null, null, false);
                             receiptLines.addAll(c2bReceiptLines);
 
                             showError("Error Processing Cash Back", response.get("errorMessage") + ". \n\nCheck transaction was processed successfully.", receiptLines);
@@ -339,6 +346,8 @@ public class TxFragment extends FragmentWithCardReader implements
 
         progressDialog(false);
 
+        receiptLines.add("Result Message -> " + message);
+
         Constants.receiptLines = receiptLines;
 
         new AlertDialog.Builder(this.getActivity())
@@ -351,7 +360,7 @@ public class TxFragment extends FragmentWithCardReader implements
                 })
                 .setNegativeButton("Print Receipt", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
-                        receiptLines.add("Result Message -> " + message);
+
 
                         ReceiptView.show(_this , receiptLines);
                     }
@@ -425,10 +434,14 @@ public class TxFragment extends FragmentWithCardReader implements
                     intent.putExtra(Field.TX.TX_FIELD, activeImgField);
                     startActivityForResult(intent, Constants.TAKE_IMAGE_REQUEST_ID);
                     break;
+
+                case Constants.UNEXPECTED_EXCEPTION_APP_CRASHING:
+                    ViewUtil.showError(this.getActivity(), "TxFragment", "UNEXPECTED _EXCEPTION _APP _CRASHING");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            ViewUtil.showError(this.getActivity(), "TxFragment", "App result Exception");
         }
     }
 
@@ -436,5 +449,16 @@ public class TxFragment extends FragmentWithCardReader implements
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         cashBackField.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
         cashBackField.setText("");
+    }
+
+    @Override
+    public void onStop () {
+//do your stuff here
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
  }

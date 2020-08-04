@@ -10,6 +10,7 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
@@ -28,8 +29,12 @@ public class TxBalanceFragment extends FragmentWithCardReader
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-        setTitle("Balance Inquiry");
-        super.onViewCreated(view, savedInstanceState);
+        try{
+            setTitle("Balance Inquiry");
+            super.onViewCreated(view, savedInstanceState);
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this.getActivity(), "TxBalanceFragment.onViewCreated()", e);
+        }
     }
 
     protected int getLayoutId(){

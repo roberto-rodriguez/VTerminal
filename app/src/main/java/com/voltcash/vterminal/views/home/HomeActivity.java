@@ -1,6 +1,8 @@
 package com.voltcash.vterminal.views.home;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,12 @@ public class HomeActivity extends AppCompatActivity {
         homeMenu = findViewById(R.id.home_menu_container);
 
         resetHome();
+
+        Boolean isError =  getIntent().getBooleanExtra("isError", false);
+
+        if(isError){
+            Toast.makeText(this, "Unexpected Error. A notification was automatically sent to Voltcash with details of the issue. Please try again.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void resetHome(){
@@ -149,4 +157,5 @@ public class HomeActivity extends AppCompatActivity {
             this.openFragment = null;
         }
     }
+
 }

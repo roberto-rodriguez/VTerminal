@@ -15,6 +15,8 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.Part;
 
 import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
@@ -97,6 +99,31 @@ public class AuthConnectorImpl implements AuthConnector {
         }
     }
 
+    public void notifyIssue(String serialNumberStr, String clerkIdStr, String functionalityStr,  String errorMessageStr)throws Exception {
+        RequestBody serialNumber  =  buildStringBody(serialNumberStr);
+        RequestBody clerkId       =  buildStringBody(clerkIdStr);
+        RequestBody functionality =  buildStringBody(functionalityStr);
+        RequestBody errorMessage  =  buildStringBody(errorMessageStr);
+
+        try {
+            Call<Map> call = getAPI().notifyIssue(serialNumber, clerkId, functionality, errorMessage);
+
+            call.enqueue(new Callback(){
+                @Override
+                public void onResponse(Call call, Response response) {
+
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable throwable) {
+
+                }
+            });
+
+        } catch (Exception e) {
+        }
+    }
+
 
     private static RequestBody getSessionToken(Activity activity) throws Exception{
         String token = PreferenceUtil.read(Field.AUTH.SESSION_TOKEN);
@@ -109,5 +136,6 @@ public class AuthConnectorImpl implements AuthConnector {
         }
         return buildStringBody(token);
     }
+
 
 }

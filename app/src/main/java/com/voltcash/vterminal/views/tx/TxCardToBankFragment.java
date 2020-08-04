@@ -18,6 +18,7 @@ import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
@@ -50,15 +51,20 @@ public class TxCardToBankFragment extends FragmentWithCardReader
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-        setTitle("Cash Back");
+        try{
+            setTitle("Cash Back");
 
-        feesLayout  = (GridLayout)findViewById(R.id.c2b_fees_layout);
+            feesLayout  = (GridLayout)findViewById(R.id.c2b_fees_layout);
 
-        feeText =  (TextView)findViewById(R.id.tx_fee_text);
-        payoutText =  (TextView)findViewById(R.id.tx_payout_text);
-        amountText =  (TextView)findViewById(R.id.tx_amount_text);
+            feeText =  (TextView)findViewById(R.id.tx_fee_text);
+            payoutText =  (TextView)findViewById(R.id.tx_payout_text);
+            amountText =  (TextView)findViewById(R.id.tx_amount_text);
 
-        super.onViewCreated(view, savedInstanceState);
+            super.onViewCreated(view, savedInstanceState);
+
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this.getActivity(), "TxCardToBankFragment.onViewCreated()", e);
+        }
     }
 
     protected int getLayoutId(){

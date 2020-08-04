@@ -202,27 +202,28 @@ public class ReceiptBuilder {
         String customerName = (String)response.get(Field.TX.CUSTUMER_NAME);
 
         List<String> receiptLines = new ArrayList();
-        addTitle(receiptLines, "ACH Authorization Form");
+
         List<String> dateTimeLines = ReceiptBuilder.dateTimeLines();
 
-
-        receiptLines.add("Merchant -> "+ response.get(Field.TX.MERCHANT_NAME));
-        receiptLines.add("Funds Settlement Information");
-        receiptLines.add("Bank Name -> "+ response.get(Field.TX.BANK_NAME));
-        receiptLines.add("Customer -> "+ customerName);
-        receiptLines.add("Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
-        receiptLines.add("Routing# -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
-        receiptLines.add("Account# -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
-        receiptLines.add("<br/>");
-
         if(includeDisclaimer){
+            addTitle(receiptLines, "ACH Authorization Form");
+
+            receiptLines.add("Merchant -> "+ response.get(Field.TX.MERCHANT_NAME));
+            receiptLines.add("Funds Settlement Information");
+            receiptLines.add("Bank Name -> "+ response.get(Field.TX.BANK_NAME));
+            receiptLines.add("Customer -> "+ customerName);
+            receiptLines.add("Address -> "+ response.get(Field.TX.CUSTUMER_ADDRESS));
+            receiptLines.add("Routing# -> "+ response.get(Field.TX.ROUTING_BANK_NUMBER));
+            receiptLines.add("Account# -> "+ response.get(Field.TX.ACCOUNT_NUMBER));
+            receiptLines.add("<br/>");
+
             receiptLines.add(ReceiptBuilder.achDisclaimer(customerName));
             receiptLines.add("<br/>");
             receiptLines.add("______________________________");
             receiptLines.add("Customer Signature");
-        }
 
-        receiptLines.add(dateTimeLines.get(0).replace(" ->", ":"));
+            receiptLines.add(dateTimeLines.get(0).replace(" ->", ":"));
+        }
 
         String card     = TxData.getString(Field.TX.CARD_NUMBER);
         String merchant = PreferenceUtil.read(Field.AUTH.MERCHANT_NAME);
@@ -248,7 +249,10 @@ public class ReceiptBuilder {
             receiptLines.add("Payout Amount -> " +  StringUtil.formatCurrency(payout));
         }
 
-        receiptLines.add("Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
+        if(includeDisclaimer){
+            receiptLines.add("Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
+        }
+
         receiptLines.add("Transaction # -> " + requestId);
 
         return receiptLines;

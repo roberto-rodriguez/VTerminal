@@ -21,6 +21,7 @@ import com.kofax.kmc.kui.uicontrols.data.GuidingLine;
 import com.kofax.kmc.kui.uicontrols.data.Symbology;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.TxData;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity
 
 
     private void setUp() {
+        try{
         setContentView(R.layout.activity_capture_barcode);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBarcodeCaptureView = (BarCodeCaptureView) findViewById(R.id.barcode_capture);
@@ -68,7 +70,9 @@ public class CaptureBarcodeActivity extends AppCompatActivity
                     onTorchClick();
                 }
             });
-
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this, "CaptureBarcodeActivity.setup()", e);
+        }
 
     }
 

@@ -62,4 +62,6 @@ public class AuthConnectorStub implements AuthConnector {
     public void changePassword(String currentPasswordStr, String newPasswordStr, ServiceCallback callback)throws Exception {
         callback.onSuccess(new HashMap());
     }
+
+    public void notifyIssue(String serialNumberStr, String clerkIdStr, String functionalityStr,  String errorMessageStr)throws Exception {}
 }

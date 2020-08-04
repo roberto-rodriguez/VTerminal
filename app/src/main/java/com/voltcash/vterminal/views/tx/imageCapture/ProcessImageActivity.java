@@ -29,6 +29,7 @@ import com.voltcash.vterminal.BuildConfig;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.TxData;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -202,6 +203,8 @@ public class ProcessImageActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try{
         setContentView(R.layout.activity_process_image);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_process_image);
         setSupportActionBar(toolbar);
@@ -249,6 +252,10 @@ public class ProcessImageActivity extends AppCompatActivity
                 }
             }
         });
+
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this, "ProcessImageActivity.onCreate()", e);
+        }
     }
 
     @Override

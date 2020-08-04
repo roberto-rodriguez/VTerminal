@@ -21,6 +21,7 @@ import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.SettingsHelperClass;
 import com.voltcash.vterminal.util.TxData;
@@ -44,6 +45,8 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try{
+
         Log.v("PreviewActivity", "onCreate - 1");
         setContentView(R.layout.activity_preview);
 
@@ -66,14 +69,12 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
         });
 
         mfabGoToProcessing = (FloatingActionButton) findViewById(R.id.fab_go_to_processing);
-     //   mfabGoToProcessing.setVisibility(View.GONE);
 
         final PreviewActivity _this = this;
 
         mfabGoToProcessing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(isProcessedImage){
                     TxData.put( field, mImgReviewEditCntrl.getImage());
 
@@ -126,6 +127,10 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
 //        } else {
 //            if (isProgressDialog && !mProgressDialog.isShowing()) mProgressDialog.show();
 //        }
+
+        }catch(Exception e){
+            GlobalExceptionHandler.catchException(this, "PreviewActivity.onCreate()", e);
+        }
     }
 
     protected void onResume() {
@@ -218,5 +223,16 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
 
     private void dismissDialog(){
         if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
+    }
+
+    @Override
+    public void onStop () {
+//do your stuff here
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

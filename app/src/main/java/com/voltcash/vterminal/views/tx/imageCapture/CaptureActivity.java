@@ -1,5 +1,6 @@
 package com.voltcash.vterminal.views.tx.imageCapture;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperienceC
 import com.kofax.kmc.kui.uicontrols.data.Flash;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
+import com.voltcash.vterminal.views.MainActivity;
 
 
 public class CaptureActivity extends AppCompatActivity
@@ -55,59 +57,64 @@ public class CaptureActivity extends AppCompatActivity
 
 
     private void setUp() {
-        Constants.RAW_IMAGE = null;
-        final CaptureActivity _this = this;
+        try {
+            Constants.RAW_IMAGE = null;
+            final CaptureActivity _this = this;
 
-        setContentView(R.layout.activity_capture);
+            setContentView(R.layout.activity_capture);
 
-        mImageCaptureView = (ImageCaptureView) findViewById(R.id.view_capture);
+            mImageCaptureView = (ImageCaptureView) findViewById(R.id.view_capture);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mImageCaptureView.addCameraInitializationListener(this);
+            mImageCaptureView.addCameraInitializationListener(this);
 
-        SettingsHelperClass.DeviceDeclinationResult declinationPitchRes = SettingsHelperClass.getDeviceDeclinationPitch(this);
-        if (declinationPitchRes.result) mImageCaptureView.setDeviceDeclinationPitch(declinationPitchRes.value);
+            SettingsHelperClass.DeviceDeclinationResult declinationPitchRes = SettingsHelperClass.getDeviceDeclinationPitch(this);
+            if (declinationPitchRes.result)
+                mImageCaptureView.setDeviceDeclinationPitch(declinationPitchRes.value);
 
-        SettingsHelperClass.DeviceDeclinationResult declinationRollRes = SettingsHelperClass.getDeviceDeclinationRoll(this);
-        if (declinationRollRes.result) mImageCaptureView.setDeviceDeclinationRoll(declinationRollRes.value);
+            SettingsHelperClass.DeviceDeclinationResult declinationRollRes = SettingsHelperClass.getDeviceDeclinationRoll(this);
+            if (declinationRollRes.result)
+                mImageCaptureView.setDeviceDeclinationRoll(declinationRollRes.value);
 
-        mDocumentCaptureExperience = new DocumentCaptureExperience(mImageCaptureView);
-        DocumentCaptureExperienceCriteriaHolder criteriaHolder = new DocumentCaptureExperienceCriteriaHolder();
+            mDocumentCaptureExperience = new DocumentCaptureExperience(mImageCaptureView);
+            DocumentCaptureExperienceCriteriaHolder criteriaHolder = new DocumentCaptureExperienceCriteriaHolder();
 
-        DocumentDetectionSettings settings = new DocumentDetectionSettings();
-        settings.setTargetFramePaddingPercent(8.0);
-        criteriaHolder.setDetectionSettings(settings);
-        mDocumentCaptureExperience.setCaptureCriteria(criteriaHolder);
+            DocumentDetectionSettings settings = new DocumentDetectionSettings();
+            settings.setTargetFramePaddingPercent(8.0);
+            criteriaHolder.setDetectionSettings(settings);
+            mDocumentCaptureExperience.setCaptureCriteria(criteriaHolder);
 
-        mDocumentCaptureExperience.addOnImageCapturedListener(this);
+            mDocumentCaptureExperience.addOnImageCapturedListener(this);
 
-        mDocumentCaptureExperience.takePicture();
+            mDocumentCaptureExperience.takePicture();
 
-        mForceCapture = (FloatingActionButton) findViewById(R.id.fab_force_capture);
-        mForceCapture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Processing Image", "Please wait...", new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        _this.onBackPressed();
-                    }
-                });
-                mImageCaptureView.forceTakePicture();
-            }
-        });
+            mForceCapture = (FloatingActionButton) findViewById(R.id.fab_force_capture);
+            mForceCapture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Processing Image", "Please wait...", new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            _this.onBackPressed();
+                        }
+                    });
+                    mImageCaptureView.forceTakePicture();
+                }
+            });
 
-        mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
+            mFabTorch = (FloatingActionButton) findViewById(R.id.fab_torch);
 
-        mFabTorch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTorchClick();
-            }
-        });
+            mFabTorch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onTorchClick();
+                }
+            });
 
-
+        }catch(Exception e){
+           GlobalExceptionHandler.catchException(this, "CaptureActivity.setup()", e);
+        }
     }
 
     private void onTorchClick(){
@@ -122,18 +129,12 @@ public class CaptureActivity extends AppCompatActivity
 
         dismissDialog();
 
-      //  mForceCapture.setVisibility(View.GONE);
-
-//        int manualCaptureTimeVal = SettingsHelperClass.getManualCaptureTime(this);
-//        if (manualCaptureTimeVal == -1) manualCaptureTimeVal = Constants.DEFAULT_MANUAL_CAPTURE_TIME;
-
         int manualCaptureTimeVal = 0;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-        //        mForceCapture.setVisibility(View.VISIBLE);
             }
         }, manualCaptureTimeVal*1000);
     }

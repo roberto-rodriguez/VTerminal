@@ -58,4 +58,10 @@ public class AuthService {
             callback.onFailure(null, e);
         }
     }
+
+    public static void notifyIssue(String serialNumber, String clerkId, String functionality,  String errorMessage){
+        try {
+            connector.notifyIssue(serialNumber, clerkId, functionality, errorMessage);
+        } catch (Exception e) {}
+    }
 }
