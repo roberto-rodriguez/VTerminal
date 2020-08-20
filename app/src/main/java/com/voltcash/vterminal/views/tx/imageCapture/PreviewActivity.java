@@ -172,13 +172,12 @@ public class PreviewActivity extends AppCompatActivity implements ImageProcessor
 
         switch (field){
             case Field.TX.CHECK_BACK:
-                //  imageProcessingConfiguration.outputDPI = 130;
                 imageProcessingConfiguration.rotateType = RotateType.ROTATE_270;
-                //   imageProcessingConfiguration.documentDimensions = new DocumentDimensions(200F, 500F);
-          //      break;
 
-            case Field.TX.ID_FRONT:
             case Field.TX.CHECK_FRONT:
+                imageProcessingConfiguration.outputColorDepth = ColorDepth.BITONAL;
+                break;
+            case Field.TX.ID_FRONT:
                 imageProcessingConfiguration.outputColorDepth = ColorDepth.COLOR;
                 break;
         }
