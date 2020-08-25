@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class ReceiptBuilder {
     private static PrnStrFormat HEADER_FORMAT = new PrnStrFormat();
-    private static PrnStrFormat LINE_FORMAT = new PrnStrFormat();
-    private static PrnStrFormat CENTERED_LINE_FORMAT = new PrnStrFormat();
+    public static PrnStrFormat LINE_FORMAT = new PrnStrFormat();
+    public static PrnStrFormat CENTERED_LINE_FORMAT = new PrnStrFormat();
 
     static{
         HEADER_FORMAT.setTextSize(25);
@@ -87,8 +87,6 @@ public class ReceiptBuilder {
         write(sb, PRINTER, newContent);
         write(sb, PRINTER, "<br/><br/><br/><br/> </div>");
 
-        print(PRINTER, " ", LINE_FORMAT);
-        print(PRINTER, " ", LINE_FORMAT);
         print(PRINTER, " ", LINE_FORMAT);
         print(PRINTER, " ", LINE_FORMAT);
 

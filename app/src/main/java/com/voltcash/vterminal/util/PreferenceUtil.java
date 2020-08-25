@@ -93,7 +93,10 @@ public class PreferenceUtil {
      try {
         for (String field : fields) {
             String value = data.get(field) + "";
-            PREFERENCES.put(field, value);
+
+            if(value != null && !value.isEmpty()){
+                PREFERENCES.put(field, value);
+            }
         }
 
 

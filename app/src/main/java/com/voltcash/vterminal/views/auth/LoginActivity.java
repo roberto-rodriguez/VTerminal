@@ -66,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                             Field.AUTH.CLERK_FIRST_NAME,
                             Field.AUTH.CLERK_LAST_NAME,
                             Field.AUTH.CLERK_ID,
-                            Field.AUTH.SESSION_TOKEN
+                            Field.AUTH.SESSION_TOKEN,
+                            Field.AUTH.MERCHANT_NAME
                     );
 
                     Intent homeView = new Intent(getApplicationContext(), HomeActivity.class);

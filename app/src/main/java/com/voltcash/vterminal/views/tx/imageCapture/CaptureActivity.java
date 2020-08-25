@@ -173,34 +173,39 @@ public class CaptureActivity extends AppCompatActivity
     public void onImageCaptured(final ImageCapturedEvent imageCapturedEvent) {
         final CaptureActivity _this = this;
 
-        dismissDialog();
+        try{
+            dismissDialog();
 
-        progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Capturing Image", "Please wait...", new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                _this.onBackPressed();
-            }
-        });
+            progressDialog = (ProgressDialog) DialogUtils.showProgress(_this, "Capturing Image", "Please wait...", new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    _this.onBackPressed();
+                }
+            });
 
-        Log.i("onImageCaptured",   " ----------");
-        if (imageCapturedEvent != null) {
-            if (imageCapturedEvent.getImage() != null) {
-                Image image = imageCapturedEvent.getImage();
+            Log.i("onImageCaptured",   " ----------");
+            if (imageCapturedEvent != null) {
+                if (imageCapturedEvent.getImage() != null) {
+                    Image image = imageCapturedEvent.getImage();
 
-                Intent intent = new Intent(getApplicationContext(), PreviewActivity.class);
-                intent.putExtra( Field.TX.TX_FIELD , field);
-                Constants.RAW_IMAGE = image;
-                startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
+                    Intent intent = new Intent(getApplicationContext(), PreviewActivity.class);
+                    intent.putExtra( Field.TX.TX_FIELD , field);
+                    Constants.RAW_IMAGE = image;
+                    startActivityForResult(intent, Constants.PROCESSED_IMAGE_REQUEST_ID);
 
-            } else {
-                dismissDialog();
-                Log.i("onImageCaptured",   "imageCapturedEvent = null");
-                onBackPressed();
-            }
+                } else {
+                    dismissDialog();
+                    Log.i("onImageCaptured",   "imageCapturedEvent = null");
+                  //  onBackPressed();
+                }
         }else{
             dismissDialog();
             Log.i("onImageCaptured",   "imageCapturedEvent = null");
         }
+
+    }catch(Exception e){
+        GlobalExceptionHandler.catchException(this, "CaptureActivity.onImageCaptured()", e);
+    }
     }
 
     @Override

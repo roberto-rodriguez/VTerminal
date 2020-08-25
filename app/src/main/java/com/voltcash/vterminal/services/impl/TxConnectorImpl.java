@@ -14,6 +14,7 @@ import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.views.MainActivity;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +56,8 @@ public class TxConnectorImpl implements TxConnector {
     public void tx(final ServiceCallback callback) throws Exception{
                 final List<File> filesToDelete = new ArrayList<>();
 
-                MultipartBody.Part checkFront= buildMultipartBody(Field.TX.CHECK_FRONT, filesToDelete);
-                MultipartBody.Part checkBack = buildMultipartBody(Field.TX.CHECK_BACK, filesToDelete);
+                MultipartBody.Part checkFront= buildMultipartBody(Field.TX.CHECK_FRONT);
+                MultipartBody.Part checkBack = buildMultipartBody(Field.TX.CHECK_BACK);
                 RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
                 RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
                 RequestBody operation        = buildStringBodyFromTxData(Field.TX.OPERATION);
@@ -68,8 +69,8 @@ public class TxConnectorImpl implements TxConnector {
                 RequestBody ssn              = null;
 
                 if(!TxData.getBoolean(Field.TX.CARD_EXIST)){
-                    idFront   = buildMultipartBody(Field.TX.ID_FRONT, filesToDelete);
-                    idBack    = buildMultipartBody(Field.TX.ID_BACK, filesToDelete);
+                    idFront   = buildMultipartBody(Field.TX.ID_FRONT);
+                    idBack    = buildMultipartBody(Field.TX.ID_BACK);
                     dlDataScan= buildStringBodyFromTxData(Field.TX.DL_DATA_SCAN);
                     phone     = buildStringBodyFromTxData(Field.TX.PHONE);
                     ssn       = buildStringBodyFromTxData(Field.TX.SSN);
@@ -92,19 +93,36 @@ public class TxConnectorImpl implements TxConnector {
                 call.enqueue(new Callback<Map>() {
                     @Override
                     public void onResponse(Call<Map> call, Response<Map> res) {
-
-                        for (File file : filesToDelete) {
-                            file.delete();
-                        }
-
+                        deleteFiles();
                         callback.onResponse(call, res);
                     }
 
                     @Override
                     public void onFailure(Call<Map> call, Throwable t) {
+                        deleteFiles();
                         callback.onFailure(call, t);
                     }
                 });
+        }
+
+        private void deleteFiles(){
+            String path = android.os.Environment
+                    .getExternalStorageDirectory()
+                    + File.separator;
+
+            File parentFolder = new File(path);
+
+
+            File[] tiffFiles = parentFolder.listFiles(new FileFilter(){
+                @Override
+                public boolean accept(File file) {
+                    return file.getName().endsWith("tiff") || file.getName().endsWith("jpg");
+                }
+            });
+
+            for (File tiffFile: tiffFiles){
+                tiffFile.delete();
+            }
         }
 
     public void balanceInquiry(final ServiceCallback callback) throws Exception{

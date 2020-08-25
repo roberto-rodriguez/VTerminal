@@ -2,9 +2,12 @@ package com.voltcash.vterminal.views.tx.receipt;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,6 +20,9 @@ import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.zcs.sdk.Printer;
 import com.zcs.sdk.SdkResult;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,12 +35,18 @@ import static com.voltcash.vterminal.VTerminal.DRIVER_MANAGER;
 public class ReceiptView extends AppCompatActivity implements View.OnClickListener  {
     private Printer PRINTER;
     private List<String> receiptLines;
+    private Boolean addBarcode;
 
     public static void show(Activity originActivity, List<String> receiptLines){
+        show(originActivity, receiptLines, true);
+    }
+
+    public static void show(Activity originActivity, List<String> receiptLines, boolean addBarcode){
         TxData.clear();
         Intent intent = new Intent(originActivity, ReceiptView.class);
 
         intent.putExtra("receiptLines", (Serializable) receiptLines);
+        intent.putExtra("addBarcode", addBarcode);
         originActivity.startActivity(intent);
     }
 
@@ -48,6 +60,7 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             PRINTER = DRIVER_MANAGER.getPrinter();
 
             receiptLines = (List<String>)getIntent().getSerializableExtra("receiptLines");
+            addBarcode = getIntent().getBooleanExtra("addBarcode", true);
 
             String receipt =  ReceiptBuilder.build(receiptLines, null);
 
@@ -103,6 +116,27 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     public void print() {
         ReceiptBuilder.build(receiptLines, PRINTER);
 
+        if(addBarcode){
+            Bitmap barcode = loadBarcode();
+
+            if(barcode != null){
+                PRINTER.setPrintAppendString("DOWNLOAD", ReceiptBuilder.CENTERED_LINE_FORMAT);
+                PRINTER.setPrintAppendString("The Voltcash App", ReceiptBuilder.CENTERED_LINE_FORMAT);
+                PRINTER.setPrintAppendString("", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendBitmap(barcode, Layout.Alignment.ALIGN_CENTER);
+                PRINTER.setPrintAppendString("", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString("SCAN ME", ReceiptBuilder.CENTERED_LINE_FORMAT);
+                PRINTER.setPrintAppendString("", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString(" 1. Download the app", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString(" 2. Sign in or create an account", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString(" 1. Receive a credit of $5 to your card", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString("", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString("", ReceiptBuilder.LINE_FORMAT);
+                PRINTER.setPrintAppendString(".", ReceiptBuilder.LINE_FORMAT);
+            }
+        }
+
+
         final Activity _this = this;
         new Thread(new Runnable() {
             @Override
@@ -121,4 +155,14 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
         }).start();
     }
 
+    private Bitmap loadBarcode(){
+        try {
+            InputStream bitmap=getAssets().open("barcode.gif");
+            return BitmapFactory.decodeStream(bitmap);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return null;
+        }
+    }
  }

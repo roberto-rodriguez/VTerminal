@@ -106,7 +106,7 @@ public class ActivityReportActivity extends AppCompatActivity implements Activit
                     receiptLines.add("Net Cash Flow -> " + getFormattedAmount(response, "NET_CASH"));
                 }
 
-                ReceiptView.show(_this, receiptLines);
+                ReceiptView.show(_this, receiptLines, false);
             }
         });
     }
