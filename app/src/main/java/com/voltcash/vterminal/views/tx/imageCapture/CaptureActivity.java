@@ -1,6 +1,5 @@
 package com.voltcash.vterminal.views.tx.imageCapture;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import com.kofax.kmc.kui.uicontrols.captureanimations.DocumentCaptureExperienceC
 import com.kofax.kmc.kui.uicontrols.data.Flash;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.*;
-import com.voltcash.vterminal.views.MainActivity;
 
 
 public class CaptureActivity extends AppCompatActivity
@@ -51,6 +49,11 @@ public class CaptureActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.field = (String)getIntent().getExtras().get( Field.TX.TX_FIELD);
+
+        if(!Field.TX.ID_FRONT.equals(this.field)){
+            mTorchFlag = false; //Enable light for all images except ID
+        }
+
         setUp();
     }
 
@@ -118,9 +121,13 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     private void onTorchClick(){
+        applyTorchFlag();
+        mTorchFlag = !mTorchFlag;
+    }
+
+    private void applyTorchFlag(){
         mFabTorch.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), (mTorchFlag) ? R.drawable.torchoff : R.drawable.torchon));
         mImageCaptureView.setFlash((mTorchFlag) ? Flash.OFF : Flash.TORCH);
-        mTorchFlag = !mTorchFlag;
     }
 
     @Override
@@ -162,7 +169,8 @@ public class CaptureActivity extends AppCompatActivity
 
         dismissDialog();
 
-        onTorchClick();
+      //  onTorchClick();
+        applyTorchFlag();
     }
 
     private void dismissDialog(){
