@@ -53,4 +53,9 @@ public interface AuthServiceAPI {
             @Part("errorMessage")  RequestBody errorMessage
     );
 
+    @Multipart
+    @POST("FrontTerminal/v1/client/subscribeSMS")
+    Call<Map> subscribeSMS(
+            @Part("clientID") RequestBody clientID
+    );
 }

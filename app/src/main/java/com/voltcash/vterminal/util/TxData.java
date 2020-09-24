@@ -74,6 +74,26 @@ public class TxData{
         return d;
     }
 
+    public static Integer getInteger(String fieldName){
+        Object obj = data.get(fieldName);
+
+        Integer d = null;
+        try{
+            if(obj != null && obj instanceof Integer){
+                d = (Integer)obj;
+            }else{
+                if(obj != null && obj instanceof Double){
+                    Double doub = (Double)obj;
+                    d = doub.intValue();
+                }else{
+                        d = Integer.parseInt(obj + "");
+                        data.put(fieldName, d);
+                }
+            }
+        }catch(Exception e){}
+        return d;
+    }
+
     public static Boolean getBoolean(String fieldName){
         Object obj = data.get(fieldName);
 

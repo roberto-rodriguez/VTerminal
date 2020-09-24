@@ -7,6 +7,14 @@ import com.voltcash.vterminal.services.stub.AuthConnectorStub;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Settings;
 
+import java.util.Map;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+
 /**
  * Created by roberto.rodriguez on 2/25/2020.
  */
@@ -62,6 +70,12 @@ public class AuthService {
     public static void notifyIssue(String serialNumber, String clerkId, String functionality,  String errorMessage){
         try {
             connector.notifyIssue(serialNumber, clerkId, functionality, errorMessage);
+        } catch (Exception e) {}
+    }
+
+    public static void subscribeSMS(ServiceCallback callback){
+        try {
+            connector.subscribeSMS(callback);
         } catch (Exception e) {}
     }
 }

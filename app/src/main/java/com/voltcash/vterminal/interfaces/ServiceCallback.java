@@ -8,6 +8,8 @@ import android.util.Log;
 import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.TxData;
+
 import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +68,9 @@ public abstract class ServiceCallback implements Callback<Map> {
             }
 
             Log.i("RESPONSE", response.toString());
+
+            TxData.put(Field.TX.CLIENT_ID, response.get(Field.TX.CLIENT_ID));
+            TxData.put(Field.TX.EXCLUDE_SMS, response.get(Field.TX.EXCLUDE_SMS));
 
             if(response.containsKey(Field.ERROR_MESSAGE)){
               onError(response);

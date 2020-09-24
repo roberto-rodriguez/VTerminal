@@ -17,4 +17,6 @@ public interface AuthConnector {
     public void changePassword(String currentPassword, String newPassword, ServiceCallback callback) throws Exception;
 
     public void notifyIssue(String serialNumber, String clerkId, String functionality,  String errorMessage) throws Exception;
+
+    public void subscribeSMS(ServiceCallback callback) throws Exception;
 }

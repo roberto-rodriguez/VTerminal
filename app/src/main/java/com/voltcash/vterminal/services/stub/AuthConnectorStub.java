@@ -4,6 +4,7 @@ import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.TxData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,4 +65,6 @@ public class AuthConnectorStub implements AuthConnector {
     }
 
     public void notifyIssue(String serialNumberStr, String clerkIdStr, String functionalityStr,  String errorMessageStr)throws Exception {}
+
+    public void subscribeSMS(ServiceCallback callback)throws Exception {}
 }

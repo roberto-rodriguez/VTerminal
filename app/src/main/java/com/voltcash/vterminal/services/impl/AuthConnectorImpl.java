@@ -7,8 +7,10 @@ import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.AuthServiceAPI;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.util.ClientBuilder;
+import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.views.MainActivity;
 
 import java.util.Map;
@@ -119,6 +121,18 @@ public class AuthConnectorImpl implements AuthConnector {
 
                 }
             });
+
+        } catch (Exception e) {
+        }
+    }
+
+    public void subscribeSMS(ServiceCallback callback)throws Exception {
+        RequestBody clientID       =  buildStringBody(TxData.getString(Field.TX.CLIENT_ID));
+
+        try {
+            Call<Map> call = getAPI().subscribeSMS(clientID);
+
+            call.enqueue(callback);
 
         } catch (Exception e) {
         }

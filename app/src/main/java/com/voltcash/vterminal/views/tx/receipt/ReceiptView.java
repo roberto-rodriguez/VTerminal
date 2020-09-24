@@ -12,7 +12,15 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.interfaces.ServiceCallback;
+import com.voltcash.vterminal.services.AuthService;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
@@ -25,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static com.voltcash.vterminal.VTerminal.DRIVER_MANAGER;
 
@@ -42,7 +51,6 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     }
 
     public static void show(Activity originActivity, List<String> receiptLines, boolean addBarcode){
-        TxData.clear();
         Intent intent = new Intent(originActivity, ReceiptView.class);
 
         intent.putExtra("receiptLines", (Serializable) receiptLines);
@@ -94,6 +102,16 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             v.setHorizontalScrollBarEnabled(false);
             v.setVerticalScrollBarEnabled(false);
 
+            //opt_in_label
+            TextView optInLabel = (TextView)findViewById(R.id.opt_in_label);
+
+            Integer clientID = (Integer)TxData.getInteger(Field.TX.CLIENT_ID);
+            Boolean excludeSMS = (Boolean)TxData.getBoolean(Field.TX.EXCLUDE_SMS);
+
+             if(clientID != null && excludeSMS == true){
+                 toggleOptInView(true);
+             }
+
         }catch(Exception e){
             ViewUtil.showError(this, "Creating ReceiptView", e.getMessage());
         }
@@ -101,6 +119,7 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.payment_receipt_back:
                 finish();
@@ -109,8 +128,34 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
                  break;
             case R.id.payment_receipt_print:
                  print();
-                break;
+                 break;
         }
+    }
+
+    public void onSubscribeYes(View view){
+        AuthService.subscribeSMS(new ServiceCallback(this) {
+            @Override
+            public void onSuccess(Map map) {
+                Toast.makeText(getApplicationContext(), "User was subscribed to SMS Notifications", Toast.LENGTH_LONG);
+                toggleOptInView(false);
+            }
+
+            @Override
+            public void onError(Map map) {
+                Toast.makeText(getApplicationContext(), "Error subscribing user", Toast.LENGTH_LONG);
+                toggleOptInView(false);
+            }
+        });
+    }
+
+    public void onSubscribeNo(View view){
+        toggleOptInView(false);
+    }
+
+
+    private void toggleOptInView(boolean show){
+        LinearLayout optInView = (LinearLayout)findViewById(R.id.opt_in);
+        optInView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void print() {
