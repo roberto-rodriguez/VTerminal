@@ -7,8 +7,8 @@ android {
         applicationId "com.voltcash.vterminal"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 18
-        versionName "20.09.14"
+        versionCode 20
+        versionName "20.10.03"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 		
 
