@@ -11,6 +11,6 @@ public class Settings {
 
     public static int CHECK_RESOLUTION = 200;// 175;
 
-    public static final String VERSION = "20.10.03";
+    public static final String VERSION = "20.10.28";
 }
 

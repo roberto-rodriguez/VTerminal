@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
         Intent mainActivity = new Intent(activity.getApplicationContext(), MainActivity.class);
         mainActivity.putExtra("isError", true);
         mainActivity.putExtra("functionality", functionality);
-        mainActivity.putExtra("errorMessage", e.getMessage());
+        mainActivity.putExtra("errorMessage", e.getMessage() + ". ( AppVersion = " + Settings.VERSION + " )");
         activity.startActivity(mainActivity);
     }
 }
