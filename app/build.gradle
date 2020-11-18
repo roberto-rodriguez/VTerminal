@@ -22,6 +22,10 @@ android {
         maven {
             url "https://jitpack.io"
         }
+
+        maven {
+            url 'https://www.myget.org/F/idscan-public/maven/'
+        }
     }
 	
 	sourceSets {
@@ -29,7 +33,7 @@ android {
             jniLibs.srcDirs = ['../MobileSDK_libs']
         }
     }
-	
+
 	 packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
@@ -56,6 +60,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0-rc01'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+    implementation 'net.idscan.components.android:scanpdf417:3.0.0'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

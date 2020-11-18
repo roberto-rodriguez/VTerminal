@@ -38,8 +38,7 @@ import java.util.Date;
 
 import static android.provider.MediaStore.Images.Media;
 
-public class ProcessImageActivity extends AppCompatActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class ProcessImageActivity extends AppCompatActivity {
 
     final int REQUEST_EXTERNAL_STORAGE_FOR_GALLERY  = 1;
     final int REQUEST_EXTERNAL_STORAGE_FOR_EXTERNAL = 2;

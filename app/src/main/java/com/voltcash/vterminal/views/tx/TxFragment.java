@@ -7,9 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.kofax.kmc.ken.engines.data.Image;
-import com.kofax.kmc.kui.uicontrols.BarCodeFoundEvent;
 import com.kofax.kmc.kui.uicontrols.ImgReviewEditCntrl;
 import com.kofax.kmc.kut.utilities.Licensing;
 import com.kofax.samples.common.License;
@@ -34,26 +34,26 @@ import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.GlobalExceptionHandler;
 import com.voltcash.vterminal.util.PreferenceUtil;
 import com.voltcash.vterminal.util.ReceiptBuilder;
+import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
-import com.voltcash.vterminal.views.auth.AuthTerminalActivity;
 import com.voltcash.vterminal.views.home.HomeActivity;
+import com.voltcash.vterminal.views.tx.imageCapture.CaptureIDScanActivity;
 import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureActivity;
-import com.voltcash.vterminal.views.tx.imageCapture.CaptureBarcodeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.PreviewActivity;
+import net.idscan.components.android.scanpdf417.PDF417ScanActivity;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 
 public class TxFragment extends FragmentWithCardReader implements
-        ActivityCompat.OnRequestPermissionsResultCallback,
         CompoundButton.OnCheckedChangeListener{
 
     private PermissionsManager mPermissionsManager;
@@ -143,14 +143,14 @@ public class TxFragment extends FragmentWithCardReader implements
         addImageCaptureListener(R.id.tx_check_front_wrapper, Field.TX.CHECK_FRONT, checkFrontImgReviewEditCntrl, CaptureActivity.class);
         addImageCaptureListener(R.id.tx_check_back_wrapper , Field.TX.CHECK_BACK , checkBackImgReviewEditCntrl , CaptureActivity.class);
         addImageCaptureListener(R.id.tx_id_front_wrapper   , Field.TX.ID_FRONT   , idFrontImgReviewEditCntrl   , CaptureActivity.class);
-        addImageCaptureListener(R.id.tx_id_back_wrapper    , Field.TX.ID_BACK    , idBackImgReviewEditCntrl    , CaptureBarcodeActivity.class);
+        addImageCaptureListener(R.id.tx_id_back_wrapper    , Field.TX.ID_BACK    , idBackImgReviewEditCntrl    , CaptureIDScanActivity.class);
     }
 
     private void addImageCaptureListener(int cmpId, final String fieldName, final ImgReviewEditCntrl imgReviewEditCntrl, final Class clz){
         ((LinearLayout)findViewById(cmpId)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCaptureClick(fieldName, imgReviewEditCntrl, clz);
+               onCaptureClick(fieldName, imgReviewEditCntrl, clz);
             }
         });
     }
@@ -399,6 +399,11 @@ public class TxFragment extends FragmentWithCardReader implements
         }
 
         intent.putExtra(Field.TX.TX_FIELD, activeImgField);
+
+        if(Field.TX.ID_BACK.equals(activeImgField)){
+            intent.putExtra(PDF417ScanActivity.EXTRA_LICENSE_KEY, Settings.ID_SCAN_CAMERA_SCANNING_KEY);
+        }
+
         startActivityForResult(intent, Constants.TAKE_IMAGE_REQUEST_ID);
     }
 
@@ -412,21 +417,21 @@ public class TxFragment extends FragmentWithCardReader implements
             switch (resultCode) {
                 case Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID:
                     Image image = null;
-                    BarCodeFoundEvent barCodeFoundEvent = null;
-
+                    
                     if (activeImgField == Field.TX.ID_BACK) {
-                        barCodeFoundEvent = TxData.BARCODE_EVENT;
-                        image = barCodeFoundEvent.getImage();
+                        InputStream is=getActivity().getAssets().open("idbarcode.png");
+                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+                        image = new Image(bitmap);
                     } else {
                         image = TxData.getImage(activeImgField);
                     }
 
                     activeImgCmp.setImage(image);
 
-                    if (activeImgField == Field.TX.ID_BACK) {
-                        TxData.put(Field.TX.ID_BACK, barCodeFoundEvent.getImage());
-                        TxData.put(Field.TX.DL_DATA_SCAN, barCodeFoundEvent.getBarCode().getValue());
-                    }
+//                    if (activeImgField == Field.TX.ID_BACK) {
+//                        TxData.put(Field.TX.ID_BACK, barCodeFoundEvent.getImage());
+//                        TxData.put(Field.TX.DL_DATA_SCAN, barCodeFoundEvent.getBarCode().getValue());
+//                    }
                     break;
 
                 case Constants.PROCESSED_IMAGE_RETAKE_RESPONSE_ID:
@@ -437,6 +442,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
                 case Constants.UNEXPECTED_EXCEPTION_APP_CRASHING:
                     ViewUtil.showError(this.getActivity(), "TxFragment", "UNEXPECTED _EXCEPTION _APP _CRASHING");
+                    break;
             }
 
         } catch (Exception e) {

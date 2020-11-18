@@ -2,7 +2,6 @@ package com.voltcash.vterminal.views.report;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
@@ -25,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ActivityReportActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
+public class ActivityReportActivity extends AppCompatActivity implements View.OnClickListener {
     private DatePickerDialog picker;
     private EditText startDateField = null;
     private EditText endDateField = null;

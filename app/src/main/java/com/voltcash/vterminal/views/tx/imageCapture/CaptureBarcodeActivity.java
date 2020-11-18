@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CaptureBarcodeActivity extends AppCompatActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback, CameraInitializationListener, BarCodeFoundListener, /*ImageCapturedListener,*/ CameraInitializationFailedListener {
+        implements CameraInitializationListener, BarCodeFoundListener, /*ImageCapturedListener,*/ CameraInitializationFailedListener {
 
     private boolean mTorchFlag = true;
     private FloatingActionButton mFabTorch;

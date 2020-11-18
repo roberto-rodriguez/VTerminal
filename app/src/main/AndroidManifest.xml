@@ -71,6 +71,13 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".views.tx.imageCapture.CaptureIDScanActivity"
+            android:label="@string/title_activity_capture"
+            android:parentActivityName=".views.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".views.auth.LoginActivity"  android:screenOrientation="portrait"/>
 
         <activity
