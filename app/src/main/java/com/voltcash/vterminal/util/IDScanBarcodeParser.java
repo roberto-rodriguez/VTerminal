@@ -2,11 +2,8 @@ package com.voltcash.vterminal.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.TextView;
-
 import net.idscan.android.dlparser.DLParser;
 import net.idscan.components.android.scanpdf417.PDF417ScanActivity;
-import net.idscan.components.pdf417.PDF417Data;
 
 public class IDScanBarcodeParser {
     private static DLParser parser;
@@ -44,11 +41,21 @@ public class IDScanBarcodeParser {
         parser.setup(ctx, Settings.ID_SCAN_ID_PARSING_KEY);
 
         DLParser.DLResult res = parser.parse(bytes);
-        String firstName = res.firstName;
-        String middleName = res.middleName;
-        String lastName = res.lastName;
-        String address1 = res.address1;
-        String birthdate = res.birthdate;
-        String expirationDate = res.expirationDate;
+
+        StringBuilder sb = new StringBuilder("<DriverLicense>");
+        sb.append("<ID>"                 + res.licenseNumber  + "</ID>");
+        sb.append("<ADDRESS>"            + res.address1       + "</ADDRESS>");
+        sb.append("<GENDER>"             + res.gender         + "</GENDER>");
+        sb.append("<CITY>"               + res.city           + "</CITY>");
+        sb.append("<LAST_NAME>"          + res.lastName       + "</LAST_NAME>");
+        sb.append("<ZIPCODE>"            + res.postalCode     + "</ZIPCODE>");
+        sb.append("<FIRST_NAME>"         + res.firstName      + "</FIRST_NAME>");
+        sb.append("<MIDDLE_NAME>"        + res.middleName     + "</MIDDLE_NAME>");
+        sb.append("<IDSTATE>"            + res.issuedBy       + "</IDSTATE>");
+        sb.append("<STATE_ABBREVIATION>" + res.issuedBy       + "</STATE_ABBREVIATION>");
+        sb.append("<BORNDATE>"           + res.birthdate      + "</BORNDATE>");
+        sb.append("<EXPIRATION_DATE>"    + res.expirationDate + "</EXPIRATION_DATE>");
+        sb.append("</DriverLicense>");
+        TxData.put(Field.TX.DL_DATA_SCAN, sb.toString());
     }
 }

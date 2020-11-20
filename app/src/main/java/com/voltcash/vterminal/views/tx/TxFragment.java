@@ -417,7 +417,7 @@ public class TxFragment extends FragmentWithCardReader implements
             switch (resultCode) {
                 case Constants.PROCESSED_IMAGE_ACCEPT_RESPONSE_ID:
                     Image image = null;
-                    
+
                     if (activeImgField == Field.TX.ID_BACK) {
                         InputStream is=getActivity().getAssets().open("idbarcode.png");
                         Bitmap bitmap = BitmapFactory.decodeStream(is);
