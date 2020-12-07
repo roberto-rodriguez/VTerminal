@@ -103,13 +103,10 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             v.setHorizontalScrollBarEnabled(false);
             v.setVerticalScrollBarEnabled(false);
 
-            //opt_in_label
-            TextView optInLabel = (TextView)findViewById(R.id.opt_in_label);
-
-            Integer clientID = (Integer)TxData.getInteger(Field.TX.CLIENT_ID);
+            Integer cardID = (Integer)TxData.getInteger(Field.TX.CARD_ID);
             Boolean excludeSMS = (Boolean)TxData.getBoolean(Field.TX.EXCLUDE_SMS);
 
-             if(clientID != null && excludeSMS == true){
+             if(cardID != null && excludeSMS == true){
                  toggleOptInView(true);
              }
 
@@ -134,7 +131,7 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
     }
 
     public void onSubscribeYes(View view){
-        AuthService.subscribeSMS(new ServiceCallback(this) {
+        AuthService.subscribeAlerts(new ServiceCallback(this) {
             @Override
             public void onSuccess(Map map) {
                 Toast.makeText(getApplicationContext(), "User was subscribed to SMS Notifications", Toast.LENGTH_LONG);

@@ -73,9 +73,9 @@ public class AuthService {
         } catch (Exception e) {}
     }
 
-    public static void subscribeSMS(ServiceCallback callback){
+    public static void subscribeAlerts(ServiceCallback callback){
         try {
-            connector.subscribeSMS(callback);
+            connector.subscribeAlerts(callback);
         } catch (Exception e) {}
     }
 }

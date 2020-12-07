@@ -4,14 +4,13 @@ public class Settings {
 
     public static final int ENV = Constants.ENV_PROD;
 
+    public static final String SERVER_URL = "http://test.girocheck.net:8085/";
 
-    //public static final String SERVER_URL = "http://test.girocheck.net:8085/";
-
-     public static final String SERVER_URL = "https://www.girocheck.net:8222/";
+    ///   public static final String SERVER_URL = "https://www.girocheck.net:8222/";
 
     public static int CHECK_RESOLUTION = 200;// 175;
 
-    public static final String VERSION = "20.11.19";
+    public static final String VERSION = "20.12.06";
 
    // https://docs.idscan.net/camerascan/pdf417.html
     public static final String  ID_SCAN_CAMERA_SCANNING_KEY = "xM59SHSZDZI/xAJqWwNBpSINRUVq9dzTLkkd9/XrbB2mVyfLmq8j/BHdCa8wsVtLN+tlM+DGgP1bHpdgv7tB+dSbyvoB92AIsFqlthGmsAlt3ObFQFy/IlUfefy85mEMJ9w7BEfLZJsQzkRDGdjrphvzWpWBbQFoQcUoxM3XExI=";

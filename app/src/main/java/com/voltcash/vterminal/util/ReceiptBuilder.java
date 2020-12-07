@@ -244,11 +244,11 @@ public class ReceiptBuilder {
         }
 
         if(payout != null){
-            receiptLines.add("Payout Amount -> " +  StringUtil.formatCurrency(payout));
+            receiptLines.add("Payout Amount ->    " +  StringUtil.formatCurrency(payout));
         }
 
         if(includeDisclaimer){
-            receiptLines.add("Account to Transfer -> " + response.get(Field.TX.ACCOUNT_NUMBER));
+            receiptLines.add("Account to Transfer ->     " + response.get(Field.TX.ACCOUNT_NUMBER));
         }
 
         receiptLines.add("Transaction # -> " + requestId);

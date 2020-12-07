@@ -126,11 +126,11 @@ public class AuthConnectorImpl implements AuthConnector {
         }
     }
 
-    public void subscribeSMS(ServiceCallback callback)throws Exception {
-        RequestBody clientID       =  buildStringBody(TxData.getString(Field.TX.CLIENT_ID));
+    public void subscribeAlerts(ServiceCallback callback)throws Exception {
+        RequestBody cardId       =  buildStringBody(TxData.getString(Field.TX.CARD_ID));
 
         try {
-            Call<Map> call = getAPI().subscribeSMS(clientID);
+            Call<Map> call = getAPI().subscribeAlerts(cardId);
 
             call.enqueue(callback);
 

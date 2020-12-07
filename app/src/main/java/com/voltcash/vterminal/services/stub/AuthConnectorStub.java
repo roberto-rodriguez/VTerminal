@@ -66,5 +66,5 @@ public class AuthConnectorStub implements AuthConnector {
 
     public void notifyIssue(String serialNumberStr, String clerkIdStr, String functionalityStr,  String errorMessageStr)throws Exception {}
 
-    public void subscribeSMS(ServiceCallback callback)throws Exception {}
+    public void subscribeAlerts(ServiceCallback callback)throws Exception {}
 }

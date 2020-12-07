@@ -50,7 +50,7 @@ public final class Field {
         public static final String ROUTING_BANK_NUMBER = "ROUTING_BANK_NUMBER";
         public static final String ACCOUNT_NUMBER  = "ACCOUNT_NUMBER";
 
-        public static final String CLIENT_ID        = "CLIENT_ID";
+        public static final String CARD_ID        = "CARD_ID";
         public static final String EXCLUDE_SMS      = "EXCLUDE_SMS";
     }
 }

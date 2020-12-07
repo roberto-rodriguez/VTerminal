@@ -54,8 +54,8 @@ public interface AuthServiceAPI {
     );
 
     @Multipart
-    @POST("FrontTerminal/v1/client/subscribeSMS")
-    Call<Map> subscribeSMS(
-            @Part("clientID") RequestBody clientID
+    @POST("FrontTerminal/v1/client/subscribeAlerts")
+    Call<Map> subscribeAlerts(
+            @Part("cardId") RequestBody cardId
     );
 }

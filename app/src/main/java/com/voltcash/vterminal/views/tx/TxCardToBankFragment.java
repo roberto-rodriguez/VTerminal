@@ -40,14 +40,11 @@ public class TxCardToBankFragment extends FragmentWithCardReader
 
     private GridLayout feesLayout;
 
-
-
     private TextView feeText;
     private TextView payoutText;
     private TextView amountText;
 
     private Double fee;
-    private Double payout;
 
     @Override
     public void onViewCreated(View view,  Bundle savedInstanceState) {
@@ -88,12 +85,11 @@ public class TxCardToBankFragment extends FragmentWithCardReader
                 cardField.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
 
-                  fee = (Double)response.get(Field.TX.C2B_FEE);
-                  payout = amount - fee;
+                fee = (Double)response.get(Field.TX.C2B_FEE);
 
-                amountText.setText("Amount: " + StringUtil.formatCurrency(amount));
+                amountText.setText("Amount: " + StringUtil.formatCurrency(amount + fee));
                 feeText.setText("Fee: " +  StringUtil.formatCurrency(fee));
-                payoutText.setText("Payout: " +  StringUtil.formatCurrency(payout));
+                payoutText.setText("Payout: " +  StringUtil.formatCurrency(amount));
             }
         });
 
@@ -126,7 +122,9 @@ public class TxCardToBankFragment extends FragmentWithCardReader
                     return;
                 }
 
-                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, amount, fee, payout, true);
+
+
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(response, (amount + fee), fee, amount, true);
 
                 Constants.receiptLines = receiptLines;
 
@@ -137,7 +135,7 @@ public class TxCardToBankFragment extends FragmentWithCardReader
             public void onError(Map response) {
                 dismissDialog();
 
-                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(new HashMap(), amount, fee, payout, false);
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(new HashMap(), (amount + fee), fee, amount, false);
                 showError("Unexpected Error", response.get("errorMessage") + "",  receiptLines);
             }
 
@@ -145,7 +143,7 @@ public class TxCardToBankFragment extends FragmentWithCardReader
             public void onFailure(Call<Map> call, Throwable t) {
                 dismissDialog();
 
-                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(new HashMap(), amount, fee, payout, false);
+                List<String> receiptLines = ReceiptBuilder.buildCardToBankReceiptLines(new HashMap(), (amount + fee), fee, amount, false);
                 showError("Unexpected Error", t.getMessage(),  receiptLines);
             }
         });
