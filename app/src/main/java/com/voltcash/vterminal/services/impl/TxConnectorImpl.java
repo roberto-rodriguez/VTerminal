@@ -162,14 +162,16 @@ public class TxConnectorImpl implements TxConnector {
         call.enqueue(callback);
     }
 
-    public void calculateFee(String operation, String amount, final ServiceCallback callback) throws Exception{
+    public void calculateFee(String operation, String amount, String card, final ServiceCallback callback) throws Exception{
         RequestBody operationBody  = buildStringBody(operation);
         RequestBody amountBody     = buildStringBody(amount);
+        RequestBody cardBody       = buildStringBody(card);
 
         Call<Map> call = getAPI().calculateFee(
                 getSessionToken(callback.getCtx()),
                 operationBody,
-                amountBody
+                amountBody,
+                cardBody
         );
 
         call.enqueue(callback);

@@ -70,14 +70,16 @@ public class TxCardToBankFragment extends FragmentWithCardReader
 
     public void onCalculateFees(View view){
         final Double amount = getAmount();
-
         if(amount == 0D) return;
+
+        final String cardNumber = getCardNumber();
+        if(cardNumber == null) return;
 
         ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.tx_container_layout);
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
 
-        TxService.calculateFee(CARD2BANK_WITH_FEE, amount + "", new ServiceCallback(this.getActivity()) {
+        TxService.calculateFee(CARD2BANK_WITH_FEE, amount + "", cardNumber, new ServiceCallback(this.getActivity()) {
             @Override
             public void onSuccess(Map response) {
                 calculateFeesLayout.setVisibility(View.GONE);

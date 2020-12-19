@@ -75,11 +75,11 @@ public class TxService {
         }
     }
 
-    public static void calculateFee(String operation, String amount, final ServiceCallback callback){
+    public static void calculateFee(String operation, String amount, String card, final ServiceCallback callback){
         try {
             callback.startProgressDialog();
 
-            connector.calculateFee(operation, amount, callback);
+            connector.calculateFee(operation, amount, card, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }

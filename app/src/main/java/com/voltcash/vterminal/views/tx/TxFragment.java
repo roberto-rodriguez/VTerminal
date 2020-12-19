@@ -176,12 +176,9 @@ public class TxFragment extends FragmentWithCardReader implements
         final TxFragment _this = this;
         final String cardNumber = getCardNumber();
 
-        if(cardNumber == null){
-            return;
-        }
+        if(cardNumber == null) return;
 
         final Double amount = getAmount();
-
         if(amount == 0D) return;
 
         TxData.put(Field.TX.CARD_NUMBER, cardNumber);

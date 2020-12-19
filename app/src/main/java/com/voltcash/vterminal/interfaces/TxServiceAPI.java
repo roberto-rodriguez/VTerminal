@@ -71,6 +71,7 @@ public interface TxServiceAPI {
     Call<Map> calculateFee(
             @Part("sessionToken") RequestBody sessionToken,
             @Part("operation") RequestBody cardNumber,
-            @Part("amount")     RequestBody amount
+            @Part("amount")     RequestBody amount,
+            @Part("card")     RequestBody card
     );
 }

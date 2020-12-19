@@ -16,5 +16,5 @@ public interface TxConnector {
 
     public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception;
 
-    public void calculateFee(String operation, String amount, final ServiceCallback callback) throws Exception;
+    public void calculateFee(String operation, String amount, String card, final ServiceCallback callback) throws Exception;
 }

@@ -78,7 +78,7 @@ public class TxConnectorStub implements TxConnector {
         callback.onSuccess( new HashMap());
     }
 
-    public void calculateFee(String operation, String amount, final ServiceCallback callback) throws Exception{
+    public void calculateFee(String operation, String amount, String card, final ServiceCallback callback) throws Exception{
         Map response = new HashMap(); 
         response.put(Field.TX.C2B_FEE,     3.0 + "");
 
