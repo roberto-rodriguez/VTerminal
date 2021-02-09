@@ -14,6 +14,10 @@
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintTop_toBottomOf="@+id/tx_fees_layout"
     app:layout_constraintVertical_bias="0.08"
+
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+
     tools:showIn="@layout/activity_tx">
 
     <LinearLayout
@@ -179,7 +183,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <EditText
+    <com.voltcash.vterminal.cmp.VEditText
         android:id="@+id/tx_id_ssn_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -190,7 +194,7 @@
         android:inputType="phone"
         android:visibility="gone" />
 
-    <EditText
+    <com.voltcash.vterminal.cmp.VEditText
         android:id="@+id/tx_id_phone_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -215,7 +219,7 @@
         android:text="Get Cash Back"
         android:visibility="invisible"/>
 
-    <EditText
+    <com.voltcash.vterminal.cmp.VEditText
         android:id="@+id/cash_back_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

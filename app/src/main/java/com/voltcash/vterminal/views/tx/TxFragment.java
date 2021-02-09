@@ -3,6 +3,7 @@ package com.voltcash.vterminal.views.tx;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,11 +13,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.kofax.kmc.kut.utilities.Licensing;
 import com.kofax.samples.common.License;
 import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
+import com.voltcash.vterminal.cmp.VEditText;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.AudioUtil;
@@ -39,6 +43,7 @@ import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
+import com.voltcash.vterminal.util.listeners.KeyImeChangeListener;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureIDScanActivity;
 import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
@@ -54,7 +59,8 @@ import java.util.Map;
 import retrofit2.Call;
 
 public class TxFragment extends FragmentWithCardReader implements
-        CompoundButton.OnCheckedChangeListener{
+        CompoundButton.OnCheckedChangeListener,
+        KeyImeChangeListener {
 
     private PermissionsManager mPermissionsManager;
 
@@ -69,7 +75,10 @@ public class TxFragment extends FragmentWithCardReader implements
     private String operation;
     String operationName;
 
-    private EditText cashBackField = null;
+    private VEditText ssnField = null;
+    private VEditText phoneField = null;
+    private VEditText cashBackField = null;
+
     private Switch cashBackSwitch = null;
 
     private ConstraintLayout txProgressDialog = null;
@@ -123,7 +132,13 @@ public class TxFragment extends FragmentWithCardReader implements
 
             getActivity().setTitle("Deposit " + operationName);
 
-            cashBackField = (EditText) findViewById(R.id.cash_back_amount);
+            ssnField = ((VEditText) findViewById(R.id.tx_id_ssn_input));
+            phoneField = ((VEditText) findViewById(R.id.tx_id_phone_input));
+            cashBackField = (VEditText) findViewById(R.id.cash_back_amount);
+
+            ssnField.setKeyImeChangeListener(this);
+            phoneField.setKeyImeChangeListener(this);
+            cashBackField.setKeyImeChangeListener(this);
 
             cashBackSwitch = ((Switch) findViewById(R.id.cash_back_checkbox));
             cashBackSwitch.setOnCheckedChangeListener(this);
@@ -136,6 +151,15 @@ public class TxFragment extends FragmentWithCardReader implements
 
         }catch(Exception e){
             GlobalExceptionHandler.catchException(this.getActivity(), "TxFragment.onViewCreated()", e);
+        }
+    }
+
+    //Fix issue hwne click the same field, keyboard covers the field
+    //Focus container when click back,
+    public void onKeyPreIme (int keyCode, KeyEvent event){
+        if ( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP ){
+            GridLayout myLayout = (GridLayout)getActivity().findViewById(R.id.tx_fees_layout);
+            myLayout.requestFocus();
         }
     }
 
@@ -198,7 +222,7 @@ public class TxFragment extends FragmentWithCardReader implements
                     return;
                 }
 
-                 cardExist = (Boolean) response.get(Field.TX.CARD_EXIST);
+               cardExist = (Boolean) response.get(Field.TX.CARD_EXIST);
                 String cardLoadFee = response.get(Field.TX.CARD_LOAD_FEE) + "";
                 String activationFee = response.get(Field.TX.ACTIVATION_FEE) + "";
 
@@ -206,6 +230,8 @@ public class TxFragment extends FragmentWithCardReader implements
                 TxData.put(Field.TX.ACTIVATION_FEE, activationFee);
                 TxData.put(Field.TX.CARD_EXIST, cardExist);
 
+                Double fee = TxData.getDouble(Field.TX.CARD_LOAD_FEE);
+                Double payout = amount - fee;
 
                 calculateFeesLayout.setVisibility(View.GONE);
                 findViewById(R.id.tx_fees_layout).setVisibility(View.VISIBLE);
@@ -225,7 +251,7 @@ public class TxFragment extends FragmentWithCardReader implements
 
                 ((TextView) findViewById(R.id.tx_amount_text)).setText("Amount: $" + StringUtil.formatCurrency(amount));
                 ((TextView) findViewById(R.id.tx_fee_text)).setText("Fee: $" + StringUtil.formatCurrency(cardLoadFee));
-                ((TextView) findViewById(R.id.tx_activation_fee_text)).setText("Activation Fee: $" + StringUtil.formatCurrency(activationFee));
+                ((TextView) findViewById(R.id.tx_activation_fee_text)).setText("Amount Loaded: $" + StringUtil.formatCurrency(payout));
 
                 submitButton.setVisibility(View.VISIBLE);
                 if (Constants.OPERATION.CHECK.equals(operation)) {
@@ -237,8 +263,8 @@ public class TxFragment extends FragmentWithCardReader implements
 
     public void onSubmit(final View view) {
         final TxFragment _this = this;
-        final String ssn = ((EditText) findViewById(R.id.tx_id_ssn_input)).getText().toString();
-        final String phone = ((EditText) findViewById(R.id.tx_id_phone_input)).getText().toString();
+        final String ssn   = ssnField.getText().toString();
+        final String phone = phoneField.getText().toString();
 
         if(!cardExist && (ssn == null || ssn.isEmpty())){
             ViewUtil.showError(getActivity(), "Error", "Social Security Number is required");

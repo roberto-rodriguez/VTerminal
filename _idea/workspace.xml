@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="09caabfb-433c-495b-a398-dc035908dcf7" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="880" height="381" key="GridCell.Tab.0.bottom" timestamp="1603767056664">
+      <screen x="1920" y="0" width="1827" height="1080" />
+    </state>
+    <state width="880" height="381" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1827.1080@1920.0.1827.1080" timestamp="1603767056664" />
+    <state width="880" height="381" key="GridCell.Tab.0.center" timestamp="1603767056664">
+      <screen x="1920" y="0" width="1827" height="1080" />
+    </state>
+    <state width="880" height="381" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1827.1080@1920.0.1827.1080" timestamp="1603767056664" />
+    <state width="880" height="381" key="GridCell.Tab.0.left" timestamp="1603767056664">
+      <screen x="1920" y="0" width="1827" height="1080" />
+    </state>
+    <state width="880" height="381" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1827.1080@1920.0.1827.1080" timestamp="1603767056664" />
+    <state width="880" height="381" key="GridCell.Tab.0.right" timestamp="1603767056664">
+      <screen x="1920" y="0" width="1827" height="1080" />
+    </state>
+    <state width="880" height="381" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1827.1080@1920.0.1827.1080" timestamp="1603767056664" />
+  </component>
+</project>
