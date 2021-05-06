@@ -3,13 +3,12 @@ package com.voltcash.vterminal.cmp;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.widget.EditText;
 
-import com.voltcash.vterminal.util.listeners.KeyImeChangeListener;
+import com.voltcash.vterminal.util.listeners.FocusRemoveListener;
 
 public class VEditText  extends android.support.v7.widget.AppCompatEditText{
 
-    private KeyImeChangeListener keyImeChangeListener;
+    private FocusRemoveListener focusRemoveListener;
 
     public VEditText( Context context )
     {
@@ -28,17 +27,31 @@ public class VEditText  extends android.support.v7.widget.AppCompatEditText{
 
     @Override
     public boolean onKeyPreIme( int key_code, KeyEvent event ) {
-        if ( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP )
+        if ( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP ){
             this.clearFocus();
 
-        if(keyImeChangeListener != null){
-            keyImeChangeListener.onKeyPreIme( key_code, event);
+            if(focusRemoveListener != null){
+                focusRemoveListener.removeTextFieldFocus();
+            }
         }
-
         return super.onKeyPreIme( key_code, event );
     }
 
-    public void setKeyImeChangeListener(KeyImeChangeListener keyImeChangeListener) {
-        this.keyImeChangeListener = keyImeChangeListener;
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        boolean result =  super.onKeyUp(keyCode, event);
+
+        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER){
+            if(focusRemoveListener != null){
+                this.clearFocus();
+                focusRemoveListener.removeTextFieldFocus();
+            }
+        }
+
+        return result;
+    }
+
+    public void setFocusRemoveListener(FocusRemoveListener focusRemoveListener) {
+        this.focusRemoveListener = focusRemoveListener;
     }
 }

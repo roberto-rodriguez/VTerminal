@@ -3,7 +3,6 @@ package com.voltcash.vterminal.views.tx;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,12 +12,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -43,7 +42,7 @@ import com.voltcash.vterminal.util.StringUtil;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
-import com.voltcash.vterminal.util.listeners.KeyImeChangeListener;
+import com.voltcash.vterminal.util.listeners.FocusRemoveListener;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.voltcash.vterminal.views.tx.imageCapture.CaptureIDScanActivity;
 import com.voltcash.vterminal.views.tx.receipt.ReceiptView;
@@ -60,7 +59,7 @@ import retrofit2.Call;
 
 public class TxFragment extends FragmentWithCardReader implements
         CompoundButton.OnCheckedChangeListener,
-        KeyImeChangeListener {
+        FocusRemoveListener {
 
     private PermissionsManager mPermissionsManager;
 
@@ -113,10 +112,10 @@ public class TxFragment extends FragmentWithCardReader implements
         try{
             mPermissionsManager = new PermissionsManager(this.getActivity());
 
-            checkFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
+            checkFrontImgReviewEditCntrl= (ImgReviewEditCntrl) findViewById(R.id.tx_check_front_image);
             checkBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_check_back_image);
-            idFrontImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
-            idBackImgReviewEditCntrl = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
+            idFrontImgReviewEditCntrl   = (ImgReviewEditCntrl) findViewById(R.id.tx_id_front_image);
+            idBackImgReviewEditCntrl    = (ImgReviewEditCntrl) findViewById(R.id.tx_id_back_image);
 
             txProgressDialog = (ConstraintLayout)findViewById(R.id.tx_progress_dialog);
             submitBtn = (Button)findViewById(R.id.tx_submit_button);
@@ -132,13 +131,16 @@ public class TxFragment extends FragmentWithCardReader implements
 
             getActivity().setTitle("Deposit " + operationName);
 
-            ssnField = ((VEditText) findViewById(R.id.tx_id_ssn_input));
-            phoneField = ((VEditText) findViewById(R.id.tx_id_phone_input));
+            ssnField      = (VEditText) findViewById(R.id.tx_id_ssn_input);
+            phoneField    = (VEditText) findViewById(R.id.tx_id_phone_input);
             cashBackField = (VEditText) findViewById(R.id.cash_back_amount);
 
-            ssnField.setKeyImeChangeListener(this);
-            phoneField.setKeyImeChangeListener(this);
-            cashBackField.setKeyImeChangeListener(this);
+            phoneField.setFocusRemoveListener(this);
+            cashBackField.setFocusRemoveListener(this);
+            ssnField.setFocusRemoveListener(this);
+
+            ssnField.setInputType(InputType.TYPE_CLASS_NUMBER); //Password field with number keyboard
+            ssnField.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
             cashBackSwitch = ((Switch) findViewById(R.id.cash_back_checkbox));
             cashBackSwitch.setOnCheckedChangeListener(this);
@@ -156,11 +158,9 @@ public class TxFragment extends FragmentWithCardReader implements
 
     //Fix issue hwne click the same field, keyboard covers the field
     //Focus container when click back,
-    public void onKeyPreIme (int keyCode, KeyEvent event){
-        if ( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP ){
+    public void removeTextFieldFocus (){
             GridLayout myLayout = (GridLayout)getActivity().findViewById(R.id.tx_fees_layout);
             myLayout.requestFocus();
-        }
     }
 
     private void addImageCaptureListeners(){

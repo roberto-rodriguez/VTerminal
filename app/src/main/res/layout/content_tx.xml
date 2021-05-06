@@ -202,7 +202,7 @@
         android:layout_gravity="fill_horizontal"
         android:gravity="center"
         android:hint="Phone"
-        android:inputType="textPersonName|phone"
+        android:inputType="phone"
         android:visibility="gone" />
 
     <Switch
