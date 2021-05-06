@@ -21,21 +21,29 @@ import retrofit2.http.Part;
 
 public class AuthService {
 
-    private static AuthConnector connector;
+    private static AuthConnector connector = new AuthConnectorImpl();
+    private static AuthConnector stubConnector = new AuthConnectorStub();
 
-    static{
+    private static AuthConnector getConnector(){
         if(Settings.ENV == Constants.ENV_LOCAL){
-            connector = new AuthConnectorStub();
+            return stubConnector;
         }else{
-            connector = new AuthConnectorImpl();
+            return connector;
         }
     }
+
 
     public static void connectTerminal(String activationCode, ServiceCallback callback) {
         try {
             callback.startProgressDialog();
 
-            connector.connectTerminal(activationCode, callback);
+            if(Settings.DEMO_ACCESS_CODE.equals(activationCode)){
+                Settings.ENV = Constants.ENV_LOCAL;
+            }else{
+                Settings.ENV = Constants.ENV_PROD;
+            }
+
+            getConnector().connectTerminal(activationCode, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -45,7 +53,7 @@ public class AuthService {
         try {
             callback.startProgressDialog();
 
-            connector.login( serialNumber, terminalUsername, terminalPassword,email, password, callback);
+            getConnector().login( serialNumber, terminalUsername, terminalPassword,email, password, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -53,7 +61,7 @@ public class AuthService {
 
     public static void logOut(String sessionToken, ServiceCallback callback) {
         try {
-            connector.logOut(sessionToken, callback);
+            getConnector().logOut(sessionToken, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -61,7 +69,7 @@ public class AuthService {
 
     public static void changePassword(String currentPassword, String newPassword, ServiceCallback callback) {
         try {
-            connector.changePassword(currentPassword, newPassword, callback);
+            getConnector().changePassword(currentPassword, newPassword, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -69,13 +77,13 @@ public class AuthService {
 
     public static void notifyIssue(String serialNumber, String clerkId, String functionality,  String errorMessage){
         try {
-            connector.notifyIssue(serialNumber, clerkId, functionality, errorMessage);
+            getConnector().notifyIssue(serialNumber, clerkId, functionality, errorMessage);
         } catch (Exception e) {}
     }
 
     public static void subscribeAlerts(ServiceCallback callback){
         try {
-            connector.subscribeAlerts(callback);
+            getConnector().subscribeAlerts(callback);
         } catch (Exception e) {}
     }
 }

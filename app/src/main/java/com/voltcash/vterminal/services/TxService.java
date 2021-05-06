@@ -1,8 +1,11 @@
 package com.voltcash.vterminal.services;
 
+import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxConnector;
+import com.voltcash.vterminal.services.impl.AuthConnectorImpl;
 import com.voltcash.vterminal.services.impl.TxConnectorImpl;
+import com.voltcash.vterminal.services.stub.AuthConnectorStub;
 import com.voltcash.vterminal.services.stub.TxConnectorStub;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
@@ -17,7 +20,16 @@ import java.util.Map;
 
 public class TxService {
 
-    private static TxConnector connector;
+    private static TxConnector connector = new TxConnectorImpl();
+    private static TxConnector stubConnector = new TxConnectorStub();
+
+    private static TxConnector getConnector(){
+        if(Settings.ENV == Constants.ENV_LOCAL){
+            return stubConnector;
+        }else{
+            return connector;
+        }
+    }
 
     static{
         if(Settings.ENV == Constants.ENV_LOCAL){
@@ -31,7 +43,7 @@ public class TxService {
         try {
             callback.startProgressDialog();
 
-            connector.checkAuthLocationConfig(callback);
+            getConnector().checkAuthLocationConfig(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -39,7 +51,7 @@ public class TxService {
 
     public static void tx(ServiceCallback callback) {
         try {
-            connector.tx(callback);
+            getConnector().tx(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -49,7 +61,7 @@ public class TxService {
         try {
             callback.startProgressDialog();
 
-            connector.balanceInquiry(callback);
+            getConnector().balanceInquiry(callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -59,7 +71,7 @@ public class TxService {
         try {
             callback.startNonCancellableProgressDialog("Please Wait...");
 
-            connector.cardToBank(operation, callback);
+            getConnector().cardToBank(operation, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -69,7 +81,7 @@ public class TxService {
         try {
             callback.startProgressDialog();
 
-            connector.activityReport(startDate, endDate, callback);
+            getConnector().activityReport(startDate, endDate, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }
@@ -79,7 +91,7 @@ public class TxService {
         try {
             callback.startProgressDialog();
 
-            connector.calculateFee(operation, amount, card, callback);
+            getConnector().calculateFee(operation, amount, card, callback);
         } catch (Exception e) {
             callback.onFailure(null, e);
         }

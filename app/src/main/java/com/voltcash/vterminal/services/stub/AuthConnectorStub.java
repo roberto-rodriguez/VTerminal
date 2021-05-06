@@ -4,6 +4,7 @@ import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.PreferenceUtil;
+import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.TxData;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
 public class AuthConnectorStub implements AuthConnector {
 
     public void connectTerminal(String activationCode, final ServiceCallback callback) {
-        boolean success = "asd".equalsIgnoreCase(activationCode);
+        boolean success = Settings.DEMO_ACCESS_CODE.equalsIgnoreCase(activationCode);
         Map response = new HashMap();
 
         if(success){
@@ -29,7 +30,7 @@ public class AuthConnectorStub implements AuthConnector {
            response.put(Field.AUTH.TERMINAL_PASSWORD, "mock_passworda");
            response.put(Field.AUTH.TERMINAL_SERIAL_NUMBER, "mock_serial_number");
 
-           callback.onSuccess(response);
+           callback.stubSuccess(response);
         }else{
             response.put(Field.ERROR_MESSAGE, "Invalid Activation Code");
             callback.onError(response);
@@ -38,18 +39,18 @@ public class AuthConnectorStub implements AuthConnector {
 
 
     public void login(String serialNumber, String terminalUsername, String terminalPassword, String email, String password, ServiceCallback callback)throws Exception{
-         boolean success = "a".equalsIgnoreCase(email) && "a".equalsIgnoreCase(password);
+         boolean success = Settings.DEMO_USERNAME.equalsIgnoreCase(email) && Settings.DEMO_PASSWORD.equalsIgnoreCase(password);
 
         Map response = new HashMap();
 
          if(success){
-
-             response.put(Field.AUTH.CLERK_FIRST_NAME, "Roberto");
-             response.put(Field.AUTH.CLERK_LAST_NAME, "Rodriguez");
+             response.put(Field.AUTH.CLERK_FIRST_NAME, "Luciano");
+             response.put(Field.AUTH.CLERK_LAST_NAME, "Garcia-Baylleres");
+             response.put(Field.AUTH.MERCHANT_NAME, "Demo Merchant");
              response.put(Field.AUTH.CLERK_ID, 1);
              response.put(Field.AUTH.SESSION_TOKEN, "asd");
 
-             callback.onSuccess(response);
+             callback.stubSuccess(response);
          }else{
              response.put(Field.ERROR_MESSAGE, "Invalid login credentials");
              callback.onError(response);
@@ -57,14 +58,17 @@ public class AuthConnectorStub implements AuthConnector {
     }
 
     public void logOut(String sessionToken, ServiceCallback callback)throws Exception{
-        callback.onSuccess(new HashMap());
+        callback.stubSuccess(new HashMap());
     }
 
     public void changePassword(String currentPasswordStr, String newPasswordStr, ServiceCallback callback)throws Exception {
-        callback.onSuccess(new HashMap());
+        callback.stubSuccess(new HashMap());
     }
 
     public void notifyIssue(String serialNumberStr, String clerkIdStr, String functionalityStr,  String errorMessageStr)throws Exception {}
 
-    public void subscribeAlerts(ServiceCallback callback)throws Exception {}
+    public void subscribeAlerts(ServiceCallback callback)throws Exception {
+
+        callback.stubSuccess(new HashMap());
+    }
 }

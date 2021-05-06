@@ -32,9 +32,9 @@ public class StringUtil {
         if(str != null){
             try{
                 Double d = Double.parseDouble(str);
-                return d.intValue() + "";
+                str = d.intValue() + "";
             }catch(Exception e){}
         }
-        return "";
+        return str;
     }
 }

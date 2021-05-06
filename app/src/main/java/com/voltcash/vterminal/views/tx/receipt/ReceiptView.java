@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.services.AuthService;
+import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ReceiptBuilder;
+import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.DialogUtils;
@@ -53,6 +55,18 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
 
     public static void show(Activity originActivity, List<String> receiptLines, boolean addBarcode){
         Intent intent = new Intent(originActivity, ReceiptView.class);
+
+        if(Settings.ENV == Constants.ENV_LOCAL){
+            receiptLines.add("");
+            receiptLines.add("");
+            receiptLines.add("");
+            receiptLines.add("___________________________________________");
+            receiptLines.add("    DEMO TRANSACTION");
+            receiptLines.add("    This transaction");
+            receiptLines.add("    was executed in Demo Mode ");
+            receiptLines.add("    without connecting to VoltCash");
+            receiptLines.add("___________________________________________");
+        }
 
         intent.putExtra("receiptLines", (Serializable) receiptLines);
         intent.putExtra("addBarcode", addBarcode);

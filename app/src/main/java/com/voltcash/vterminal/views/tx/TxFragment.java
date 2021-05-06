@@ -150,7 +150,6 @@ public class TxFragment extends FragmentWithCardReader implements
             TxData.put(Field.TX.OPERATION, this.operation);
 
             addImageCaptureListeners();
-
         }catch(Exception e){
             GlobalExceptionHandler.catchException(this.getActivity(), "TxFragment.onViewCreated()", e);
         }

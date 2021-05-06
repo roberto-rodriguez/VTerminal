@@ -213,6 +213,33 @@
                     android:textColor="?android:attr/colorForeground" />
         </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/button_home_demo_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="64dp"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="onPrintLastReceipt"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button_home_print_last_receipt">
+
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="DEMO MODE"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="#FF9800" />
+                </LinearLayout>
+
         </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

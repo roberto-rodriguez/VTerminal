@@ -11,11 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.util.Constants;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.cardReader.FragmentWithCardReader;
 import com.voltcash.vterminal.views.report.ActivityReportActivity;
 import com.voltcash.vterminal.views.settings.ClerkSettingsActivity;
@@ -48,6 +50,11 @@ public class HomeActivity extends AppCompatActivity {
 
         if(isError){
             Toast.makeText(this, "Unexpected Error. A notification was automatically sent to Voltcash with details of the issue. Please try again.", Toast.LENGTH_LONG).show();
+        }
+
+        if(Settings.ENV == Constants.ENV_LOCAL){
+            LinearLayout demoLabel = (LinearLayout)findViewById(R.id.button_home_demo_mode);
+            demoLabel.setVisibility(View.VISIBLE);
         }
     }
 

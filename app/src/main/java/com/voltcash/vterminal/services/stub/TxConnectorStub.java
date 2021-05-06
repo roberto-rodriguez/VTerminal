@@ -32,14 +32,14 @@ public class TxConnectorStub implements TxConnector {
             Thread.sleep(2000);
             Map response = new HashMap();
             response.put(Field.TX.BALANCE,   "100.0");
+            response.put(Field.TX.CARD_LOAD_FEE,  "3.50");
             response.put(Field.TX.ACTIVATION_FEE,  "0.00");
-            response.put(Field.TX.CARD_EXIST,  "1".equals(cardNumber));
+            response.put(Field.TX.CARD_EXIST,  false);
+
             //---- TODO remove this --
-
-
             TxData.take(response, Field.TX.CARD_LOAD_FEE, Field.TX.ACTIVATION_FEE, Field.TX.CARD_EXIST);
 
-            callback.onSuccess(response);
+            callback.stubSuccess(response);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,39 +49,52 @@ public class TxConnectorStub implements TxConnector {
     public void tx(  final ServiceCallback callback) throws Exception{
         Log.i("TxServiceStub", "submitTx");
 
-            callback.onSuccess( new HashMap());
-        }
+
+        Map response = new HashMap();
+        response.put("REQUEST_ID",   "123.0");
+
+        response.put(Field.TX.EXCLUDE_SMS, true);
+        response.put(Field.TX.CARD_ID,  1);
+
+        TxData.take(response, Field.TX.EXCLUDE_SMS, Field.TX.CARD_ID);
+
+        callback.stubSuccess(response);
+    }
 
     public void balanceInquiry(final ServiceCallback callback) throws Exception{
         Map response = new HashMap();
         response.put(Field.TX.BALANCE,   "100.0");
 
-        callback.onSuccess(response);
+        callback.stubSuccess(response);
     }
 
     public void cardToBank(String operation, final ServiceCallback callback) throws Exception{
         Map response = new HashMap();
         response.put(Field.TX.REQUEST_ID,   "1");
         response.put(Field.TX.EXISTACH,     true);
-        response.put(Field.TX.MERCHANT_NAME,"Bass Brothers");
-        response.put(Field.TX.CUSTUMER_ADDRESS,"9840 Palmetto Club Dr, Miami, FL, 33157");
-        response.put(Field.TX.CUSTUMER_NAME,   "Vanessa Rodriguez");
+        response.put(Field.TX.MERCHANT_NAME,"Demo Merchant");
+        response.put(Field.TX.CUSTUMER_ADDRESS,"123 Main Street, Miami, FL, 33157");
+        response.put(Field.TX.CUSTUMER_NAME,   "John Smith");
         response.put(Field.TX.BANK_NAME,       "Chase");
         response.put(Field.TX.ROUTING_BANK_NUMBER,   "12345");
         response.put(Field.TX.ACCOUNT_NUMBER,  "9988776655");
 
-        callback.onSuccess(response);
+        callback.stubSuccess(response);
     }
 
 
     public void activityReport(String startDate, String endDate, final ServiceCallback callback) throws Exception{
-        callback.onSuccess( new HashMap());
+        Map response = new HashMap();
+
+        response.put("TOTAL_ROWS", 0.0);
+
+        callback.stubSuccess(response);
     }
 
     public void calculateFee(String operation, String amount, String card, final ServiceCallback callback) throws Exception{
         Map response = new HashMap(); 
-        response.put(Field.TX.C2B_FEE,     3.0 + "");
+        response.put(Field.TX.C2B_FEE,     3.0);
 
-        callback.onSuccess(response);
+        callback.stubSuccess(response);
     }
 }

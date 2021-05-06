@@ -102,6 +102,13 @@ public abstract class ServiceCallback implements Callback<Map> {
         }
     }
 
+    public void stubSuccess(Map map){ //Called from Stub Services only
+        if (mProgressDialog != null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+        onSuccess(map);
+    }
+
     public abstract void onSuccess(Map map);
 
     public void onError( Map map){
