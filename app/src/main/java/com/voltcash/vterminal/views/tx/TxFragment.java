@@ -30,6 +30,7 @@ import com.kofax.samples.common.PermissionsManager;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.cmp.VEditText;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
+import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.services.TxService;
 import com.voltcash.vterminal.util.AudioUtil;
 import com.voltcash.vterminal.util.Constants;
@@ -81,6 +82,7 @@ public class TxFragment extends FragmentWithCardReader implements
     private Switch cashBackSwitch = null;
 
     private ConstraintLayout txProgressDialog = null;
+
     private Button submitBtn;
 
     private Boolean cardExist = true;
@@ -248,9 +250,9 @@ public class TxFragment extends FragmentWithCardReader implements
                     }
                 }
 
-                ((TextView) findViewById(R.id.tx_amount_text)).setText("Amount: $" + StringUtil.formatCurrency(amount));
-                ((TextView) findViewById(R.id.tx_fee_text)).setText("Fee: $" + StringUtil.formatCurrency(cardLoadFee));
-                ((TextView) findViewById(R.id.tx_activation_fee_text)).setText("Amount Loaded: $" + StringUtil.formatCurrency(payout));
+                String amountText = "Amount: $" + StringUtil.formatCurrency(amount) + "   |   Fee: $" + StringUtil.formatCurrency(cardLoadFee) + "   |   Payout: $" + StringUtil.formatCurrency(payout);
+
+                ((TextView) findViewById(R.id.tx_amount_text)).setText(amountText);
 
                 submitButton.setVisibility(View.VISIBLE);
                 if (Constants.OPERATION.CHECK.equals(operation)) {
@@ -483,6 +485,15 @@ public class TxFragment extends FragmentWithCardReader implements
     public void onStop () {
 //do your stuff here
         super.onStop();
+    }
+
+    public void onSubscribeSMS(View view) {
+        /*
+        boolean selection = view.getId() == R.id.opt_in_yes;
+        TxData.put(Field.TX.SUBSCRIBE_SMS, selection);
+        subscribeSMS_YES.setBackgroundResource(selection ? R.drawable.voltcash_button_dark : R.drawable.voltcash_button);
+        subscribeSMS_NO.setBackgroundResource(!selection ? R.drawable.voltcash_button_dark : R.drawable.voltcash_button);
+        */
     }
 
     @Override

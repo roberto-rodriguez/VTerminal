@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,35 +12,24 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.voltcash.vterminal.R;
-import com.voltcash.vterminal.interfaces.ServiceCallback;
-import com.voltcash.vterminal.services.AuthService;
 import com.voltcash.vterminal.util.Constants;
-import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.ReceiptBuilder;
 import com.voltcash.vterminal.util.Settings;
-import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.ViewUtil;
 import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.views.home.HomeActivity;
 import com.zcs.sdk.Printer;
 import com.zcs.sdk.SdkResult;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import static com.voltcash.vterminal.VTerminal.DRIVER_MANAGER;
 
 /**
- * Created by roberto.rodriguez on 2/25/2020.
+ * Created by roberto.rodriguez <gtitorobe@gmail.com> on 2/25/2020.
  */
 
 public class ReceiptView extends AppCompatActivity implements View.OnClickListener  {
@@ -116,14 +104,6 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
             v.loadDataWithBaseURL("", receipt, "text/html", "utf-8", "");
             v.setHorizontalScrollBarEnabled(false);
             v.setVerticalScrollBarEnabled(false);
-
-            Integer cardID = (Integer)TxData.getInteger(Field.TX.CARD_ID);
-            Boolean excludeSMS = (Boolean)TxData.getBoolean(Field.TX.EXCLUDE_SMS);
-
-             if(cardID != null && excludeSMS == true){
-                 toggleOptInView(true);
-             }
-
         }catch(Exception e){
             ViewUtil.showError(this, "Creating ReceiptView", e.getMessage());
         }
@@ -144,31 +124,6 @@ public class ReceiptView extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public void onSubscribeYes(View view){
-        AuthService.subscribeAlerts(new ServiceCallback(this) {
-            @Override
-            public void onSuccess(Map map) {
-                Toast.makeText(getApplicationContext(), "User was subscribed to SMS Notifications", Toast.LENGTH_LONG);
-                toggleOptInView(false);
-            }
-
-            @Override
-            public void onError(Map map) {
-                Toast.makeText(getApplicationContext(), "Error subscribing user", Toast.LENGTH_LONG);
-                toggleOptInView(false);
-            }
-        });
-    }
-
-    public void onSubscribeNo(View view){
-        toggleOptInView(false);
-    }
-
-
-    private void toggleOptInView(boolean show){
-        LinearLayout optInView = (LinearLayout)findViewById(R.id.opt_in);
-        optInView.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
 
     public void print() {
         ReceiptBuilder.build(receiptLines, PRINTER);

@@ -33,7 +33,7 @@ public final class Field {
         public static final String DL_DATA_SCAN= "dlDataScan";
         public static final String SSN         = "ssn";
         public static final String PHONE       = "phone";
-
+        public static final String SUBSCRIBE_SMS="subscribeSMS";
         //------- response ------
         public static final String CARD_LOAD_FEE = "CRDLDF";
         public static final String ACTIVATION_FEE= "ACTIVATION_FEE";

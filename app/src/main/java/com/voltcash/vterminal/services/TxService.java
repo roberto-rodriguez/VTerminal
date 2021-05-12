@@ -1,18 +1,11 @@
 package com.voltcash.vterminal.services;
 
-import com.voltcash.vterminal.interfaces.AuthConnector;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxConnector;
-import com.voltcash.vterminal.services.impl.AuthConnectorImpl;
 import com.voltcash.vterminal.services.impl.TxConnectorImpl;
-import com.voltcash.vterminal.services.stub.AuthConnectorStub;
 import com.voltcash.vterminal.services.stub.TxConnectorStub;
 import com.voltcash.vterminal.util.Constants;
-import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.Settings;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by roberto.rodriguez on 2/25/2020.

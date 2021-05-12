@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Part;
 
 import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
 
@@ -61,6 +62,7 @@ public class TxConnectorImpl implements TxConnector {
                 RequestBody amount           = buildStringBodyFromTxData(Field.TX.AMOUNT);
                 RequestBody cardNumber       = buildStringBodyFromTxData(Field.TX.CARD_NUMBER);
                 RequestBody operation        = buildStringBodyFromTxData(Field.TX.OPERATION);
+                RequestBody subscribeSMS     = buildStringBodyFromTxData(Field.TX.SUBSCRIBE_SMS);
 
                 MultipartBody.Part idFront   = null;
                 MultipartBody.Part idBack    = null;
@@ -87,7 +89,8 @@ public class TxConnectorImpl implements TxConnector {
                         phone,
                         ssn,
                         operation,
-                        dlDataScan
+                        dlDataScan,
+                        subscribeSMS
                 );
 
                 call.enqueue(new Callback<Map>() {

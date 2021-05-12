@@ -28,7 +28,8 @@ public interface TxServiceAPI {
             @Part("phone") RequestBody  phone,
             @Part("ssn") RequestBody ssn,
             @Part("operation") RequestBody operation,
-            @Part("dlDataScan") RequestBody dlDataScan
+            @Part("dlDataScan") RequestBody dlDataScan,
+            @Part("subscribeSMS") RequestBody subscribeSMS
     );
 
     @Multipart

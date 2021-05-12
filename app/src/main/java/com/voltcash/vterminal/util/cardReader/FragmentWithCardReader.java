@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.kofax.kmc.kut.utilities.AppContextProvider;
 import com.voltcash.vterminal.R;
 import com.voltcash.vterminal.VTerminal;
+import com.voltcash.vterminal.util.Field;
 import com.voltcash.vterminal.util.TxData;
 import com.voltcash.vterminal.util.DialogUtils;
 import com.voltcash.vterminal.util.ViewUtil;
@@ -49,6 +50,9 @@ public abstract class FragmentWithCardReader extends Fragment
 
     protected Button submitButton;
     protected GridLayout calculateFeesLayout;
+
+    private Button subscribeSMS_YES;
+    private Button subscribeSMS_NO;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,18 @@ public abstract class FragmentWithCardReader extends Fragment
         mCardReadManager = VTerminal.DRIVER_MANAGER.getCardReadManager();
         mMagCard = mCardReadManager.getMAGCard();
 
+        TxData.put(Field.TX.SUBSCRIBE_SMS, true);
+        subscribeSMS_YES = (Button)findViewById(R.id.opt_in_yes);
+        subscribeSMS_NO = (Button)findViewById(R.id.opt_in_no);
+
+        if(subscribeSMS_YES != null){
+            subscribeSMS_YES.setOnClickListener(this);
+        }
+
+        if(subscribeSMS_NO != null){
+            subscribeSMS_NO.setOnClickListener(this);
+        }
+
         searchBankCard();
     }
 
@@ -103,6 +119,13 @@ public abstract class FragmentWithCardReader extends Fragment
             case R.id.tx_card_field:
                 searchBankCard();
                 break;
+
+            case R.id.opt_in_yes:
+            case R.id.opt_in_no:
+                boolean selection = view.getId() == R.id.opt_in_yes;
+                TxData.put(Field.TX.SUBSCRIBE_SMS, selection);
+                subscribeSMS_YES.setBackgroundResource(selection ? R.drawable.voltcash_button_dark : R.drawable.voltcash_button);
+                subscribeSMS_NO.setBackgroundResource(!selection ? R.drawable.voltcash_button_dark : R.drawable.voltcash_button);
         }
     }
 
