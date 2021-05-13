@@ -14,6 +14,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -198,6 +199,8 @@ public class TxFragment extends FragmentWithCardReader implements
 
 
     public void onCalculateFees(View view) {
+        Log.d("vlog", "onCalculateFees");
+
         final TxFragment _this = this;
         final String cardNumber = getCardNumber();
 

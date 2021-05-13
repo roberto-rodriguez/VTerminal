@@ -3,13 +3,20 @@ package com.voltcash.vterminal.services.stub;
 import android.util.Log;
 import com.voltcash.vterminal.interfaces.ServiceCallback;
 import com.voltcash.vterminal.interfaces.TxConnector;
+import com.voltcash.vterminal.interfaces.TxServiceAPI;
+import com.voltcash.vterminal.util.ClientBuilder;
 import com.voltcash.vterminal.util.Field;
+import com.voltcash.vterminal.util.Settings;
 import com.voltcash.vterminal.util.TxData;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
 
@@ -18,6 +25,7 @@ import static com.voltcash.vterminal.util.RequestBuilder.buildStringBody;
  */
 
 public class TxConnectorStub implements TxConnector {
+
 
 
     public void checkAuthLocationConfig( final ServiceCallback callback) throws Exception{
@@ -34,7 +42,8 @@ public class TxConnectorStub implements TxConnector {
             response.put(Field.TX.BALANCE,   "100.0");
             response.put(Field.TX.CARD_LOAD_FEE,  "3.50");
             response.put(Field.TX.ACTIVATION_FEE,  "0.00");
-            response.put(Field.TX.CARD_EXIST,  false);
+
+            response.put(Field.TX.CARD_EXIST,  amountD < 50);
 
             //---- TODO remove this --
             TxData.take(response, Field.TX.CARD_LOAD_FEE, Field.TX.ACTIVATION_FEE, Field.TX.CARD_EXIST);
@@ -47,14 +56,29 @@ public class TxConnectorStub implements TxConnector {
     }
 
     public void tx(  final ServiceCallback callback) throws Exception{
-        Log.i("TxServiceStub", "submitTx");
-
+        Log.d("vlog", "Calling Stub tx");
 
         Map response = new HashMap();
         response.put("REQUEST_ID",   "123.0");
 
         response.put(Field.TX.EXCLUDE_SMS, true);
         response.put(Field.TX.CARD_ID,  1);
+
+        String operation = TxData.getString(Field.TX.OPERATION);
+        String ssn = TxData.getString(Field.TX.SSN);
+
+        int sleep = 5_000;
+
+        if("01".equals(operation)){
+            sleep = (ssn == null || ssn.isEmpty()) ? 10_000 : 20_000;
+        }
+
+        try {
+            Log.d("vlog", "Sleeping " + sleep);
+            Thread.sleep(sleep);
+        }catch(Exception e){
+
+        }
 
         TxData.take(response, Field.TX.EXCLUDE_SMS, Field.TX.CARD_ID);
 
