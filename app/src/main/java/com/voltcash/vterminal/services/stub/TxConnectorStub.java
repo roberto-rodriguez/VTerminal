@@ -40,7 +40,7 @@ public class TxConnectorStub implements TxConnector {
             Thread.sleep(2000);
             Map response = new HashMap();
             response.put(Field.TX.BALANCE,   "100.0");
-            response.put(Field.TX.CARD_LOAD_FEE,  "3.50");
+            response.put(Field.TX.CARD_LOAD_FEE,  "3.95");
             response.put(Field.TX.ACTIVATION_FEE,  "0.00");
 
             response.put(Field.TX.CARD_EXIST,  amountD < 50);

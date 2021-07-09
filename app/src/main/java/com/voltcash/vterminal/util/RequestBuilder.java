@@ -1,20 +1,8 @@
 package com.voltcash.vterminal.util;
 
-import android.graphics.Bitmap;
-
 import com.kofax.kmc.ken.engines.data.Image;
-import com.kofax.kmc.ken.engines.processing.ColorDepth;
-import com.kofax.kmc.ken.engines.processing.RotateType;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
